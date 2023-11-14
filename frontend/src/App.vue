@@ -10,4 +10,14 @@ import TheHeadingNavbar from "./components/layout/TheHeadingNavbar.vue";
   </main>
 </template>
 
-<style scoped></style>
+<style>
+main {
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+
+  max-width: 1080px;
+}
+</style>
