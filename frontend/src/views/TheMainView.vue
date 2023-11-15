@@ -1,10 +1,12 @@
 <script setup>
 import { ref } from "vue";
 const items = ref([
-  { src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg" },
-  { src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg" },
-  { src: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" },
-  { src: "@/assets/images/trip4.jpg" },
+  { text: "1번 그림", src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg" },
+  { text: "2번 그림", src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg" },
+  {
+    text: "3번 그림",
+    src: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg",
+  },
 ]);
 </script>
 
@@ -34,41 +36,107 @@ const items = ref([
         <p class="subject-text">함께 할 크루원을 찾아요</p>
         <br />
 
-        <v-carousel
-          cycle
-          hide-delimiter-background
-          :show-arrows="false"
-          :show-delimiters="false"
-        >
-          <v-carousel-item
-            v-for="(item, i) in items"
-            :key="i"
-            :style="{ width: '33.33%' }"
+        <div>
+          <v-carousel
+            cycle
+            hide-delimiter-background
+            :show-arrows="false"
+            :show-delimiters="false"
+            hide-controls
           >
-            <v-sheet class="fill-height ma-0 pa-0" style="display: flex">
-              <!-- 내용 및 이미지 -->
-              <v-img
-                :src="items[(i + (items.length - 1)) % items.length].src"
-                aspect-ratio="2.75"
-              ></v-img>
-              <v-img :src="item.src"></v-img>
-              <v-img
-                :src="items[(i + 1) % items.length].src"
-                aspect-ratio="2.75"
-              ></v-img>
-            </v-sheet>
-          </v-carousel-item>
-        </v-carousel>
+            <v-carousel-item v-for="(item, i) in items" :key="i">
+              <v-sheet
+                class="fill-height ma-0 pa-0"
+                style="display: flex; border-radius: 10px; position: relative"
+                rounded
+              >
+                <!-- 검은색 투명도 레이어 -->
+                <div
+                  style="
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 97%;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    border-radius: 10px;
+                  "
+                ></div>
+
+                <!-- 오른쪽 이미지 -->
+                <v-img
+                  :src="items[(i + 1) % items.length].src"
+                  aspect-ratio="16/9"
+                  style="
+                    width: 60%;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    z-index: 1;
+                    opacity: 0.5;
+                    transition: opacity 0.3s ease-in-out;
+                    object-fit: cover;
+                    border-radius: 10px;
+                  "
+                ></v-img>
+
+                <!-- 왼쪽 이미지 -->
+                <v-img
+                  :src="items[(i + items.length - 1) % items.length].src"
+                  aspect-ratio="16/9"
+                  style="
+                    width: 60%;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    z-index: 2;
+                    opacity: 0.5;
+                    transition: opacity 0.3s ease-in-out;
+                    object-fit: cover;
+                    border-radius: 10px;
+                  "
+                ></v-img>
+
+                <!-- 중앙 이미지 -->
+                <v-img
+                  :src="item.src"
+                  aspect-ratio="16/9"
+                  style="
+                    width: 60%;
+                    position: absolute;
+                    top: 0%;
+                    left: 20%;
+                    z-index: 3;
+                    transition: opacity 0.3s ease-in-out;
+                    object-fit: cover;
+                    border-radius: 10px;
+                  "
+                ></v-img>
+
+                <!-- 텍스트 -->
+                <div
+                  style="
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    z-index: 4;
+                    color: white; /* 텍스트 색상을 흰색으로 지정 */
+                  "
+                >
+                  <span>여기는 텍스트 입니다.</span>
+                  <span>{{ item.text }}</span>
+                </div>
+              </v-sheet>
+            </v-carousel-item>
+          </v-carousel>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* .v-carousel-item:nth-child(2) {
-  transform: translateX(-50%);
-} */
-
 .container {
 }
 .banner-container {
