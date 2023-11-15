@@ -47,14 +47,19 @@ const items = ref([
             <v-carousel-item v-for="(item, i) in items" :key="i">
               <v-sheet
                 class="fill-height ma-0 pa-0"
-                style="display: flex; border-radius: 10px; position: relative"
+                style="
+                  display: flex;
+                  border-radius: 10px;
+                  position: relative;
+                  overflow: hidden;
+                "
                 rounded
               >
                 <!-- 검은색 투명도 레이어 -->
                 <div
                   style="
                     position: absolute;
-                    top: 0;
+                    bottom: 1%;
                     left: 0;
                     width: 100%;
                     height: 97%;
@@ -71,7 +76,7 @@ const items = ref([
                     width: 60%;
                     position: absolute;
                     right: 0;
-                    top: 0;
+                    bottom: 1%;
                     z-index: 1;
                     opacity: 0.5;
                     transition: opacity 0.3s ease-in-out;
@@ -88,12 +93,13 @@ const items = ref([
                     width: 60%;
                     position: absolute;
                     left: 0;
-                    top: 0;
+                    bottom: 1%;
                     z-index: 2;
                     opacity: 0.5;
                     transition: opacity 0.3s ease-in-out;
                     object-fit: cover;
                     border-radius: 10px;
+                    height: ;
                   "
                 ></v-img>
 
@@ -104,13 +110,13 @@ const items = ref([
                   style="
                     width: 60%;
                     position: absolute;
-                    top: 0%;
+                    bottom: 1%;
                     left: 20%;
                     z-index: 3;
                     transition: opacity 0.3s ease-in-out;
                     object-fit: cover;
                     border-radius: 10px;
-                    box-shadow: 5px 5px 20px 5px #000;
+                    box-shadow: 1px 1px 15px 5px #000;
                   "
                 ></v-img>
 
