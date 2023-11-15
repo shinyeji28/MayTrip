@@ -36,6 +36,11 @@ const router = createRouter({
         // },
       ],
     },
+    {
+      path: "/crew",
+      name: "crew",
+      component: () => import("@/views/TheCrewView.vue"),
+    },
   ],
 });
 
