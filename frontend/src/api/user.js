@@ -10,4 +10,8 @@ async function signup(data) {
   return await local.post(`/signup`, JSON.stringify(data));
 }
 
-export { login, signup };
+async function modifyUser(data) {
+  return await local.put(`/user`, JSON.stringify(data));
+}
+
+export { login, signup, modifyUser };
