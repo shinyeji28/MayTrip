@@ -116,7 +116,7 @@ const items = ref([
                     transition: opacity 0.3s ease-in-out;
                     object-fit: cover;
                     border-radius: 10px;
-                    box-shadow: 1px 1px 15px 5px #000;
+                    box-shadow: 0px 0px 10px 3px #000;
                   "
                 ></v-img>
 
