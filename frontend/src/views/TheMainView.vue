@@ -58,7 +58,7 @@ const items = ref([
                     left: 0;
                     width: 100%;
                     height: 97%;
-                    background-color: rgba(0, 0, 0, 0.9);
+                    background-color: rgba(0, 0, 0, 0.6);
                     border-radius: 10px;
                   "
                 ></div>
@@ -110,6 +110,7 @@ const items = ref([
                     transition: opacity 0.3s ease-in-out;
                     object-fit: cover;
                     border-radius: 10px;
+                    box-shadow: 5px 5px 20px 5px #000;
                   "
                 ></v-img>
 
