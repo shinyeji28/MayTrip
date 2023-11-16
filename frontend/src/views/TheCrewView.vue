@@ -1,7 +1,68 @@
 <script setup>
 import { ref } from "vue";
+import VPageNavigation from "../components/common/VPageNavigation.vue";
 
 const items = ref([
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
+    subtitle: "제목 1",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
+    subtitle: "제목 2",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
+    subtitle: "제목 2",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
+    subtitle: "제목 1",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
+    subtitle: "제목 2",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
+    subtitle: "제목 2",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
+    subtitle: "제목 1",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
+    subtitle: "제목 2",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
+    subtitle: "제목 2",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
+    subtitle: "제목 1",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
+    subtitle: "제목 2",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
+    subtitle: "제목 2",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
+    subtitle: "제목 1",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
+    subtitle: "제목 2",
+  },
+  {
+    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
+    subtitle: "제목 2",
+  },
   {
     src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
     subtitle: "제목 1",
@@ -33,6 +94,10 @@ const gugun = ref([
   "Texas",
   "Wyoming",
 ]);
+
+//pageNavigation
+const page = ref(1);
+const perPage = ref(12);
 </script>
 
 <template>
@@ -47,22 +112,13 @@ const gugun = ref([
         <v-select label="구군 선택" :items="gugun"></v-select>
         <v-btn height="50px">메이트 모집하기</v-btn>
       </div>
-      <section class="card-wrap">
-        <v-card
-          v-for="(item, i) in items"
-          :key="i"
-          class="card"
-          width="310"
-          height="300"
-          title="모집 글 제목"
-        >
-          <v-img :src="item.src"></v-img>
 
-          <template v-slot:subtitle>{{ item.subtitle }}</template>
-
-          <template v-slot:text> 간략 설명 </template>
-        </v-card>
-      </section>
+      <VPageNavigation
+        :items="items"
+        :page="page"
+        :perPage="perPage"
+        @pageChange="onPageChange"
+      ></VPageNavigation>
     </div>
   </main>
 </template>
