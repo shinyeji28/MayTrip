@@ -63,18 +63,6 @@ const items = ref([
     src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
     subtitle: "제목 2",
   },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
-    subtitle: "제목 1",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
 ]);
 
 const sido = ref([
@@ -97,7 +85,7 @@ const gugun = ref([
 
 //pageNavigation
 const page = ref(1);
-const perPage = ref(12);
+const perPage = ref(9);
 </script>
 
 <template>

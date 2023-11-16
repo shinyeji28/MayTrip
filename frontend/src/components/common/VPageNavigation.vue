@@ -11,8 +11,6 @@ const page = ref(props.page);
 const items = ref(props.items);
 const perPage = ref(props.perPage);
 
-console.log("perPage", perPage);
-
 function onPageChange(pg) {
   emit("pageChange", pg);
 }
@@ -65,4 +63,18 @@ function updatePage(newPage) {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.card {
+  /* width: calc(33.3% - 10px); */
+  margin-bottom: 30px;
+  margin-right: 35px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
+}
+.card:hover {
+  transform: translateY(15px);
+  opacity: 0.3;
+}
+</style>
