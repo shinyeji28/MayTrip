@@ -4,7 +4,7 @@ import { useAuthStore } from "../../stores/auth";
 import { storeToRefs } from "pinia";
 
 const menuStore = useMenuStore();
-const { clearUser, user } = useAuthStore();
+const { clearUser } = useAuthStore();
 
 // 반응형을 유지하면서 스토어에서 속성을 추출하려면, storeToRefs()를 사용
 // https://pinia.vuejs.kr/core-concepts/
