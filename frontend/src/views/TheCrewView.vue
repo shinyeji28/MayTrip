@@ -1,9 +1,15 @@
 <script setup>
-import { ref, computed } from "vue";
-import { listBoard } from "@/api/board.js";
+import { ref, computed, onMounted, watch } from "vue";
+import { listBoard, listBoardByGugun } from "@/api/board.js";
+import { listSido, listGugun } from "@/api/sidoGugun.js";
 
 const items = ref([]);
-const getBoard = async () => {
+const sido = ref([]);
+const gugun = ref([]);
+const selectedSido = ref(null);
+const selectedGugun = ref(null);
+
+const getBoardList = async () => {
   const { data } = await listBoard();
   try {
     items.value = data;
@@ -11,25 +17,56 @@ const getBoard = async () => {
     console.error(error);
   }
 };
-getBoard();
 
-const sido = ref([
-  "California",
-  "Colorado",
-  "Florida",
-  "Georgia",
-  "Texas",
-  "Wyoming",
-]);
+const getSidoList = async () => {
+  const { data } = await listSido();
+  try {
+    sido.value = data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-const gugun = ref([
-  "California",
-  "Colorado",
-  "Florida",
-  "Georgia",
-  "Texas",
-  "Wyoming",
-]);
+const getGugunList = async (sidoCode) => {
+  const { data } = await listGugun(sidoCode);
+  try {
+    gugun.value = data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const boardListByGugun = async (gugunCode) => {
+  console.log(selectedSido.value.sidoCode);
+  if (selectedSido !== null) {
+    const { data } = await listBoardByGugun(
+      selectedSido.value.sidoCode,
+      gugunCode
+    );
+    try {
+      items.value = data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+};
+
+onMounted(async () => {
+  await getBoardList();
+  await getSidoList();
+});
+
+watch(selectedSido, (newValue) => {
+  if (newValue !== null) {
+    getGugunList(newValue.sidoCode);
+  }
+});
+
+watch(selectedGugun, (newValue) => {
+  if (newValue !== null) {
+    boardListByGugun(newValue.gugunCode);
+  }
+});
 
 //pageNavigation
 const page = ref(1);
@@ -47,55 +84,86 @@ const totalPages = computed(() => {
 </script>
 
 <template>
-  <div class="banner">
-    <img src="@/assets/images/trip4.jpg" />
-    <div class="title">여행 친구를 구하고 있어요 😍</div>
-  </div>
-  <main class="container">
-    <div class="main-wrap">
-      <div class="select-box">
-        <v-select label="시도 선택" :items="sido"></v-select>
-        <v-select label="구군 선택" :items="gugun"></v-select>
-        <v-btn height="50px">메이트 모집하기</v-btn>
-      </div>
-
-      <v-container>
-        <v-row>
-          <v-col
-            v-for="(item, index) in paginatedItems"
-            :key="index"
-            cols="12"
-            sm="6"
-            md="4"
-            lg="4"
-          >
-            <v-card class="card" width="310" height="300" title="모집 글 제목">
-              <v-img :src="item.src"></v-img>
-
-              <template v-slot:title>{{ item.title }}</template>
-
-              <template v-slot:subtitle
-                >{{ item.sidoName }} {{ item.gugunName }}</template
-              >
-
-              <template v-slot:text> 간략 설명 </template>
-            </v-card>
-          </v-col>
-        </v-row>
-
-        <!-- 페이지네이션 -->
-        <v-pagination
-          v-model="page"
-          :length="totalPages"
-          @input="updatePage"
-          rounded="circle"
-        ></v-pagination>
-      </v-container>
+  <div class="container">
+    <div class="banner">
+      <img src="@/assets/images/trip4.jpg" />
+      <div class="title">여행 친구를 구하고 있어요 😍</div>
     </div>
-  </main>
+    <main class="container">
+      <div class="main-wrap">
+        <div class="select-box">
+          <v-select
+            v-model="selectedSido"
+            :items="sido"
+            item-title="sidoName"
+            item-value="sidoCode"
+            label="시도 선택"
+            return-object
+            hint="구군까지 선택해주세요"
+          ></v-select>
+          <v-select
+            v-model="selectedGugun"
+            :items="gugun"
+            item-title="gugunName"
+            item-value="gugunCode"
+            label="구군 선택"
+            return-object
+          ></v-select>
+          <v-btn height="50px">메이트 모집하기</v-btn>
+        </div>
+
+        <v-container>
+          <v-row>
+            <v-col
+              v-for="(item, index) in paginatedItems"
+              :key="index"
+              cols="12"
+              sm="6"
+              md="4"
+              lg="4"
+            >
+              <v-card
+                class="card"
+                width="310"
+                height="300"
+                title="모집 글 제목"
+              >
+                <v-img :src="item.src"></v-img>
+
+                <template v-slot:title>{{ item.title }}</template>
+
+                <template v-slot:subtitle
+                  >타겟 도시 : {{ item.sidoName }}
+                  {{ item.gugunName }}</template
+                >
+
+                <template v-slot:text> 간략 설명 </template>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <!-- 페이지네이션 -->
+          <v-pagination
+            v-model="page"
+            :length="totalPages"
+            rounded="circle"
+          ></v-pagination>
+        </v-container>
+      </div>
+    </main>
+  </div>
 </template>
 
 <style scoped>
+.container {
+  display: flex;
+
+  margin: auto;
+  padding: 0;
+
+  flex-direction: column;
+  max-width: 1080px;
+}
 .banner {
   position: absolute;
   left: 0;
