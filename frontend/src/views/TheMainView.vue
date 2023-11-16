@@ -145,6 +145,13 @@ const items = ref([
 
 <style scoped>
 .container {
+  display: flex;
+
+  margin: auto;
+  padding: 0;
+
+  flex-direction: column;
+  max-width: 1080px;
 }
 .banner-container {
   position: absolute;
