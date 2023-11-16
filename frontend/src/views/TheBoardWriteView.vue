@@ -1,4 +1,14 @@
 <script setup>
+import { ref } from 'vue';
+import QuillEditor from '@/components/common/VQuillEditor.vue';
+
+const content = ref('안녕하세요');
+
+const submitContent = (content) => {
+  console.log('Submitted Content:', content); // ref 변수의 실제 내용을 가져오려면 .value를 사용합니다.
+  // 서버로 데이터를 보내거나 필요한 작업을 수행할 수 있습니다.
+};
+
 
 </script>
 
@@ -10,8 +20,10 @@
     </div>
     <main class="container">
       <div class="main-wrap">
-        rsfd
-
+        <div>
+    <QuillEditor v-model="content"
+    @saveContent="submitContent" />
+  </div>
       </div>
       </main>
 </div>
