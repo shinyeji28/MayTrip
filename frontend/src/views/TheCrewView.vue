@@ -1,69 +1,17 @@
 <script setup>
-import { ref } from "vue";
-import VPageNavigation from "../components/common/VPageNavigation.vue";
+import { ref, computed } from "vue";
+import { listBoard } from "@/api/board.js";
 
-const items = ref([
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
-    subtitle: "제목 1",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
-    subtitle: "제목 1",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
-    subtitle: "제목 1",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
-    subtitle: "제목 1",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
-    subtitle: "제목 1",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-  {
-    src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg",
-    subtitle: "제목 2",
-  },
-]);
+const items = ref([]);
+const getBoard = async () => {
+  const { data } = await listBoard();
+  try {
+    items.value = data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+getBoard();
 
 const sido = ref([
   "California",
@@ -86,6 +34,16 @@ const gugun = ref([
 //pageNavigation
 const page = ref(1);
 const perPage = ref(9);
+
+const paginatedItems = computed(() => {
+  const startIndex = (page.value - 1) * perPage.value;
+  const endIndex = startIndex + perPage.value;
+  return items.value.slice(startIndex, endIndex);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(items.value.length / perPage.value);
+});
 </script>
 
 <template>
@@ -101,12 +59,38 @@ const perPage = ref(9);
         <v-btn height="50px">메이트 모집하기</v-btn>
       </div>
 
-      <VPageNavigation
-        :items="items"
-        :page="page"
-        :perPage="perPage"
-        @pageChange="onPageChange"
-      ></VPageNavigation>
+      <v-container>
+        <v-row>
+          <v-col
+            v-for="(item, index) in paginatedItems"
+            :key="index"
+            cols="12"
+            sm="6"
+            md="4"
+            lg="4"
+          >
+            <v-card class="card" width="310" height="300" title="모집 글 제목">
+              <v-img :src="item.src"></v-img>
+
+              <template v-slot:title>{{ item.title }}</template>
+
+              <template v-slot:subtitle
+                >{{ item.sidoName }} {{ item.gugunName }}</template
+              >
+
+              <template v-slot:text> 간략 설명 </template>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <!-- 페이지네이션 -->
+        <v-pagination
+          v-model="page"
+          :length="totalPages"
+          @input="updatePage"
+          rounded="circle"
+        ></v-pagination>
+      </v-container>
     </div>
   </main>
 </template>
@@ -162,10 +146,6 @@ const perPage = ref(9);
   gap: 30px;
   margin-bottom: 40px;
 }
-.card-wrap {
-  display: flex;
-  flex-wrap: wrap;
-}
 .card {
   /* width: calc(33.3% - 10px); */
   margin-bottom: 30px;
@@ -174,9 +154,6 @@ const perPage = ref(9);
   border-radius: 10px;
   box-sizing: border-box;
   transition: transform 0.3s ease;
-}
-.card:nth-child(3n) {
-  margin-right: 0;
 }
 .card:hover {
   transform: translateY(15px);
