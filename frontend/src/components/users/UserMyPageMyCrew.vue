@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { getCrewListByUserId } from "@/api/crew";
+import { getCrewListApi } from "@/api/crew";
 
 onMounted(() => {
   getCrewList();
@@ -8,8 +8,8 @@ onMounted(() => {
 const crewlist = ref([]);
 
 const getCrewList = async () => {
-  const response = await getCrewListByUserId();
-  crewlist.value = response.data;
+  const { data } = await getCrewListApi();
+  crewlist.value = data;
   console.log(crewlist.value);
 };
 </script>

@@ -2,15 +2,12 @@
 import { useMenuStore } from "@/stores/menu";
 import { useAuthStore } from "@/stores/auth";
 import { ref } from "vue";
-import { login } from "@/api/user";
 import { useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
 
 const router = useRouter();
+const { login } = useAuthStore();
 const { changeMenuState } = useMenuStore();
-const authStore = useAuthStore();
-const { updateToken } = useAuthStore();
-const user = storeToRefs(authStore);
+
 const userForm = ref({});
 
 // 입력 폼 확인 용 규칙
@@ -37,10 +34,9 @@ const clickLogin = async () => {
     return; // 입력폼 값 확인
   }
   try {
-    const response = await login(userForm.value);
+    await login(userForm.value);
     console.log("login 성공 !!");
-    updateToken(response.data.token); // 토큰 및 유저정보 저장
-    changeMenuState(); // 메뉴바 토글
+    changeMenuState();
     router.push({ path: "/" });
   } catch (error) {
     console.log(error);

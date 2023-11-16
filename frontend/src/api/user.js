@@ -1,17 +1,16 @@
-import { localAxios } from "@/util/http-commons";
+import axios from "axios";
 
-const local = localAxios();
-
-async function login(data) {
-  return await local.post(`/login`, JSON.stringify(data));
+async function loginApi(data) {
+  return await axios.post(`/api/login`, data);
 }
 
-async function signup(data) {
-  return await local.post(`/signup`, JSON.stringify(data));
+async function signupApi(data) {
+  return await axios.post(`/api/signup`, data);
 }
 
-async function modifyUser(data) {
-  return await local.put(`/user`, JSON.stringify(data));
+async function modifyUserApi(data) {
+  // return await local.put(`/user`, data);
+  return await axios.put("/api/user", data);
 }
 
-export { login, signup, modifyUser };
+export { loginApi, signupApi, modifyUserApi };

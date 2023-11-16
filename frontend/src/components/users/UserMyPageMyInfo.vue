@@ -1,23 +1,34 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { modifyUser } from "@/api/user";
+import { ref } from "vue";
 import { useAuthStore } from "../../stores/auth";
 import { storeToRefs } from "pinia";
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
+const { modifyUser } = authStore;
 
-const userForm = ref(user);
+const userForm = ref({
+  memberId: user.value.memberId,
+  username: user.value.username,
+  name: user.value.name,
+});
 const isShowInfo = ref(true);
 
 const modify = async () => {
   try {
-    const response = await modifyUser(userForm);
-    console.log(response.data);
-    // user.value = response.data;
+    await modifyUser(userForm.value);
+    resetUserForm();
+    toggle();
   } catch (error) {
     alert("다시 시도해주세요.");
+    resetUserForm();
   }
+};
+
+const resetUserForm = () => {
+  (userForm.value.memberId = user.value.memberId),
+    (userForm.value.username = user.value.username),
+    (userForm.value.name = user.value.name);
 };
 
 const toggle = () => {
@@ -25,7 +36,7 @@ const toggle = () => {
 };
 
 const cancel = () => {
-  userForm.value = user;
+  resetUserForm();
   toggle();
 };
 </script>

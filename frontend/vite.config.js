@@ -2,7 +2,7 @@ import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-const { VITE_VUE_API_URL } = import.meta.env;
+// const { VITE_VUE_API_URL } = import.meta.env;
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,13 +12,13 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  // server: {
-  //   proxy: {
-  //     "/api": {
-  //       target: "http://localhost/vue",
-  //       // rewrite: (path) => path.replace(/^\/api/, ""),
-  //       changeOrigin: true,
-  //     },
-  //   },
-  // },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:9000",
+        // rewrite: (path) => path.replace(/^\/api/, ""),
+        changeOrigin: true,
+      },
+    },
+  },
 });

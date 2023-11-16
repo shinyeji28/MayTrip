@@ -1,15 +1,12 @@
-import { localAxios } from "@/util/http-commons";
 import { useAuthStore } from "@/stores/auth";
+import axios from "axios";
+import { storeToRefs } from "pinia";
 
-const local = localAxios();
-const { user } = useAuthStore();
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
-async function getCrewListByUserId() {
-  return await local.get(`/crews/all/${user.userId}`);
+async function getCrewListApi() {
+  return await axios.get(`/api/crews/all/${user.value.memberId}`);
 }
 
-async function signup(data) {
-  return await local.post(`/signup`, JSON.stringify(data));
-}
-
-export { getCrewListByUserId, signup };
+export { getCrewListApi };
