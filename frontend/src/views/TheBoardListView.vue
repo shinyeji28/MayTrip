@@ -37,7 +37,6 @@ const getGugunList = async (sidoCode) => {
 };
 
 const boardListByGugun = async (gugunCode) => {
-  console.log(selectedSido.value.sidoCode);
   if (selectedSido !== null) {
     const { data } = await listBoardByGugun(
       selectedSido.value.sidoCode,
