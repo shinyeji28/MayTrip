@@ -1,7 +1,19 @@
 <script setup></script>
 
 <template>
-  <router-view></router-view>
+  <div class="container">
+    <router-view></router-view>
+  </div>
 </template>
 
-<style></style>
+<style>
+.container {
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+
+  max-width: 1080px;
+}
+</style>

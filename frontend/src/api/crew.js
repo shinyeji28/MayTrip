@@ -9,4 +9,8 @@ async function getCrewListApi() {
   return await axios.get(`/api/crews/all/${user.value.memberId}`);
 }
 
-export { getCrewListApi };
+async function getCrewApi(crewId) {
+  return await axios.get(`/api/crews/${crewId}`);
+}
+
+export { getCrewListApi, getCrewApi };

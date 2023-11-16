@@ -36,6 +36,22 @@ const router = createRouter({
         // },
       ],
     },
+    {
+      path: "/crew",
+      name: "crew",
+      children: [
+        {
+          path: "detail/:crewId",
+          name: "crew-detail",
+          component: () => import("@/components/crews/CrewPage.vue"),
+        },
+        {
+          path: "plan/:crewId",
+          name: "crew-plan",
+          component: () => import("@/components/crews/CrewPlanPage.vue"),
+        },
+      ],
+    },
   ],
 });
 
