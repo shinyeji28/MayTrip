@@ -1,10 +1,9 @@
-import { localAxios } from "@/util/http-commons";
+import axios from "axios";
 
-const local = localAxios();
 const listSido = async () => {
-  return await local.get(`/sido`);
+  return await axios.get(`/api/sido`);
 };
 const listGugun = async (sidoCode) => {
-  return await local.get(`/gugun/${sidoCode}`);
+  return await axios.get(`/api/gugun/${sidoCode}`);
 };
 export { listSido, listGugun };

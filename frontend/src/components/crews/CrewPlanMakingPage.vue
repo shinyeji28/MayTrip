@@ -1,8 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { usePlanStore } from "@/stores/plan";
 import { storeToRefs } from "pinia";
+import { listSido, listGugun } from "@/api/sidoGugun";
 
 const route = useRoute();
 const planStore = usePlanStore();
@@ -15,6 +16,51 @@ const selectForm = ref({
 });
 const sido = ref([]);
 const gugun = ref([]);
+const searchForm = ref({
+  key: "",
+  word: "",
+});
+const searchSetting = ref({
+  loading: false,
+  loaded: false,
+});
+const clickSearch = () => {
+  searchSetting.value.loading = true;
+  setTimeout(() => {
+    searchSetting.value.loading = false;
+    searchSetting.value.loaded = true;
+  }, 2000);
+};
+
+const getSido = async () => {
+  try {
+    const { data } = await listSido();
+    sido.value = data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getGugun = async () => {
+  try {
+    const { data } = await listGugun(selectForm.value.sidoCode);
+    gugun.value = data;
+    console.log(gugun.value);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+watch(
+  () => selectForm.value.sidoCode,
+  () => {
+    getGugun();
+  }
+);
+
+onMounted(() => {
+  getSido();
+});
 </script>
 
 <template>
@@ -25,14 +71,9 @@ const gugun = ref([]);
           <v-col cols="4">
             <v-select
               label="시도"
-              :items="[
-                'California',
-                'Colorado',
-                'Florida',
-                'Georgia',
-                'Texas',
-                'Wyoming',
-              ]"
+              :items="sido"
+              item-title="sidoName"
+              item-value="sidoCode"
               variant="underlined"
               v-model="selectForm.sidoCode"
             ></v-select>
@@ -40,14 +81,9 @@ const gugun = ref([]);
           <v-col cols="4">
             <v-select
               label="구군"
-              :items="[
-                'California',
-                'Colorado',
-                'Florida',
-                'Georgia',
-                'Texas',
-                'Wyoming',
-              ]"
+              :items="gugun"
+              item-title="gugunName"
+              item-value="gugunCode"
               variant="underlined"
               v-model="selectForm.gugunCode"
             ></v-select>
@@ -73,8 +109,38 @@ const gugun = ref([]);
           </v-col>
         </v-row>
       </div>
+      <div class="row margin-30">
+        <v-row>
+          <v-col cols="4">
+            <v-select
+              label="검색조건"
+              :items="[
+                { title: '관광지명', key: 'title' },
+                { title: '주소', key: 'address' },
+              ]"
+              item-title="title"
+              item-value="key"
+              variant="underlined"
+              v-model="searchForm.key"
+            ></v-select>
+          </v-col>
+          <v-col cols="8">
+            <v-card-text class="mx-auto" max-width="400">
+              <v-text-field
+                :loading="searchSetting.loading"
+                density="compact"
+                variant="solo"
+                label="Search"
+                append-inner-icon="mdi-magnify"
+                single-line
+                hide-details
+                @click:append-inner="clickSearch"
+              ></v-text-field>
+            </v-card-text>
+          </v-col>
+        </v-row>
+      </div>
     </div>
-    <div class="row margin-30"></div>
   </div>
 </template>
 
