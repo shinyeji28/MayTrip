@@ -1,53 +1,71 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { getPlanApi } from "@/api/plan";
-import { getCrewApi } from "@/api/crew";
+import crewPlanSetting from "@/components/crews/CrewPlanSettingPage.vue";
+import crewPlanMaking from "@/components/crews/crewPlanMakingPage.vue";
 
 const route = useRoute();
+const crewId = route.params.crewId;
 
-const crew = ref({});
-const plan = ref({});
+const toggle = ref(1);
 
-const getCrewInfo = async () => {
+const changeToggle = (num) => {
+  toggle.value = num;
+};
+
+const getInfoData = async () => {
   try {
-    const { data } = await getCrewApi(route.params.crewId);
-    console.log(data);
-    crew.value = data;
+    if (!confirm("임시 저장된 내역을 불러올까요?")) {
+      await getInfos(props.crewId);
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
-const getPlanInfo = async () => {
-  try {
-    const { data } = await getPlanApi(route.params.crewId);
-    console.log(data);
-    plan.value = data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-getCrewInfo();
-getPlanInfo();
-// beforeRouteLeave (to, from, next) {
-//   const element = document.getElementsByTagName('main')[0];
-//   element.style.maxWidth = '1080px';
-// }
-const drawer = ref(true);
+onMounted(() => {
+  getInfoData();
+});
 </script>
 
 <template>
-  <div class="row">
-    <div>첫번째</div>
-    <div>두번째</div>
-    <div>세번째</div>
-    <div>지도</div>
+  <div class="row container">
+    <div class="col side">
+      <div class="side-item" @click="changeToggle(1)">
+        1. 날짜 & 여행지 선택
+      </div>
+      <div class="side-item" @click="changeToggle(2)">2. 일정 만들기</div>
+    </div>
+    <crewPlanSetting v-show="toggle == 1"></crewPlanSetting>
+    <crewPlanMaking v-show="toggle == 2"></crewPlanMaking>
   </div>
 </template>
 
 <style scoped>
+.container {
+  width: 100%;
+  height: 100%;
+}
+.side {
+  width: 100px;
+  height: 90vh;
+  border-right: 1px solid lightgray;
+}
+.side-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100px;
+  padding: 20px 10px;
+  color: black;
+  font-weight: 800;
+  font-size: small;
+  border-radius: 5px;
+  border-bottom: 1px solid lightgray;
+}
+.side-item:hover {
+  background-color: lightblue;
+}
 .blue {
   background-color: aqua;
 }
@@ -60,14 +78,6 @@ const drawer = ref(true);
   flex-direction: column;
 }
 
-.profile {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://cdn.pixabay.com/photo/2020/06/28/00/04/chicago-5347435_960_720.jpg");
-  background-size: cover;
-  border-radius: 10px;
-  padding: 10px 60px;
-  height: 400px;
-}
 .center {
   justify-content: center;
   align-items: center;
