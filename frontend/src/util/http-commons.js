@@ -13,4 +13,14 @@ function localAxios() {
   return instance;
 }
 
-export { localAxios };
+function localAxiosFormData() {
+  const instanceFormData = axios.create({
+    baseURL: VITE_VUE_API_URL,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return instanceFormData;
+}
+
+export { localAxios, localAxiosFormData };

@@ -1,19 +1,43 @@
 <script setup>
-import { ref } from 'vue';
-import QuillEditor from '@/components/common/VQuillEditor.vue';
+import { ref, onMounted } from "vue";
+import QuillEditor from "@/components/common/VQuillEditor.vue";
+import { setBoardContent } from "@/api/board.js";
 
-const content = ref('안녕하세요');
+const form = ref(null);
+const fileInput = ref(null);
 
-const submitContent = (content) => {
-  console.log('Submitted Content:', content); // ref 변수의 실제 내용을 가져오려면 .value를 사용합니다.
-  // 서버로 데이터를 보내거나 필요한 작업을 수행할 수 있습니다.
+onMounted(() => {
+  console.log(form.value);
+});
+
+const content = ref("<h1>아이</h1>");
+const selectedFile = ref("");
+
+const saveBoard = async (formData) => {
+  const { data } = await setBoardContent(formData);
+  try {
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
+const submitContent = (content) => {
+  console.log("Submitted Content:", content);
+};
 
+const handleFileUpload = () => {
+  console.log(selectedFile.value);
+};
+
+const onSubmit = () => {
+  const formData = new FormData(form.value);
+  saveBoard(formData);
+};
 </script>
 
 <template>
-<div class="container">
+  <div class="container">
     <div class="banner">
       <img src="@/assets/images/trip4.jpg" />
       <div class="title">여행 크루 모집을 위한 글을 작성하세요 😎</div>
@@ -21,12 +45,25 @@ const submitContent = (content) => {
     <main class="container">
       <div class="main-wrap">
         <div>
-    <QuillEditor v-model="content"
-    @saveContent="submitContent" />
-  </div>
+          <form @submit.prevent="onSubmit" ref="form">
+            <input
+              type="file"
+              ref="fileInput"
+              accept="image/*,.txt"
+              name="thumbnail"
+            />
+            <!-- <v-file-input
+              label="썸네일 이미지를 넣어주세요"
+              v-model="selectedFile"
+              @change="handleFileUpload"
+            ></v-file-input> -->
+            <QuillEditor v-model="content" @saveContent="submitContent" />
+            <button type="submit">제출</button>
+          </form>
+        </div>
       </div>
-      </main>
-</div>
+    </main>
+  </div>
 </template>
 
 <style scoped>
