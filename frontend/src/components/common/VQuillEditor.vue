@@ -1,8 +1,6 @@
 <!-- VQuillEditor.vue -->
 <template>
   <div class="quill-editor"></div>
-  <input type="hidden" id="quill_html" name="content" />
-  <v-btn @click="submitContent">Submit</v-btn>
 </template>
 
 <script setup>
@@ -17,14 +15,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits("saveContent");
+const emit = defineEmits(['update:modelValue']);
 
 let quillInstance;
-
-const submitContent = () => {
-  console.log("제출");
-  emit("saveContent", quillInstance.root.innerHTML);
-};
+const editorContent = ref(props.modelValue);
 
 onMounted(() => {
   quillInstance = new Quill(".quill-editor", {
@@ -41,6 +35,11 @@ onMounted(() => {
   });
 
   quillInstance.root.innerHTML = props.modelValue;
+
+  quillInstance.on("text-change", () => {
+    const content = quillInstance.root.innerHTML;
+    emit('update:modelValue', content); 
+  });
 });
 
 onUnmounted(() => {
