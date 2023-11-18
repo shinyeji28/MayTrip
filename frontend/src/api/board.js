@@ -1,13 +1,16 @@
 import { localAxios, localAxiosFormData } from "@/util/http-commons";
+import axios from "axios";
+// const local = localAxios();
+// const localFormData = localAxiosFormData();
 
-const local = localAxios();
-const localFormData = localAxiosFormData();
+const formDataHeader = {"Content-Type": "multipart/form-data"};
+
 const listBoard = async () => {
-  return await local.get(`boards`);
+  return await axios.get(`/api/boards`);
 };
 
 const listBoardByGugun = async (sido, gugun) => {
-  return await local.get(`boards/`, {
+  return await axios.get(`/api/boards/`, {
     params: {
       sido,
       gugun,
@@ -15,8 +18,10 @@ const listBoardByGugun = async (sido, gugun) => {
   });
 };
 
-const setBoardContent = async (formData) => {
-  return await localFormData.post(`boards`, formData);
+const registBoard = async (formData) => {
+  return await axios.post(`/api/boards`, formData, {
+    headers: formDataHeader
+  });
 };
 
-export { listBoard, listBoardByGugun, setBoardContent };
+export { listBoard, listBoardByGugun, registBoard };
