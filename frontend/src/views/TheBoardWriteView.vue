@@ -1,8 +1,9 @@
 <!-- 부모 컴포넌트 -->
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import VQuillEditor from "@/components/common/VQuillEditor.vue";
 import { registBoard } from "@/api/board.js";
+import { listSido, listGugun } from "@/api/sidoGugun.js";
 
 const form = ref(null);
 
@@ -24,10 +25,39 @@ const selectedGugun = ref(null);
 const content = ref(null);
 const selectedFile = ref([]);
 
+onMounted(async () => {
+  await getSidoList();
+});
+
+const getSidoList = async () => {
+  const { data } = await listSido();
+  try {
+    sido.value = data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getGugunList = async (sidoCode) => {
+  const { data } = await listGugun(sidoCode);
+  try {
+    gugun.value = data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+watch(selectedSido, (newValue) => {
+  if (newValue !== null) {
+    getGugunList(newValue.sidoCode);
+  }
+});
+
 const saveBoard = async (formData) => {
   const { data } = await registBoard(formData);
   try {
     alert("등록이 완료되었습니다.");
+    // console.log(data);
   } catch (error) {
     console.error(error);
   }
@@ -42,16 +72,16 @@ const handleFileUpload = () => {
   console.log(selectedFile.value);
 };
 
-const onSubmit = () => {
+const onSubmit = async() => {
   const formData = new FormData(form.value);
   formData.append('memberId', 1);     // todo token으로 수정
-  formData.append('startDate', startDate.value.toISOString());
-  formData.append('endDate', endDate.value.toISOString());
+  formData.append('startDate', startDate.value.toISOString().substring(0,10));
+  formData.append('endDate', endDate.value.toISOString().substring(0,10));
   formData.append('content', content.value);
-  for (let key of formData.keys()) {
-	console.log(key, ":", formData.get(key));
-}
-  // saveBoard(formData);
+  // for (let key of formData.keys()) {
+	//   console.log(key, ":", formData.get(key));
+  // }
+   await saveBoard(formData);
 };
 
 const setStartDate = () => {
@@ -102,6 +132,7 @@ const setEndDate = () => {
             label="시도 선택"
             return-object
             hint="구군까지 선택해주세요"
+            name="sidoCode"
           ></v-select>
           <v-select
             v-model="selectedGugun"
@@ -110,13 +141,14 @@ const setEndDate = () => {
             item-value="gugunCode"
             label="구군 선택"
             return-object
+            name="gugunCode"
           ></v-select>
 
             <v-date-picker v-model="startDate" :min="today" label="여행 출발 날짜" @click="setStartDate"></v-date-picker>
             <v-date-picker v-model="endDate" :min="startDate" label="여행 종료 날짜" @click="setEndDate"></v-date-picker>
 
             <VQuillEditor :content="content" @update:modelValue="changeEditor" />
-            <button type="submit">제출</button>
+            <v-btn type="submit">제출</v-btn>
           </form>
         </div>
       </div>
