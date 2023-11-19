@@ -1,6 +1,7 @@
+<!-- 부모 컴포넌트 -->
 <script setup>
 import { ref, onMounted } from "vue";
-import QuillEditor from "@/components/common/VQuillEditor.vue";
+import VQuillEditor from "@/components/common/VQuillEditor.vue";
 import { registBoard } from "@/api/board.js";
 
 const form = ref(null);
@@ -20,11 +21,6 @@ const gugun = ref([]);
 const selectedSido = ref(null);
 const selectedGugun = ref(null);
 
-onMounted(() => {
-
-  console.log(form.value);
-});
-
 const content = ref("<h1>아이</h1>");
 const selectedFile = ref([]);
 
@@ -37,10 +33,9 @@ const saveBoard = async (formData) => {
   }
 };
 
-const submitContent = (newContent) => {
+const changeEditor = (newContent) => {
   content.value = newContent;
-  console.log("Submitted Content:", content.value);
-  
+console.log("d")  
 };
 
 const handleFileUpload = () => {
@@ -120,7 +115,7 @@ const setEndDate = () => {
             <v-date-picker v-model="startDate" :min="today" label="여행 출발 날짜" @click="setStartDate"></v-date-picker>
             <v-date-picker v-model="endDate" :min="startDate" label="여행 종료 날짜" @click="setEndDate"></v-date-picker>
 
-            <QuillEditor v-model="content" @update:modelValue="submitContent" />
+            <VQuillEditor v-model="content" @update:modelValue="changeEditor" />
             <button type="submit">제출</button>
           </form>
         </div>

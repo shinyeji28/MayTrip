@@ -24,4 +24,10 @@ const registBoard = async (formData) => {
   });
 };
 
-export { listBoard, listBoardByGugun, registBoard };
+const registImage = async(formData) => {
+  return await axios.post(`/api/file`, formData, {
+    headers: formDataHeader
+  });
+};
+
+export { listBoard, listBoardByGugun, registBoard, registImage };
