@@ -21,7 +21,7 @@ const gugun = ref([]);
 const selectedSido = ref(null);
 const selectedGugun = ref(null);
 
-const content = ref("<h1>아이</h1>");
+const content = ref(null);
 const selectedFile = ref([]);
 
 const saveBoard = async (formData) => {
@@ -35,7 +35,7 @@ const saveBoard = async (formData) => {
 
 const changeEditor = (newContent) => {
   content.value = newContent;
-console.log("d")  
+  console.log(content.value);
 };
 
 const handleFileUpload = () => {
@@ -115,7 +115,7 @@ const setEndDate = () => {
             <v-date-picker v-model="startDate" :min="today" label="여행 출발 날짜" @click="setStartDate"></v-date-picker>
             <v-date-picker v-model="endDate" :min="startDate" label="여행 종료 날짜" @click="setEndDate"></v-date-picker>
 
-            <VQuillEditor v-model="content" @update:modelValue="changeEditor" />
+            <VQuillEditor :content="content" @update:modelValue="changeEditor" />
             <button type="submit">제출</button>
           </form>
         </div>

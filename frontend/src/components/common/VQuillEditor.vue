@@ -2,14 +2,14 @@
 
 <template>
   <div>
-    <QuillEditor :value="editorContent" @input="updateContent" theme="snow" toolbar="full" ref="editor"/>
+    <QuillEditor :value="editorContent" :modules="modules"  @input="updateContent" theme="snow" toolbar="full" ref="editor"/>
   </div>
 </template>
 
 <script setup>
 // https://vueup.github.io/vue-quill/api/methods.html
 
-import { ref, onMounted, toRefs, defineProps , defineEmits } from 'vue';
+import { ref, onMounted, defineProps , defineEmits, watch } from 'vue';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import ImageUploader from 'quill-image-uploader';
@@ -24,7 +24,7 @@ const props = defineProps({
   content : String
 });
 const editor = ref(null);
-const editorContent = ref(props.content); 
+const editorContent = ref(props.content);
 // 이미지 업로더 모듈 설정
 const modules = {
   name: 'imageUploader',
@@ -32,6 +32,7 @@ const modules = {
   options: {
     upload: async (file) => {
       try {
+        console.log("들어옴")
         const formData = new FormData();
         formData.append('file', file);
 
@@ -39,6 +40,8 @@ const modules = {
         const response = await registImage(formData);
         const imageUrl = response.data.url;
         const imageName = response.data.originImageName;
+        // console.log(imagefile)
+
 
         // Quill 에디터의 커서 위치에 이미지 삽입
         const quill = editor.value?.getQuill();
@@ -47,7 +50,12 @@ const modules = {
           const imageHtml = `<img src="${imageUrl}" alt="${imageName}">`;
           // editor.value.setHTML(imageHtml);  
           // quill.clipboard.dangerouslyPasteHTML(range.index, imageHtml, 'api');
-          quill.clipboard.dangerouslyPasteHTML(range ? range.index : 0, imageHtml, 'api');
+          quill.clipboard.dangerouslyPasteHTML(range ? range.index : 0, imageHtml);
+          // quill.insertEmbed(quill.getSelection().index, 'image', imageUrl);
+          // quill.clipboard.dangerouslyPasteHTML(imageHtml, 'api');
+          // editor.value.pasteHTML(imageHtml, 'api');
+          console.log(quill.root.innerHTML);
+          emit('changeEditor', quill.root.innerHTML);
 
         } else {
           console.error('Quill 인스턴스를 찾을 수 없습니다.');
@@ -65,20 +73,13 @@ const modules = {
 
 // QuillEditor 컴포넌트가 마운트된 후 Quill 에디터 인스턴스에 접근
 onMounted(() => { 
-  const quillInstance = editor.value?.getQuill(); // Quill 에디터 인스턴스 가져오기
-
-  if (quillInstance) {
-    quillInstance.root.innerHTML = props.modelValue;
-
-    quillInstance.on("text-change", () => {
-      const content = quillInstance.root.innerHTML;
-      emit('update:modelValue', content); 
-    });
-  }
+  editorContent.value = props.content; // 초기 내용 설정
 });
 
+
+
 const updateContent = (newContent) => {
-  editorContent.value = newContent;
-  emit('update:modelValue', newContent);
+  const content = editor.value.getHTML();
+  emit('update:modelValue', content);
 };
 </script>
