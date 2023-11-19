@@ -46,6 +46,11 @@ const router = createRouter({
       name:"write",
       component: () => import("@/views/TheBoardWriteView.vue"),
     },
+    {
+        path: "/board/detail/:id",
+        name: "detail",
+        component: () => import("@/views/TheBoardDetailView.vue"),
+    },
   
   ],
 });

@@ -2,6 +2,9 @@
 import { ref, computed, onMounted, watch } from "vue";
 import { listBoard, listBoardByGugun } from "@/api/board.js";
 import { listSido, listGugun } from "@/api/sidoGugun.js";
+import { useRouter } from 'vue-router';
+
+const $router = useRouter();
 
 const items = ref([]);
 const sido = ref([]);
@@ -108,7 +111,7 @@ const totalPages = computed(() => {
             label="구군 선택"
             return-object
           ></v-select>
-          <v-btn height="50px">메이트 모집하기</v-btn>
+          <RouterLink :to="{name:'write'}"><v-btn height="50px" >메이트 모집하기</v-btn></RouterLink>
         </div>
 
         <v-container>
@@ -126,7 +129,8 @@ const totalPages = computed(() => {
                 width="310"
                 height="300"
                 title="모집 글 제목"
-              >
+                @click="$router.push({name:'detail', params: { id: item.id }})"
+                >
                 <v-img :src="item.src"></v-img>
 
                 <template v-slot:title>{{ item.title }}</template>

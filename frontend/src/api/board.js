@@ -30,4 +30,13 @@ const registImage = async(formData) => {
   });
 };
 
-export { listBoard, listBoardByGugun, registBoard, registImage };
+const getDetail = async(id) => {
+  return await axios.get(`/api/boards/${id}`);
+};
+
+const deleteBoard = async(id) => {
+  return await axios.delete(`/api/boards/${id}`);
+}
+
+export { listBoard, listBoardByGugun, registBoard, registImage, getDetail,
+  deleteBoard };
