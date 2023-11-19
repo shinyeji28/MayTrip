@@ -1,7 +1,6 @@
 <script setup>
 import { useMenuStore } from "@/stores/menu";
 import { useAuthStore } from "@/stores/auth";
-import { useAuthStore } from "@/stores/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
