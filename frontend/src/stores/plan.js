@@ -17,11 +17,13 @@ export const usePlanStore = defineStore(
     const getCrewInfos = async (crewId) => {
       const { data } = await getCrewApi(crewId);
       crew.value = data;
+      console.log("store crew : ", crew.value);
     };
 
     const getPlanInfos = async (crewId) => {
       const { data } = await getPlanApi(crewId);
       plan.value = data;
+      console.log("store plan : ", plan.value);
     };
 
     return {

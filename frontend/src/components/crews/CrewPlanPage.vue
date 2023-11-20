@@ -3,9 +3,13 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import crewPlanSetting from "@/components/crews/CrewPlanSettingPage.vue";
 import crewPlanMaking from "@/components/crews/crewPlanMakingPage.vue";
+import { usePlanStore } from "@/stores/plan";
+import { storeToRefs } from "pinia";
 
 const route = useRoute();
-const crewId = route.params.crewId;
+const planStore = usePlanStore();
+const { getInfos } = planStore;
+const { crew } = storeToRefs(planStore);
 
 const toggle = ref(1);
 
@@ -15,17 +19,18 @@ const changeToggle = (num) => {
 
 const getInfoData = async () => {
   try {
+    if(Object.keys(crew.value).length == 0) {
+      await getInfos(route.params.crewId);
+      return;
+    }
     if (!confirm("임시 저장된 내역을 불러올까요?")) {
-      await getInfos(props.crewId);
+      await getInfos(route.params.crewId);
     }
   } catch (error) {
     console.log(error);
   }
 };
-
-onMounted(() => {
-  getInfoData();
-});
+getInfoData();
 </script>
 
 <template>

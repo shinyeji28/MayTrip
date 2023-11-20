@@ -7,7 +7,6 @@ const route = useRoute();
 
 const crew = ref({});
 
-onMounted(() => {});
 
 const getCrewInfo = async () => {
   try {
@@ -19,6 +18,8 @@ const getCrewInfo = async () => {
   }
 };
 getCrewInfo();
+
+
 </script>
 
 <template>

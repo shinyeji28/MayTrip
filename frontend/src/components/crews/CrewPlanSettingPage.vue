@@ -5,19 +5,10 @@ import { usePlanStore } from "@/stores/plan";
 import { storeToRefs } from "pinia";
 
 const planStore = usePlanStore();
-const { crew, plan } = storeToRefs(planStore);
+const { crew } = storeToRefs(planStore);
 
-const boardForm = ref({
-  id: crew.value.board.id,
-  title: crew.value.board.title,
-  content: crew.value.board.content,
-  startDate: crew.value.board.startDate,
-  endDate: crew.value.board.endDate,
-  headcount: crew.value.board.headcount,
-  gugunCode: crew.value.board.gugunCode,
-  sidoCode: crew.value.board.sidoCode,
-});
 
+const boardForm = ref({});
 const updateForm = () => {
   boardForm.value = {
     id: crew.value.board.id,
@@ -30,6 +21,8 @@ const updateForm = () => {
     sidoCode: crew.value.board.sidoCode,
   };
 };
+updateForm();
+
 
 const modify = () => {};
 
