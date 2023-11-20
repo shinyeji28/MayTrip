@@ -49,7 +49,7 @@ const router = createRouter({
           path: "plan/:crewId",
           name: "crew-plan",
           component: () => import("@/components/crews/CrewPlanPage.vue"),
-          redirect: "/crew/plan/:crewId/info",
+          redirect: { name: "crew-plan-info" },
           children: [
             {
               path: "info",

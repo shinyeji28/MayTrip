@@ -13,7 +13,10 @@ const { crew } = storeToRefs(planStore);
 
 const getInfoData = async () => {
   try {
-    if (Object.keys(crew.value).length == 0) {
+    if (
+      Object.keys(crew.value).length == 0 ||
+      crew.value.id != route.params.crewId
+    ) {
       await getInfos(route.params.crewId);
       return;
     }
@@ -44,11 +47,10 @@ getInfoData();
 <style scoped>
 .container {
   width: 100%;
-  height: 100%;
+  height: 90vh;
 }
 .side {
   width: 100px;
-  height: 90vh;
   border-right: 1px solid lightgray;
 }
 .side-item {

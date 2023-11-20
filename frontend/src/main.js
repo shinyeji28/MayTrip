@@ -1,4 +1,5 @@
 import "./assets/default.css";
+import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
@@ -14,6 +15,9 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import { aliases, mdi } from "vuetify/iconsets/mdi";
 import "@mdi/font/css/materialdesignicons.css";
+
+// Vue Virtual Scroller
+import VueVirtualScroller from "vue-virtual-scroller";
 
 const app = createApp(App);
 
@@ -36,5 +40,6 @@ const vuetify = createVuetify({
 app.use(pinia);
 app.use(vuetify);
 app.use(router);
+app.use(VueVirtualScroller);
 
 app.mount("#app");

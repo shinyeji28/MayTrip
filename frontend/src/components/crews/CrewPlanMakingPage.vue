@@ -8,47 +8,44 @@ import {
   getAllBySidoGugunContentTypeApi,
   getDescriptionByContentIdApi,
   getByKeyWord,
+  getByContentId,
 } from "@/api/attraction";
 import crewPlanMapPage from "@/components/crews/CrewPlanMapPage.vue";
 
-const route = useRoute();
 const planStore = usePlanStore();
+const { insertDetail, deleteDetail } = planStore;
 const { crew, plan } = storeToRefs(planStore);
-
+console.log("plan : ", plan.value);
 const selectForm = ref({
+  // 시도, 구군, 콘텐츠 타입 선택 정보
   sido: 0,
   gugun: 0,
   contentType: 0,
 });
-const sido = ref([]);
-const gugun = ref([]);
+const sido = ref([]); // 시도 리스트
+const gugun = ref([]); // 구군 리스트
 const searchForm = ref({
+  // 검색어 입력 폼 정보
   key: "",
   word: "",
 });
 const searchSetting = ref({
+  // 검색어 입력 관련 설정
   loading: false,
   loaded: false,
 });
-const list = ref([]);
-const dialog = ref(false);
-const dialogDetail = ref({});
+const list = ref([]); // 검색 목록
+const dialog = ref(false); // 상세 보기 토글
+const dialogDetail = ref({}); // 상세보기 정보
 const location = ref({
-  lan: 0.0,
-  lon: 0.0,
+  // 선택된 장소 위치
+  latitude: 0.0,
+  longitude: 0.0,
 });
+const selectedDay = ref(plan.value.days[0].dayId);
+const dayList = ref(plan.value.days[0].details);
 
-const clickSearch = async () => {
-  searchSetting.value.loading = true;
-  const { data } = await getByKeyWord(searchForm.value);
-  if (data.length > 300) list.value = data.slice(0, 300);
-  else list.value = data;
-  searchSetting.value.loading = false;
-  searchSetting.value.loaded = true;
-  //setTimeout(() => {
-  //}, 2000);
-};
-
+/** 검색 조건 관련 */
 const getSido = async () => {
   try {
     const { data } = await listSido();
@@ -67,17 +64,17 @@ const getGugun = async () => {
   }
 };
 
-const clickDetail = async (contentId) => {
-  list.value.forEach((info) => {
-    if (info.contentId == contentId) {
-      dialogDetail.value = info;
-      return false;
-    }
-  });
-  const { data } = await getDescriptionByContentIdApi(contentId);
-  dialogDetail.value.overview = data.overview;
-  dialog.value = true;
-  console.log(dialogDetail.value);
+const clickSearch = async () => {
+  // 키워드 검색
+  searchSetting.value.loading = true;
+  console.log("조건 검색 : ", searchForm.value);
+  const { data } = await getByKeyWord(searchForm.value);
+  if (data.length > 300) list.value = data.slice(0, 300);
+  else list.value = data;
+  searchSetting.value.loading = false;
+  searchSetting.value.loaded = true;
+  //setTimeout(() => {
+  //}, 2000);
 };
 
 watch(
@@ -97,9 +94,61 @@ watch(
     const { data } = await getAllBySidoGugunContentTypeApi(selectForm.value);
     if (data.length > 300) list.value = data.slice(0, 300);
     else list.value = data;
-    console.log(list.value);
+    console.log("검색됨! - 리스트 길이 : ", list.value.length);
   }
 );
+
+/** 클릭 이벤트 */
+const clickDetail = async (contentId) => {
+  try {
+    const response = await getByContentId(contentId);
+    dialogDetail.value = response.data;
+    const { data } = await getDescriptionByContentIdApi(contentId);
+    dialogDetail.value.overview = data.overview;
+    dialog.value = true;
+    console.log(dialogDetail.value);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const clickAdd = async (contentId) => {
+  const data = {
+    contentId,
+    dayId: selectedDay.value,
+    priority: dayList.value.length + 1,
+  };
+  console.log("추가 버튼 클릭!!", data);
+  await insertDetail(data);
+  updateDayList();
+};
+
+const clickRemove = async (detailId) => {
+  console.log("삭제 버튼 클릭!!");
+  await deleteDetail(detailId);
+  updateDayList();
+};
+
+const clickItem = async (lat, lon) => {
+  console.log("아이템 클릭 : ", lat, lon);
+  location.value.latitude = lat;
+  location.value.longitude = lon;
+};
+
+const clickDay = async (dayId) => {
+  selectedDay.value = dayId;
+  updateDayList();
+};
+
+const updateDayList = () => {
+  plan.value.days.forEach((day) => {
+    if (day.dayId == selectedDay.value) {
+      dayList.value = day.details;
+      console.log(dayList.value);
+      return false;
+    }
+  });
+};
 
 onMounted(() => {
   getSido();
@@ -177,6 +226,7 @@ onMounted(() => {
                 append-inner-icon="mdi-magnify"
                 single-line
                 hide-details
+                v-model="searchForm.word"
                 @click:append-inner="clickSearch"
               ></v-text-field>
             </v-card-text>
@@ -184,9 +234,24 @@ onMounted(() => {
         </v-row>
       </div>
       <div class="col center">
-        <v-virtual-scroll :items="list" width="500" height="70vh">
+        <!-- <RecycleScroller
+          class="scroll"
+          :items="list"
+          :item-size="30"
+          key-field="contentId"
+          v-slot="{ item }"
+        >
+          <div class="user">
+            {{ item.title }}
+          </div>
+        </RecycleScroller> -->
+        <v-virtual-scroll :items="list" width="500" height="700" class="scroll">
           <template v-slot:default="{ item }">
-            <v-card width="320" class="mx-auto mb-2">
+            <v-card
+              width="350"
+              class="mx-1 mb-2 item"
+              @click="clickItem(item.latitude, item.longitude)"
+            >
               <div class="d-flex flex-no-wrap justify-flex-start">
                 <v-avatar class="ma-2" size="100" rounded="0">
                   <v-img
@@ -240,18 +305,21 @@ onMounted(() => {
                         cover
                         height="250"
                         :src="
-                          dialogDetail.firstImage != ''
-                            ? dialogDetail.firstImage
-                            : dialogDetail.firstImage2
+                          dialogDetail.attractionInfo.firstImage != ''
+                            ? dialogDetail.attractionInfo.firstImage
+                            : dialogDetail.attractionInfo.firstImage2
                         "
                       ></v-img>
                     </v-col>
                     <v-col cols="12">
-                      <v-card-title>{{ dialogDetail.title }}</v-card-title>
+                      <v-card-title>{{
+                        dialogDetail.attractionInfo.title
+                      }}</v-card-title>
                       <v-card-subtitle>
                         <span class="me-1"
-                          >{{ dialogDetail.addr1 }} {{ dialogDetail.addr2 }} -
-                          {{ dialogDetail.zipcode }}</span
+                          >{{ dialogDetail.attractionInfo.addr1 }}
+                          {{ dialogDetail.attractionInfo.addr2 }} -
+                          {{ dialogDetail.attractionInfo.zipcode }}</span
                         >
                       </v-card-subtitle>
                     </v-col>
@@ -264,9 +332,9 @@ onMounted(() => {
                     ></v-icon>
                     <div class="text-grey ms-2">
                       {{
-                        dialogDetail.tel == ""
+                        dialogDetail.attractionInfo.tel == ""
                           ? "등록된 번호가 없습니다."
-                          : dialogDetail.tel
+                          : dialogDetail.attractionInfo.tel
                       }}
                     </div>
                   </v-row>
@@ -277,7 +345,7 @@ onMounted(() => {
                       size="small"
                     ></v-icon>
                     <div class="text-grey ms-2">
-                      {{ dialogDetail.readcount }}
+                      {{ dialogDetail.attractionInfo.readcount }}
                     </div>
                   </v-row>
                   <v-row class="mx-1">
@@ -303,6 +371,78 @@ onMounted(() => {
     <div class="map">
       <crewPlanMapPage :location="location"></crewPlanMapPage>
     </div>
+    <div class="day-side">
+      <v-list-item title="Days" subtitle="여행일"></v-list-item>
+      <v-divider></v-divider>
+      <v-list-item
+        v-for="day in plan.days"
+        :key="day.dayId"
+        link
+        :title="day.day + '일자'"
+        @click="clickDay(day.dayId)"
+      ></v-list-item>
+    </div>
+    <div class="col margin-30">
+      <v-virtual-scroll
+        :items="dayList"
+        width="400"
+        height="700"
+        class="scroll"
+      >
+        <template v-slot:default="{ item }">
+          <v-card
+            width="400"
+            class="mx-1 mb-2 item"
+            @click="
+              clickItem(
+                item.attractionInfo.latitude,
+                item.attractionInfo.longitude
+              )
+            "
+          >
+            <div class="d-flex flex-no-wrap justify-flex-start">
+              <v-avatar class="ma-2" size="100" rounded="0">
+                <v-img
+                  :src="
+                    item.attractionInfo.firstImage != ''
+                      ? item.attractionInfo.firstImage
+                      : item.attractionInfo.firstImage2
+                  "
+                ></v-img>
+              </v-avatar>
+              <div>
+                <v-card-title class="text-h20">
+                  {{ item.attractionInfo.title }}
+                </v-card-title>
+
+                <v-card-subtitle>{{
+                  item.attractionInfo.addr1
+                }}</v-card-subtitle>
+
+                <v-card-actions>
+                  <v-btn
+                    size="small"
+                    variant="text"
+                    density="comfortable"
+                    @click="clickDetail(item.attractionInfo.contentId)"
+                  >
+                    상세보기
+                  </v-btn>
+                  <v-btn
+                    size="small"
+                    variant="outlined"
+                    density="comfortable"
+                    @click="clickRemove(item.detailId)"
+                  >
+                    remove
+                  </v-btn>
+                </v-card-actions>
+              </div>
+            </div>
+          </v-card>
+        </template>
+      </v-virtual-scroll>
+    </div>
   </div>
 </template>
 
@@ -316,6 +456,23 @@ onMounted(() => {
   width: 50vw;
   border-right: 1px solid lightgray;
 }
+.scroll {
+  height: 100%;
+}
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+.item {
+  height: 30%;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+}
+.day-side {
+  width: 100px;
+  border-right: 1px solid lightgray;
+}
+
 .row {
   display: flex;
   flex-direction: row;
