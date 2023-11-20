@@ -32,7 +32,7 @@ const remove = async () => {
 };
 
 const mvUpdate = () => {
-  router.push({ name: "board-update" });
+  router.push({ name: "board-update", params: { id: id } });
 };
 
 const formatDate = (date) => {
