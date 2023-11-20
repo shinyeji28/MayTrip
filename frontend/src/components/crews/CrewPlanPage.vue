@@ -11,15 +11,9 @@ const planStore = usePlanStore();
 const { getInfos } = planStore;
 const { crew } = storeToRefs(planStore);
 
-const toggle = ref(1);
-
-const changeToggle = (num) => {
-  toggle.value = num;
-};
-
 const getInfoData = async () => {
   try {
-    if(Object.keys(crew.value).length == 0) {
+    if (Object.keys(crew.value).length == 0) {
       await getInfos(route.params.crewId);
       return;
     }
@@ -36,13 +30,14 @@ getInfoData();
 <template>
   <div class="row container">
     <div class="col side">
-      <div class="side-item" @click="changeToggle(1)">
+      <router-link class="side-item" :to="{ name: 'crew-plan-info' }">
         1. 날짜 & 여행지 선택
-      </div>
-      <div class="side-item" @click="changeToggle(2)">2. 일정 만들기</div>
+      </router-link>
+      <router-link class="side-item" :to="{ name: 'crew-plan-schedule' }">
+        2. 일정 만들기
+      </router-link>
     </div>
-    <crewPlanSetting v-show="toggle == 1"></crewPlanSetting>
-    <crewPlanMaking v-show="toggle == 2"></crewPlanMaking>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -67,6 +62,7 @@ getInfoData();
   font-size: small;
   border-radius: 5px;
   border-bottom: 1px solid lightgray;
+  text-decoration: none;
 }
 .side-item:hover {
   background-color: lightblue;

@@ -49,6 +49,21 @@ const router = createRouter({
           path: "plan/:crewId",
           name: "crew-plan",
           component: () => import("@/components/crews/CrewPlanPage.vue"),
+          redirect: "/crew/plan/:crewId/info",
+          children: [
+            {
+              path: "info",
+              name: "crew-plan-info",
+              component: () =>
+                import("@/components/crews/CrewPlanSettingPage.vue"),
+            },
+            {
+              path: "schedule",
+              name: "crew-plan-schedule",
+              component: () =>
+                import("@/components/crews/CrewPlanMakingPage.vue"),
+            },
+          ],
         },
       ],
     },

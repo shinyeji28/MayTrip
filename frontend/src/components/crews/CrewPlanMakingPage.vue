@@ -4,7 +4,12 @@ import { useRoute } from "vue-router";
 import { usePlanStore } from "@/stores/plan";
 import { storeToRefs } from "pinia";
 import { listSido, listGugun } from "@/api/sidoGugun";
-import { getAllBySidoGugunContentTypeApi, getDescriptionByContentIdApi, getByKeyWord } from "@/api/attraction";
+import {
+  getAllBySidoGugunContentTypeApi,
+  getDescriptionByContentIdApi,
+  getByKeyWord,
+} from "@/api/attraction";
+import crewPlanMapPage from "@/components/crews/CrewPlanMapPage.vue";
 
 const route = useRoute();
 const planStore = usePlanStore();
@@ -28,11 +33,15 @@ const searchSetting = ref({
 const list = ref([]);
 const dialog = ref(false);
 const dialogDetail = ref({});
+const location = ref({
+  lan: 0.0,
+  lon: 0.0,
+});
 
 const clickSearch = async () => {
   searchSetting.value.loading = true;
-  const {data} = await getByKeyWord(searchForm.value);
-  if(data.length > 300) list.value = data.slice(0, 300);
+  const { data } = await getByKeyWord(searchForm.value);
+  if (data.length > 300) list.value = data.slice(0, 300);
   else list.value = data;
   searchSetting.value.loading = false;
   searchSetting.value.loaded = true;
@@ -60,16 +69,16 @@ const getGugun = async () => {
 
 const clickDetail = async (contentId) => {
   list.value.forEach((info) => {
-    if(info.contentId == contentId) {
+    if (info.contentId == contentId) {
       dialogDetail.value = info;
       return false;
     }
   });
-  const {data} = await getDescriptionByContentIdApi(contentId);
+  const { data } = await getDescriptionByContentIdApi(contentId);
   dialogDetail.value.overview = data.overview;
   dialog.value = true;
   console.log(dialogDetail.value);
-}
+};
 
 watch(
   () => selectForm.value.sido,
@@ -78,13 +87,17 @@ watch(
   }
 );
 
-
 watch(
-  () => [selectForm.value.sido, selectForm.value.gugun, selectForm.value.contentType],
+  () => [
+    selectForm.value.sido,
+    selectForm.value.gugun,
+    selectForm.value.contentType,
+  ],
   async () => {
-    const {data} = await getAllBySidoGugunContentTypeApi(selectForm.value);
-    if(data.length > 300) list.value = data.slice(0, 300);
+    const { data } = await getAllBySidoGugunContentTypeApi(selectForm.value);
+    if (data.length > 300) list.value = data.slice(0, 300);
     else list.value = data;
+    console.log(list.value);
   }
 );
 
@@ -171,27 +184,24 @@ onMounted(() => {
         </v-row>
       </div>
       <div class="col center">
-        <v-virtual-scroll :items="list" width="500" height="500">
+        <v-virtual-scroll :items="list" width="500" height="70vh">
           <template v-slot:default="{ item }">
-            <v-card
-            width="320"
-            class="mx-auto mb-2"
-          >
+            <v-card width="320" class="mx-auto mb-2">
               <div class="d-flex flex-no-wrap justify-flex-start">
-                <v-avatar
-                class="ma-2"
-                size="100"
-                  rounded="0"
-                >
-                  <v-img :src="item.firstImage!=''?item.firstImage: item.firstImage2"></v-img>
+                <v-avatar class="ma-2" size="100" rounded="0">
+                  <v-img
+                    :src="
+                      item.firstImage != '' ? item.firstImage : item.firstImage2
+                    "
+                  ></v-img>
                 </v-avatar>
                 <div>
                   <v-card-title class="text-h20">
-                    {{item.title}}
+                    {{ item.title }}
                   </v-card-title>
-  
-                  <v-card-subtitle>{{item.addr1}}</v-card-subtitle>
-  
+
+                  <v-card-subtitle>{{ item.addr1 }}</v-card-subtitle>
+
                   <v-card-actions>
                     <v-btn
                       size="small"
@@ -212,17 +222,12 @@ onMounted(() => {
                   </v-card-actions>
                 </div>
               </div>
-        </v-card>
+            </v-card>
           </template>
-          
         </v-virtual-scroll>
 
         <v-row justify="center">
-          <v-dialog
-            v-model="dialog"
-            persistent
-            width="1024"
-          >
+          <v-dialog v-model="dialog" persistent width="1024">
             <v-card>
               <v-card-title>
                 <span class="text-h5">Detail</span>
@@ -234,36 +239,49 @@ onMounted(() => {
                       <v-img
                         cover
                         height="250"
-                        :src="dialogDetail.firstImage!=''?dialogDetail.firstImage:dialogDetail.firstImage2"
+                        :src="
+                          dialogDetail.firstImage != ''
+                            ? dialogDetail.firstImage
+                            : dialogDetail.firstImage2
+                        "
                       ></v-img>
                     </v-col>
                     <v-col cols="12">
-                      <v-card-title>{{dialogDetail.title}}</v-card-title>
+                      <v-card-title>{{ dialogDetail.title }}</v-card-title>
                       <v-card-subtitle>
-                        <span class="me-1">{{dialogDetail.addr1}} {{(dialogDetail.addr2)}} - {{ dialogDetail.zipcode }}</span>
+                        <span class="me-1"
+                          >{{ dialogDetail.addr1 }} {{ dialogDetail.addr2 }} -
+                          {{ dialogDetail.zipcode }}</span
+                        >
                       </v-card-subtitle>
                     </v-col>
                   </v-row>
-                  <v-row
-                    align="center"
-                    class="mx-4"
-                  >
-                  <v-icon icon="mdi-phone-incoming" color="warning" size="small"></v-icon>
+                  <v-row align="center" class="mx-4">
+                    <v-icon
+                      icon="mdi-phone-incoming"
+                      color="warning"
+                      size="small"
+                    ></v-icon>
                     <div class="text-grey ms-2">
-                      {{ dialogDetail.tel =="" ? "등록된 번호가 없습니다." : dialogDetail.tel }}
+                      {{
+                        dialogDetail.tel == ""
+                          ? "등록된 번호가 없습니다."
+                          : dialogDetail.tel
+                      }}
                     </div>
                   </v-row>
-                  <v-row
-                    align="center"
-                    class="mx-4"
-                  >
-                  <v-icon icon="mdi-eye" color="warning" size="small"></v-icon>
+                  <v-row align="center" class="mx-4">
+                    <v-icon
+                      icon="mdi-eye"
+                      color="warning"
+                      size="small"
+                    ></v-icon>
                     <div class="text-grey ms-2">
                       {{ dialogDetail.readcount }}
                     </div>
                   </v-row>
                   <v-row class="mx-1">
-                    <v-card-text>{{dialogDetail.overview}}</v-card-text>
+                    <v-card-text>{{ dialogDetail.overview }}</v-card-text>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -280,8 +298,10 @@ onMounted(() => {
             </v-card>
           </v-dialog>
         </v-row>
-        
       </div>
+    </div>
+    <div class="map">
+      <crewPlanMapPage :location="location"></crewPlanMapPage>
     </div>
   </div>
 </template>
@@ -291,6 +311,10 @@ onMounted(() => {
   width: 400px;
   border-right: 1px solid lightgray;
   padding: 30px 20px;
+}
+.map {
+  width: 50vw;
+  border-right: 1px solid lightgray;
 }
 .row {
   display: flex;
