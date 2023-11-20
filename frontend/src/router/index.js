@@ -39,19 +39,25 @@ const router = createRouter({
     {
       path: "/board",
       name: "board",
-      component: () => import("@/views/TheBoardListView.vue"),
+      component: () => import("@/views/TheBoardView.vue"),
+      children: [
+        {
+          path: "list",
+          name: "board-list",
+          component: () => import("@/components/boards/BoardList.vue"),
+        },
+        {
+          path: "write",
+          name: "board-write",
+          component: () => import("@/components/boards/BoardWrite.vue"),
+        },
+        {
+          path: "detail/:id",
+          name: "board-detail",
+          component: () => import("@/components/boards/BoardDetail.vue"),
+        },
+      ],
     },
-    {
-      path:"/write",
-      name:"write",
-      component: () => import("@/views/TheBoardWriteView.vue"),
-    },
-    {
-        path: "/board/detail/:id",
-        name: "detail",
-        component: () => import("@/views/TheBoardDetailView.vue"),
-    },
-  
   ],
 });
 

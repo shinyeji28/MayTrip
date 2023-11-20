@@ -2,9 +2,9 @@
 import { ref, computed, onMounted, watch } from "vue";
 import { listBoard, listBoardByGugun } from "@/api/board.js";
 import { listSido, listGugun } from "@/api/sidoGugun.js";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
-const $router = useRouter();
+const router = useRouter();
 
 const items = ref([]);
 const sido = ref([]);
@@ -86,75 +86,68 @@ const totalPages = computed(() => {
 </script>
 
 <template>
-  <div class="container">
-    <div class="banner">
-      <img src="@/assets/images/trip4.jpg" />
-      <div class="title">여행 친구를 구하고 있어요 😍</div>
-    </div>
-    <main class="container">
-      <div class="main-wrap">
-        <div class="select-box">
-          <v-select
-            v-model="selectedSido"
-            :items="sido"
-            item-title="sidoName"
-            item-value="sidoCode"
-            label="시도 선택"
-            return-object
-            hint="구군까지 선택해주세요"
-          ></v-select>
-          <v-select
-            v-model="selectedGugun"
-            :items="gugun"
-            item-title="gugunName"
-            item-value="gugunCode"
-            label="구군 선택"
-            return-object
-          ></v-select>
-          <RouterLink :to="{name:'write'}"><v-btn height="50px" >메이트 모집하기</v-btn></RouterLink>
-        </div>
-
-        <v-container>
-          <v-row>
-            <v-col
-              v-for="(item, index) in paginatedItems"
-              :key="index"
-              cols="12"
-              sm="6"
-              md="4"
-              lg="4"
-            >
-              <v-card
-                class="card"
-                width="310"
-                height="300"
-                title="모집 글 제목"
-                @click="$router.push({name:'detail', params: { id: item.id }})"
-                >
-                <v-img :src="item.src"></v-img>
-
-                <template v-slot:title>{{ item.title }}</template>
-
-                <template v-slot:subtitle
-                  >타겟 도시 : {{ item.sidoName }}
-                  {{ item.gugunName }}</template
-                >
-
-                <template v-slot:text> 간략 설명 </template>
-              </v-card>
-            </v-col>
-          </v-row>
-
-          <!-- 페이지네이션 -->
-          <v-pagination
-            v-model="page"
-            :length="totalPages"
-            rounded="circle"
-          ></v-pagination>
-        </v-container>
-      </div>
-    </main>
+  <div class="select-box">
+    <v-select
+      v-model="selectedSido"
+      :items="sido"
+      item-title="sidoName"
+      item-value="sidoCode"
+      label="시도 선택"
+      return-object
+      hint="구군까지 선택해주세요"
+    ></v-select>
+    <v-select
+      v-model="selectedGugun"
+      :items="gugun"
+      item-title="gugunName"
+      item-value="gugunCode"
+      label="구군 선택"
+      return-object
+    ></v-select>
+    <RouterLink :to="{ name: 'board-write' }"
+      ><v-btn height="50px">메이트 모집하기</v-btn></RouterLink
+    >
   </div>
+
+  <v-container>
+    <v-row>
+      <v-col
+        v-for="(item, index) in paginatedItems"
+        :key="index"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
+        <v-card
+          class="card"
+          width="310"
+          height="300"
+          title="모집 글 제목"
+          @click="
+            router.push({ name: 'board-detail', params: { id: item.id } })
+          "
+        >
+          <v-img :src="item.src"></v-img>
+
+          <template v-slot:title>{{ item.title }}</template>
+
+          <template v-slot:subtitle
+            >타겟 도시 : {{ item.sidoName }} {{ item.gugunName }}</template
+          >
+
+          <template v-slot:text> 간략 설명 </template>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <!-- 페이지네이션 -->
+    <v-pagination
+      v-model="page"
+      :length="totalPages"
+      rounded="circle"
+    ></v-pagination>
+  </v-container>
 </template>
 
 <style scoped>
