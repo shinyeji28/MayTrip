@@ -32,14 +32,14 @@ const selectedFile = ref([]);
 const boardInfo = ref(null);
 const title = ref(null);
 const headCount = ref(null);
-const savedThumbnail = ref(null);
+const thumbnail = ref({});
 
 const getBoardDetail = async () => {
   const { data } = await getDetail(id);
   try {
     boardInfo.value = data;
     title.value = data.title;
-    savedThumbnail.value = `http://localhost:9000/api/images/${data.thumbnail.saveFolder}/${data.thumbnail.saveFile}`;
+    thumbnail.value = data.thumbnailInfo;
     headCount.value = data.headcount;
     selectedSido.value = { sidoCode: data.sidoCode, sidoName: data.sidoName };
     selectedGugun.value = data.gugunCode;
@@ -48,8 +48,7 @@ const getBoardDetail = async () => {
     endDate.value = new Date(data.endDate);
     endDate.value.setHours(0, 0, 0, 0);
     content.value = data.content;
-    console.log(data);
-    console.log(savedThumbnail.value);
+    // console.log(data);
   } catch (error) {
     console.error(error);
   }
@@ -89,7 +88,7 @@ const updateBoard = async (formData) => {
   const { data } = await updateBoard(formData);
   try {
     alert("수정이 완료되었습니다.");
-    console.log(data);
+    // console.log(data);
   } catch (error) {
     console.error(error);
   }
@@ -152,7 +151,11 @@ const updateHeadCount = () => {
         :rules="rules"
         hide-details="auto"
       ></v-file-input>
-      <img class="thumbnail-img" :src="savedThumbnail" />
+      <img
+        class="thumbnail-img"
+        :src="thumbnail?.url"
+        :alt="thumbnail?.originFileName"
+      />
       <v-text-field
         label="모집 인원수"
         name="headcount"

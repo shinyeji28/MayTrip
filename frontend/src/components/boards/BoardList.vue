@@ -128,7 +128,10 @@ const totalPages = computed(() => {
             router.push({ name: 'board-detail', params: { id: item.id } })
           "
         >
-          <v-img :src="item.src"></v-img>
+          <v-img
+            :src="item.thumbnailInfo?.url"
+            alt="item.thumbnailInfo?.originFileName"
+          ></v-img>
 
           <template v-slot:title>{{ item.title }}</template>
 
