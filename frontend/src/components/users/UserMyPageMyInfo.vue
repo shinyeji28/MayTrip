@@ -14,7 +14,6 @@ const userForm = ref({
   profileImg: [],
 });
 const isShowInfo = ref(true);
-const profileImg = ref([]);
 
 const modify = async () => {
   try {
@@ -76,6 +75,7 @@ const handleFileUpload = () => {
     <v-btn v-show="!isShowInfo" class="me-4" @click="modify"> confirm </v-btn>
     <v-btn v-show="!isShowInfo" @click="cancel"> cancel </v-btn>
   </form>
+  
 </template>
 
 <style scoped>

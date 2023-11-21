@@ -15,7 +15,7 @@ const getCrewList = async () => {
 </script>
 
 <template>
-  <v-card>
+  <v-card width="800">
     <v-data-iterator :items="crewlist" :items-per-page="3">
       <template v-slot:default="{ items }">
         <v-container class="pa-2" fluid>
@@ -73,4 +73,5 @@ const getCrewList = async () => {
   </v-card>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
