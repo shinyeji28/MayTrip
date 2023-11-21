@@ -110,9 +110,9 @@ const onSubmit = async () => {
   formData.append("startDate", startDate.value.toISOString().substring(0, 10));
   formData.append("endDate", endDate.value.toISOString().substring(0, 10));
   formData.append("content", content.value);
-  if (selectedFile.value.length == 0) {
-    formData.append("image", null);
-  }
+  // if (selectedFile.value.length == 0) {
+  // formData.append("image", null);
+  // }
   // for (let key of formData.keys()) {
   //   console.log(key, ":", formData.get(key));
   // }
