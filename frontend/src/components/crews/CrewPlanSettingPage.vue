@@ -86,7 +86,7 @@ const today = date.toISOString().split("T")[0];
 <style scoped>
 .container {
   justify-content: center;
-  max-width: 1000px;
+  width: 800px;
   margin: 0 auto;
 }
 .row {

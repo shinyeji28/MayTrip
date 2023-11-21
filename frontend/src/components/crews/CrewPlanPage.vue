@@ -37,11 +37,12 @@ getInfoData();
 
 <style scoped>
 .container {
-  width: 100%;
   height: 90vh;
+  max-width: none;
 }
 .side {
-  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
   border-right: 1px solid lightgray;
 }
 .side-item {
@@ -50,7 +51,7 @@ getInfoData();
   align-items: center;
   height: 100px;
   padding: 20px 10px;
-  color: black;
+  color: darkgray;
   font-weight: 800;
   font-size: small;
   border-radius: 5px;
@@ -58,7 +59,7 @@ getInfoData();
   text-decoration: none;
 }
 .side-item:hover {
-  background-color: lightblue;
+  color: rgb(130, 198, 221);
 }
 .blue {
   background-color: aqua;
