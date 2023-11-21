@@ -9,9 +9,15 @@ const toggle = ref(1);
 </script>
 
 <template>
-  <div class="row space-between margin-60">
+  <div class="row center margin-60">
     <div>
-      <img src="@/assets/ssafy_logo.png" alt="profile" class="profile" />
+      <img
+        :src="
+          user.profileImg == '' ? '@/assets/ssafy_logo.png' : user.profileImg
+        "
+        alt="profile"
+        class="profile"
+      />
     </div>
     <div class="text-2">{{ user.username }} 님</div>
   </div>
@@ -19,7 +25,7 @@ const toggle = ref(1);
     <v-tab @click="toggle = 1"> My Crew </v-tab>
     <v-tab @click="toggle = 2"> My Info </v-tab>
   </v-tabs>
-  <div class="col margin-60">
+  <div class="col margin-60 center">
     <userMyPageMyCrew v-show="toggle == 1" />
     <userMyPageMyInfo v-show="toggle == 2" />
   </div>
@@ -43,7 +49,7 @@ const toggle = ref(1);
   margin-right: 80px;
 }
 
-.space-between {
+.center {
   justify-content: center;
   align-items: center;
 }
