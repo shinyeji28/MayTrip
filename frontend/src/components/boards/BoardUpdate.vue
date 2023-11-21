@@ -4,7 +4,7 @@ import VQuillEditor from "@/components/boards/item/VQuillEditor.vue";
 import { registBoard } from "@/api/board.js";
 import { listSido, listGugun } from "@/api/sidoGugun.js";
 import { useRoute, useRouter } from "vue-router";
-import { getDetail } from "@/api/board.js";
+import { getDetail, updateBoard } from "@/api/board.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -84,11 +84,11 @@ watch(selectedSido, (newValue) => {
   }
 });
 
-const updateBoard = async (formData) => {
+const updateBoardContent = async (formData) => {
   const { data } = await updateBoard(formData);
   try {
     alert("수정이 완료되었습니다.");
-    // console.log(data);
+    console.log(data);
   } catch (error) {
     console.error(error);
   }
@@ -110,10 +110,15 @@ const onSubmit = async () => {
   formData.append("startDate", startDate.value.toISOString().substring(0, 10));
   formData.append("endDate", endDate.value.toISOString().substring(0, 10));
   formData.append("content", content.value);
+  if (selectedFile.value.length == 0) {
+    formData.append("image", null);
+  }
   // for (let key of formData.keys()) {
   //   console.log(key, ":", formData.get(key));
   // }
-  await updateBoard(formData);
+  await updateBoardContent(formData);
+
+  router.push({ name: "board-detail", params: { id: id } });
 };
 
 const setStartDate = () => {

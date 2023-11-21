@@ -1,8 +1,11 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
 import VQuillEditor from "@/components/boards/item/VQuillEditor.vue";
 import { registBoard } from "@/api/board.js";
 import { listSido, listGugun } from "@/api/sidoGugun.js";
+
+const router = useRouter();
 
 const form = ref(null);
 
@@ -75,10 +78,11 @@ const onSubmit = async () => {
   formData.append("startDate", startDate.value.toISOString().substring(0, 10));
   formData.append("endDate", endDate.value.toISOString().substring(0, 10));
   formData.append("content", content.value);
-  for (let key of formData.keys()) {
-    console.log(key, ":", formData.get(key));
-  }
+  // for (let key of formData.keys()) {
+  //   console.log(key, ":", formData.get(key));
+  // }
   await saveBoard(formData);
+  router.push({ name: "board-list" });
 };
 
 const setStartDate = () => {

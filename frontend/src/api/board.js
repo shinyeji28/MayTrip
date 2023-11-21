@@ -39,7 +39,9 @@ const deleteBoard = async (id) => {
 };
 
 const updateBoard = async (formData) => {
-  return await axios.put(`/api/boards`);
+  return await axios.put(`/api/boards`, formData, {
+    headers: formDataHeader,
+  });
 };
 
 export {
@@ -49,4 +51,5 @@ export {
   registImage,
   getDetail,
   deleteBoard,
+  updateBoard,
 };
