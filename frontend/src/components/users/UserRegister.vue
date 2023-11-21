@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { signup } from "@/api/user";
+import { signupApi } from "@/api/user";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -54,7 +54,7 @@ const clickSignup = async () => {
   }
 
   try {
-    const response = await signup(userForm.value);
+    const response = await signupApi(userForm.value);
     console.log("signup 성공 !!");
     router.push({ name: "user-login" });
   } catch (error) {

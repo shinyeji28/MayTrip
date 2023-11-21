@@ -1,4 +1,3 @@
-import { localAxios, localAxiosFormData } from "@/util/http-commons";
 import axios from "axios";
 // const local = localAxios();
 // const localFormData = localAxiosFormData();
@@ -44,6 +43,11 @@ const updateBoard = async (formData) => {
   });
 };
 
+
+const modifyBoardDetailApi = async (data) => {
+  return await axios.put("/api/boards/detail", data);
+};
+
 export {
   listBoard,
   listBoardByGugun,
@@ -52,4 +56,5 @@ export {
   getDetail,
   deleteBoard,
   updateBoard,
+  modifyBoardDetailApi,
 };
