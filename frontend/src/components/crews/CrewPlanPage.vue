@@ -13,16 +13,7 @@ const { crew } = storeToRefs(planStore);
 
 const getInfoData = async () => {
   try {
-    if (
-      Object.keys(crew.value).length == 0 ||
-      crew.value.id != route.params.crewId
-    ) {
-      await getInfos(route.params.crewId);
-      return;
-    }
-    if (!confirm("임시 저장된 내역을 불러올까요?")) {
-      await getInfos(route.params.crewId);
-    }
+    await getInfos(route.params.crewId);
   } catch (error) {
     console.log(error);
   }
