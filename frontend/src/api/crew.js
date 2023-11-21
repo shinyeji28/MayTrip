@@ -13,7 +13,8 @@ async function getCrewApi(crewId) {
   return await axios.get(`/api/crews/${crewId}`);
 }
 
-async function joinCrew(crewId, memberId) {
+async function joinCrew(crewId) {
+  const memberId = user.value.memberId;
   return await axios.post(`/api/crews/join`, {
     crewId,
     memberId,

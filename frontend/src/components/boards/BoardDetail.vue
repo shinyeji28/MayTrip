@@ -47,6 +47,10 @@ const join = async () => {
   try {
     alert("크루 신청이 완료되었습니다.");
     // console.log(data);
+    router.push({
+      name: "crew-detail",
+      params: { crewId: boardInfo.value.crewId },
+    });
   } catch (error) {
     console.error(error);
   }

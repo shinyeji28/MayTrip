@@ -43,9 +43,12 @@ const updateBoard = async (formData) => {
   });
 };
 
-
 const modifyBoardDetailApi = async (data) => {
   return await axios.put("/api/boards/detail", data);
+};
+
+const getSharedBoard = async (data) => {
+  return await axios.get("/api/boards/planlist", data);
 };
 
 export {
@@ -57,4 +60,5 @@ export {
   deleteBoard,
   updateBoard,
   modifyBoardDetailApi,
+  getSharedBoard,
 };
