@@ -65,11 +65,6 @@ const router = createRouter({
             },
           ],
         },
-        {
-          path: "list",
-          name: "crew-list",
-          component: () => import("@/components/crews/CrewPlanList.vue"),
-        },
       ],
     },
     {
@@ -98,6 +93,18 @@ const router = createRouter({
           component: () => import("@/components/boards/BoardUpdate.vue"),
         },
       ],
+    },
+    {
+      path: "/review",
+      name: "review",
+      component: () => import("@/views/TheReviewView.vue"),
+      children: [
+        {
+          path: "list",
+          name: "review-list",
+          component: () => import("@/components/review/ReviewList.vue"),
+        },
+      ]
     },
   ],
 });

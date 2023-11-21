@@ -119,7 +119,6 @@ const totalPages = computed(() => {
           class="card"
           width="310"
           height="300"
-          title="모집 글 제목"
           @click="
             router.push({ name: 'board-detail', params: { id: item.id } })
           "
@@ -132,7 +131,7 @@ const totalPages = computed(() => {
           <template v-slot:title>{{ item.title }}</template>
 
           <template v-slot:subtitle
-            >타겟 도시 : {{ item.sidoName }} {{ item.gugunName }}</template
+            >다녀온 곳 : {{ item.sidoName }} {{ item.gugunName }}</template
           >
 
           <template v-slot:text> 간략 설명 </template>
