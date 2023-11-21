@@ -1,35 +1,20 @@
-<script setup>
-import { ref } from 'vue';
-import QuillEditor from '@/components/common/VQuillEditor.vue';
-
-const content = ref('안녕하세요');
-
-const submitContent = (content) => {
-  console.log('Submitted Content:', content); // ref 변수의 실제 내용을 가져오려면 .value를 사용합니다.
-  // 서버로 데이터를 보내거나 필요한 작업을 수행할 수 있습니다.
-};
-
-
-</script>
+<script setup></script>
 
 <template>
-<div class="container">
+  <div class="container">
     <div class="banner">
       <img src="@/assets/images/trip4.jpg" />
-      <div class="title">여행 크루 모집을 위한 글을 작성하세요 😎</div>
+      <div class="title">여행 친구를 구하고 있어요 😍</div>
     </div>
     <main class="container">
       <div class="main-wrap">
-        <div>
-    <QuillEditor v-model="content"
-    @saveContent="submitContent" />
-  </div>
+        <router-view></router-view>
       </div>
-      </main>
-</div>
+    </main>
+  </div>
 </template>
 
-<style scoped>
+<style>
 .container {
   display: flex;
 
@@ -40,7 +25,6 @@ const submitContent = (content) => {
   max-width: 1080px;
 }
 .banner {
-  /* position: fixed; */
   position: absolute;
   left: 0;
   top: 70px;

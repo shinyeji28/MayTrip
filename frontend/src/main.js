@@ -18,6 +18,9 @@ import "@mdi/font/css/materialdesignicons.css";
 
 // Vue Virtual Scroller
 import VueVirtualScroller from "vue-virtual-scroller";
+// import { quillEditor } from 'vue3-quill'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 const app = createApp(App);
 
@@ -41,5 +44,7 @@ app.use(pinia);
 app.use(vuetify);
 app.use(router);
 app.use(VueVirtualScroller);
+app.component('QuillEditor', QuillEditor)
+
 
 app.mount("#app");
