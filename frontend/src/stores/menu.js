@@ -5,6 +5,7 @@ import { useAuthStore } from "./auth";
 export const useMenuStore = defineStore("menuStore", () => {
   const authStore = useAuthStore();
   const isLogin = computed(() => !!authStore.token);
+
   const menuList = ref([
     { name: "회원가입", show: !isLogin.value, routeName: "user-join" },
     { name: "로그인", show: !isLogin.value, routeName: "user-login" },

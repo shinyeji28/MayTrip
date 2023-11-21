@@ -49,7 +49,11 @@ const getCrewList = async () => {
                     </div>
                   </div>
 
-                  <router-link :to="{ name: 'user-login' }"
+                  <router-link
+                    :to="{
+                      name: 'crew-detail',
+                      params: { crewId: crew.raw.id },
+                    }"
                     ><v-btn
                       border
                       flat
