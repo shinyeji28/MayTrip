@@ -73,8 +73,6 @@ const clickSearch = async () => {
   else list.value = data;
   searchSetting.value.loading = false;
   searchSetting.value.loaded = true;
-  //setTimeout(() => {
-  //}, 2000);
 };
 
 watch(
@@ -106,7 +104,6 @@ const clickDetail = async (contentId) => {
     const { data } = await getDescriptionByContentIdApi(contentId);
     dialogDetail.value.overview = data.overview;
     dialog.value = true;
-    console.log(dialogDetail.value);
   } catch (error) {
     console.log(error);
   }
@@ -144,7 +141,6 @@ const updateDayList = () => {
   plan.value.days.forEach((day) => {
     if (day.dayId == selectedDay.value) {
       dayList.value = day.details;
-      console.log(dayList.value);
       return false;
     }
   });
