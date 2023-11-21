@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import { getPlanApi, registDetailApi, deleteByDetailIdApi } from "@/api/plan";
 import { getCrewApi } from "@/api/crew";
-import { modifyBoardDetailApi } from "@/api/board";
+import { modifyBoardDetailApi, toggleIsSharedApi } from "@/api/board";
 
 export const usePlanStore = defineStore(
   "planStore",
@@ -52,6 +52,15 @@ export const usePlanStore = defineStore(
       }
     };
 
+    const toggleIsShared = async (boardId) => {
+      try {
+        await toggleIsSharedApi(boardId);
+        // crew.value.board.isShared = !crew.value.board.isShared;
+      } catch (error) {
+        console.log("공유 토글 실패 : ", error);
+      }
+    };
+
     return {
       crew,
       plan,
@@ -59,6 +68,7 @@ export const usePlanStore = defineStore(
       insertDetail,
       deleteDetail,
       modifyBoardDetail,
+      toggleIsShared,
     };
   },
   {

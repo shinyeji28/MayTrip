@@ -48,6 +48,10 @@ const modifyBoardDetailApi = async (data) => {
   return await axios.put("/api/boards/detail", data);
 };
 
+const toggleIsSharedApi = async (boardId) => {
+  return await axios.post(`/api/boards/${boardId}/shared`);
+};
+
 export {
   listBoard,
   listBoardByGugun,
@@ -57,4 +61,5 @@ export {
   deleteBoard,
   updateBoard,
   modifyBoardDetailApi,
+  toggleIsSharedApi,
 };
