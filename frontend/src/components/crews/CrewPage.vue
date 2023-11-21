@@ -2,24 +2,23 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { getCrewApi } from "@/api/crew";
+import { usePlanStore } from "@/stores/plan";
+import { storeToRefs } from "pinia";
+
+const planStore = usePlanStore();
+const { getInfos } = planStore;
+const { crew } = storeToRefs(planStore);
 
 const route = useRoute();
 
-const crew = ref({});
-
-
 const getCrewInfo = async () => {
   try {
-    const { data } = await getCrewApi(route.params.crewId);
-    console.log(data);
-    crew.value = data;
+    await getInfos(route.params.crewId);
   } catch (error) {
     console.log(error);
   }
 };
 getCrewInfo();
-
-
 </script>
 
 <template>

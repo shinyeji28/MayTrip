@@ -1,12 +1,11 @@
-import { localAxios } from "@/util/http-commons";
+import axios from "axios";
 
-const local = localAxios();
 const listBoard = async () => {
-  return await local.get(`boards`);
+  return await axios.get(`boards`);
 };
 
 const listBoardByGugun = async (sido, gugun) => {
-  return await local.get(`boards/`, {
+  return await axios.get(`boards/`, {
     params: {
       sido,
       gugun,
@@ -14,4 +13,8 @@ const listBoardByGugun = async (sido, gugun) => {
   });
 };
 
-export { listBoard, listBoardByGugun };
+const modifyBoardDetailApi = async (data) => {
+  return await axios.put("/api/boards/detail", data);
+};
+
+export { listBoard, listBoardByGugun, modifyBoardDetailApi };

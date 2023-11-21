@@ -5,8 +5,8 @@ import { usePlanStore } from "@/stores/plan";
 import { storeToRefs } from "pinia";
 
 const planStore = usePlanStore();
+const { modifyBoardDetail } = planStore;
 const { crew } = storeToRefs(planStore);
-
 
 const boardForm = ref({});
 const updateForm = () => {
@@ -23,12 +23,23 @@ const updateForm = () => {
 };
 updateForm();
 
-
-const modify = () => {};
+const modify = async () => {
+  const data = {
+    id: boardForm.value.id,
+    title: boardForm.value.title,
+    startDate: boardForm.value.startDate,
+    endDate: boardForm.value.endDate,
+  };
+  await modifyBoardDetail(data);
+  updateForm();
+};
 
 const cancle = () => {
   updateForm();
 };
+
+let date = new Date();
+const today = date.toISOString().split("T")[0];
 </script>
 
 <template>
@@ -42,6 +53,7 @@ const cancle = () => {
             name="startDate"
             id="startDate"
             v-model="boardForm.startDate"
+            :min="today"
           />
         </v-col>
 
@@ -52,6 +64,7 @@ const cancle = () => {
             name="endDate"
             id="endDate"
             v-model="boardForm.endDate"
+            :min="boardForm.startDate"
           />
         </v-col>
       </v-row>
