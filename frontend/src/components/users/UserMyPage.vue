@@ -3,9 +3,13 @@ import { useAuthStore } from "@/stores/auth";
 import { ref } from "vue";
 import userMyPageMyCrew from "@/components/users/UserMyPageMyCrew.vue";
 import userMyPageMyInfo from "./UserMyPageMyInfo.vue";
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 const { user } = useAuthStore();
-const toggle = ref(1);
+const toggle = (idx) => {
+  if (idx == 1) router.push({ name: "user-mypage-crew" });
+  else if (idx == 2) router.push({ name: "user-mypage-info" });
+};
 </script>
 
 <template>
@@ -13,7 +17,9 @@ const toggle = ref(1);
     <div>
       <img
         :src="
-          user.profileImg == '' ? '@/assets/ssafy_logo.png' : user.profileImg
+          !user.profileImg
+            ? '/src/assets/profile_none.png'
+            : user.profileImg.url
         "
         alt="profile"
         class="profile"
@@ -22,12 +28,11 @@ const toggle = ref(1);
     <div class="text-2">{{ user.username }} 님</div>
   </div>
   <v-tabs fixed-tabs>
-    <v-tab @click="toggle = 1"> My Crew </v-tab>
-    <v-tab @click="toggle = 2"> My Info </v-tab>
+    <v-tab @click="toggle(1)"> My Crew </v-tab>
+    <v-tab @click="toggle(2)"> My Info </v-tab>
   </v-tabs>
   <div class="col margin-60 center">
-    <userMyPageMyCrew v-show="toggle == 1" />
-    <userMyPageMyInfo v-show="toggle == 2" />
+    <router-view></router-view>
   </div>
 </template>
 

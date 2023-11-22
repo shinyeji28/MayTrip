@@ -10,7 +10,6 @@ const crewlist = ref([]);
 const getCrewList = async () => {
   const { data } = await getCrewListApi();
   crewlist.value = data;
-  console.log(crewlist.value);
 };
 </script>
 
@@ -73,5 +72,4 @@ const getCrewList = async () => {
   </v-card>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
