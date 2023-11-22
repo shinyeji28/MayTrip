@@ -34,7 +34,7 @@ const searchSetting = ref({
   loading: false,
   loaded: false,
 });
-const list = ref([]); // 검색 목록
+const list = ref([]); // 목록에 보일 검색 목록
 const dialog = ref(false); // 상세 보기 토글
 const dialogDetail = ref({}); // 상세보기 정보
 const location = ref({
@@ -44,6 +44,12 @@ const location = ref({
 });
 const selectedDay = ref(plan.value.days[0].dayId);
 const dayList = ref(plan.value.days[0].details);
+
+// 스크롤 관련
+const tempList = ref([]); // 전체 조회 검색 목록
+const offset = ref(0); // 탐색 시작 위치
+const attractionTable = ref(null); // 스크롤 div
+
 
 /** 검색 조건 관련 */
 const getSido = async () => {
@@ -90,8 +96,12 @@ watch(
   ],
   async () => {
     const { data } = await getAllBySidoGugunContentTypeApi(selectForm.value);
-    if (data.length > 300) list.value = data.slice(0, 300);
-    else list.value = data;
+    tempList.value = data;
+    list.value = [];
+    offset.value = 0;
+    addAttractionInfo();
+    // if (data.length > 300) list.value = data.slice(0, 300);
+    // else list.value = data;
     console.log("검색됨! - 리스트 길이 : ", list.value.length);
   }
 );
@@ -144,6 +154,28 @@ const updateDayList = () => {
       return false;
     }
   });
+};
+
+const addAttractionInfo = () => {
+  var end = offset.value + 100 > tempList.value.length ? tempList.value.length : offset.value+100;
+  for(var i=offset.value; i<end; i++) {
+    list.value.push(tempList.value[i]);
+  }
+  offset.value += 100;
+  console.log("현재 목록 : ", list.value);
+}
+
+
+const handleAttractionListScroll = () => {
+  const table = attractionTable.value;
+  const scrollHeight = table.scrollHeight;
+  const scrollTop = table.scrollTop;
+  const clientHeight = table.clientHeight;
+
+  if (scrollTop + clientHeight >= scrollHeight) {
+    // 스크롤이 하단에 도달하면 추가 데이터 로드
+    addAttractionInfo();
+  }
 };
 
 onMounted(() => {
@@ -229,63 +261,55 @@ onMounted(() => {
           </v-col>
         </v-row>
       </div>
-      <div class="col center">
-        <!-- <RecycleScroller
-          class="scroll"
-          :items="list"
-          :item-size="30"
-          key-field="contentId"
-          v-slot="{ item }"
-        >
-          <div class="user">
-            {{ item.title }}
-          </div>
-        </RecycleScroller> -->
-        <v-virtual-scroll :items="list" width="500" height="700" class="scroll">
-          <template v-slot:default="{ item }">
+      <div class="scrollable" ref="attractionTable" @scroll="handleAttractionListScroll">
+        <v-row dense>
+          <v-col cols="12">
             <v-card
-              width="350"
-              class="mx-1 mb-2 item"
-              @click="clickItem(item.latitude, item.longitude)"
-            >
-              <div class="d-flex flex-no-wrap justify-flex-start">
-                <v-avatar class="ma-2" size="100" rounded="0">
-                  <v-img
-                    :src="
-                      item.firstImage != '' ? item.firstImage : item.firstImage2
-                    "
-                  ></v-img>
-                </v-avatar>
-                <div>
-                  <v-card-title class="text-h20">
-                    {{ item.title }}
-                  </v-card-title>
-
-                  <v-card-subtitle>{{ item.addr1 }}</v-card-subtitle>
-
-                  <v-card-actions>
-                    <v-btn
-                      size="small"
-                      variant="text"
-                      density="comfortable"
-                      @click="clickDetail(item.contentId)"
-                    >
-                      상세보기
-                    </v-btn>
-                    <v-btn
-                      size="small"
-                      variant="outlined"
-                      density="comfortable"
-                      @click="clickAdd(item.contentId)"
-                    >
-                      add
-                    </v-btn>
-                  </v-card-actions>
-                </div>
+            v-for="item in list" :key="item.contentId"
+            max-width="350"
+            height="150"
+            class="mb-2 item"
+            @click="clickItem(item.latitude, item.longitude)"
+          >
+            <div class="d-flex flex-no-wrap justify-flex-start">
+              <v-avatar class="ma-2" size="100" rounded="0">
+                <v-img
+                  :src="
+                    item.firstImage != '' ? item.firstImage : item.firstImage2
+                  "
+                ></v-img>
+              </v-avatar>
+              <div>
+                <v-card-title class="text-h20">
+                  {{ item.title }}
+                </v-card-title>
+  
+                <v-card-subtitle>{{ item.addr1 }}</v-card-subtitle>
+  
+                <v-card-actions>
+                  <v-btn
+                    size="small"
+                    variant="text"
+                    density="comfortable"
+                    @click="clickDetail(item.contentId)"
+                  >
+                    상세보기
+                  </v-btn>
+                  <v-btn
+                    size="small"
+                    variant="outlined"
+                    density="comfortable"
+                    @click="clickAdd(item.contentId)"
+                  >
+                    add
+                  </v-btn>
+                </v-card-actions>
               </div>
+            </div>
             </v-card>
-          </template>
-        </v-virtual-scroll>
+          </v-col>
+          
+        </v-row>    
 
         <v-row justify="center">
           <v-dialog v-model="dialog" persistent width="1024">
@@ -452,15 +476,15 @@ onMounted(() => {
   width: 50vw;
   border-right: 1px solid lightgray;
 }
-.scroll {
-  height: 100%;
+.scrollable {
+  width: 100%;
+  height: 600px;
+  overflow: auto;
 }
-.scroll::-webkit-scrollbar {
-  display: none;
+.scrollable::-webkit-scrollbar {
+  display: none; 
 }
 .item {
-  height: 30%;
-  padding: 0 12px;
   display: flex;
   align-items: center;
 }
