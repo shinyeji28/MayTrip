@@ -104,7 +104,12 @@ const router = createRouter({
           name: "review-list",
           component: () => import("@/components/review/ReviewList.vue"),
         },
-      ]
+        {
+          path: "detail/:id",
+          name: "review-detail",
+          component: () => import("@/components/review/ReviewDetail.vue"),
+        },
+      ],
     },
   ],
 });

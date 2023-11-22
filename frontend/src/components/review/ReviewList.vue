@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import { getSharedBoard, listBoardByGugun } from "@/api/board.js";
+import { getReviewList } from "@/api/review.js";
 import { listSido, listGugun } from "@/api/sidoGugun.js";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -11,10 +11,11 @@ const gugun = ref([]);
 const selectedSido = ref(null);
 const selectedGugun = ref(null);
 
-const getSharedList = async () => {
-  const { data } = await getSharedBoard();
+const getReview = async () => {
+  const { data } = await getReviewList();
   try {
     items.value = data;
+    console.log(items.value);
   } catch (error) {
     console.error(error);
   }
@@ -38,22 +39,8 @@ const getGugunList = async (sidoCode) => {
   }
 };
 
-const boardListByGugun = async (gugunCode) => {
-  if (selectedSido !== null) {
-    const { data } = await listBoardByGugun(
-      selectedSido.value.sidoCode,
-      gugunCode
-    );
-    try {
-      items.value = data;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-};
-
 onMounted(async () => {
-  await getSharedList();
+  await getReview();
   await getSidoList();
 });
 
@@ -120,7 +107,7 @@ const totalPages = computed(() => {
           width="310"
           height="300"
           @click="
-            router.push({ name: 'board-detail', params: { id: item.id } })
+            router.push({ name: 'review-detail', params: { id: item.id } })
           "
         >
           <v-img
