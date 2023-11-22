@@ -58,6 +58,11 @@ const clickLogin = async () => {
         ></v-text-field>
         <v-btn type="submit" block class="mt-2">Login</v-btn>
       </v-form>
+      <div class="row center">
+        <v-btn variant="plain" @click="router.push({ name: 'user-pass' })">
+          비밀번호를 잊어버리셨나요?
+        </v-btn>
+      </div>
     </v-sheet>
   </div>
 </template>
@@ -79,5 +84,20 @@ const clickLogin = async () => {
   font-size: 50px;
   font-weight: 700;
   margin: 50px 0px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.col {
+  display: flex;
+  flex-direction: col;
+}
+
+.center {
+  width: 300px;
+  justify-content: center;
+  margin-top: 20px;
 }
 </style>

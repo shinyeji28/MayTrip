@@ -14,6 +14,7 @@ export const useAuthStore = defineStore(
       memberId: "",
       username: "",
       name: "",
+      email: "",
       profileImg: {},
     });
     const token = ref("");
@@ -44,6 +45,7 @@ export const useAuthStore = defineStore(
       user.value.memberId = data.memberId;
       user.value.username = data.username;
       user.value.name = data.name;
+      user.value.email = data.email;
       user.value.profileImg = data.profileImg;
     };
 
@@ -57,6 +59,7 @@ export const useAuthStore = defineStore(
       user.value.memberId = "";
       user.value.username = "";
       user.value.name = "";
+      user.value.email = "";
       user.value.profileImg = {};
       menuStore.changeMenuState();
     };
