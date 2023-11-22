@@ -13,6 +13,7 @@ const userInfo = ref({
   memberId: user.value.memberId,
   username: user.value.username,
   name: user.value.name,
+  email: user.value.email,
 });
 
 const isShowInfo = ref(true);
@@ -35,6 +36,7 @@ const resetUserInfo = () => {
   userInfo.value.memberId = user.value.memberId;
   userInfo.value.username = user.value.username;
   userInfo.value.name = user.value.name;
+  userInfo.value.email = user.value.email;
 };
 
 const toggle = () => {
@@ -102,6 +104,13 @@ const secession = async () => {
       name="name"
       required
       v-model="userInfo.name"
+      :disabled="isShowInfo"
+    ></v-text-field>
+    <v-text-field
+      label="E-mail"
+      name="email"
+      required
+      v-model="userInfo.email"
       :disabled="isShowInfo"
     ></v-text-field>
     <v-file-input
