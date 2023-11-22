@@ -3,25 +3,36 @@ import { useAuthStore } from "@/stores/auth";
 import { ref } from "vue";
 import userMyPageMyCrew from "@/components/users/UserMyPageMyCrew.vue";
 import userMyPageMyInfo from "./UserMyPageMyInfo.vue";
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 const { user } = useAuthStore();
-const toggle = ref(1);
+const toggle = (idx) => {
+  if (idx == 1) router.push({ name: "user-mypage-crew" });
+  else if (idx == 2) router.push({ name: "user-mypage-info" });
+};
 </script>
 
 <template>
-  <div class="row space-between margin-60">
+  <div class="row center margin-60">
     <div>
-      <img src="@/assets/ssafy_logo.png" alt="profile" class="profile" />
+      <img
+        :src="
+          !user.profileImg
+            ? '/src/assets/profile_none.png'
+            : user.profileImg.url
+        "
+        alt="profile"
+        class="profile"
+      />
     </div>
     <div class="text-2">{{ user.username }} 님</div>
   </div>
   <v-tabs fixed-tabs>
-    <v-tab @click="toggle = 1"> My Crew </v-tab>
-    <v-tab @click="toggle = 2"> My Info </v-tab>
+    <v-tab @click="toggle(1)"> My Crew </v-tab>
+    <v-tab @click="toggle(2)"> My Info </v-tab>
   </v-tabs>
-  <div class="col margin-60">
-    <userMyPageMyCrew v-show="toggle == 1" />
-    <userMyPageMyInfo v-show="toggle == 2" />
+  <div class="col margin-60 center">
+    <router-view></router-view>
   </div>
 </template>
 
@@ -43,7 +54,7 @@ const toggle = ref(1);
   margin-right: 80px;
 }
 
-.space-between {
+.center {
   justify-content: center;
   align-items: center;
 }

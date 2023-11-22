@@ -25,19 +25,16 @@ const rules = ref({
   password: [
     (value) => {
       if (value) return true;
-
       return "Password is requred.";
     },
   ],
   name: [
     (value) => {
       if (value) return true;
-
       return "Name is required.";
     },
     (value) => {
       if (value?.length <= 10) return true;
-
       return "Name must be less than 10 characters.";
     },
   ],
@@ -78,6 +75,7 @@ const clickSignup = async () => {
           v-model="userForm.password"
           :rules="rules.password"
           label="Password"
+          type="password"
         ></v-text-field>
         <v-text-field
           v-model="userForm.name"
