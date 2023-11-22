@@ -39,7 +39,7 @@ const getDetailReview = async () => {
           <plan v-if="reviewInfo != null" :plans="reviewInfo?.plan"></plan>
         </v-container>
         <v-container v-else-if="tab === 2" fluid>
-          <review :review="reviewInfo?.review"></review>
+          <review v-if="reviewInfo != null" :review="reviewInfo?.review"></review>
         </v-container>
       </v-window-item>
     </v-window>
