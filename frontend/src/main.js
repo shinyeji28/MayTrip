@@ -22,6 +22,10 @@ import VueVirtualScroller from "vue-virtual-scroller";
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
+// georocation
+import Vue3Geolocation from 'vue3-geolocation';
+
+
 const app = createApp(App);
 
 const pinia = createPinia();
@@ -44,6 +48,7 @@ app.use(pinia);
 app.use(vuetify);
 app.use(router);
 app.use(VueVirtualScroller);
+app.use(Vue3Geolocation);
 app.component('QuillEditor', QuillEditor)
 
 

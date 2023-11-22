@@ -9,6 +9,7 @@ import {
   getDescriptionByContentIdApi,
   getByKeyWord,
   getByContentId,
+  getAllByLatLonApi
 } from "@/api/attraction";
 import crewPlanMapPage from "@/components/crews/CrewPlanMapPage.vue";
 
@@ -81,6 +82,12 @@ const clickSearch = async () => {
   searchSetting.value.loaded = true;
 };
 
+const updateAttractionList = (data) => {
+  tempList.value = data;
+  list.value = [];
+  offset.value = 0;
+}
+
 watch(
   () => selectForm.value.sido,
   () => {
@@ -96,12 +103,8 @@ watch(
   ],
   async () => {
     const { data } = await getAllBySidoGugunContentTypeApi(selectForm.value);
-    tempList.value = data;
-    list.value = [];
-    offset.value = 0;
+    updateAttractionList(data);
     addAttractionInfo();
-    // if (data.length > 300) list.value = data.slice(0, 300);
-    // else list.value = data;
     console.log("검색됨! - 리스트 길이 : ", list.value.length);
   }
 );
@@ -178,8 +181,28 @@ const handleAttractionListScroll = () => {
   }
 };
 
+const getGeorocation = async () => {
+  if(!navigator.geolocation) {
+    alert("현재 위치 정보를 찾을 수 없습니다.");
+  } else {
+    navigator.geolocation.getCurrentPosition(async pos => {
+      location.value.latitude = pos.coords.latitude;
+      location.value.longitude = pos.coords.longitude;
+      console.log("내위치", location.value);
+      const params = {lat: location.value.latitude, lon: location.value.longitude, nkm: 5};
+      const {data} = await getAllByLatLonApi(params);
+      updateAttractionList(data);
+      addAttractionInfo();
+    }, err => {
+      console.log(err.message);
+    });
+  }
+}
+
+
 onMounted(() => {
   getSido();
+  getGeorocation();
 });
 </script>
 
