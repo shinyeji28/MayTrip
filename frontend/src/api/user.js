@@ -24,4 +24,25 @@ async function deleteUserApi(memberId) {
   return await axios.delete(`/api/user/${memberId}`);
 }
 
-export { loginApi, signupApi, modifyUserApi, getUserApi, deleteUserApi };
+async function sendCertificateNumApi(form) {
+  return await axios.post("/api/user/auth", form);
+}
+
+async function matchCertificateNumApi(form) {
+  return await axios.post("/api/user/match", form);
+}
+
+async function clickChangePasswordApi(form) {
+  return await axios.post("/api/user/pass", form);
+}
+
+export {
+  loginApi,
+  signupApi,
+  modifyUserApi,
+  getUserApi,
+  deleteUserApi,
+  sendCertificateNumApi,
+  matchCertificateNumApi,
+  clickChangePasswordApi,
+};

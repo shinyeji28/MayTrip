@@ -25,6 +25,11 @@ const router = createRouter({
           component: () => import("@/components/users/UserRegister.vue"),
         },
         {
+          path: "pass",
+          name: "user-pass",
+          component: () => import("@/components/users/UserFindPassword.vue"),
+        },
+        {
           path: "mypage",
           name: "user-mypage",
           component: () => import("@/components/users/UserMyPage.vue"),
