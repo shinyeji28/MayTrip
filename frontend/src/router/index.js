@@ -25,9 +25,29 @@ const router = createRouter({
           component: () => import("@/components/users/UserRegister.vue"),
         },
         {
+          path: "pass",
+          name: "user-pass",
+          component: () => import("@/components/users/UserFindPassword.vue"),
+        },
+        {
           path: "mypage",
           name: "user-mypage",
           component: () => import("@/components/users/UserMyPage.vue"),
+          redirect: { name: "user-mypage-crew" },
+          children: [
+            {
+              path: "crew",
+              name: "user-mypage-crew",
+              component: () =>
+                import("@/components/users/UserMyPageMyCrew.vue"),
+            },
+            {
+              path: "info",
+              name: "user-mypage-info",
+              component: () =>
+                import("@/components/users/UserMyPageMyInfo.vue"),
+            },
+          ],
         },
         // {
         //   path: "modify/:userid",

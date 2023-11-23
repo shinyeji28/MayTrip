@@ -7,6 +7,7 @@ const router = useRouter();
 const userForm = ref({
   username: "",
   password: "",
+  email: "",
   name: "",
 });
 
@@ -25,20 +26,24 @@ const rules = ref({
   password: [
     (value) => {
       if (value) return true;
-
       return "Password is requred.";
     },
   ],
   name: [
     (value) => {
       if (value) return true;
-
       return "Name is required.";
     },
     (value) => {
       if (value?.length <= 10) return true;
-
       return "Name must be less than 10 characters.";
+    },
+  ],
+  email: [
+    (value) => {
+      var regex = /^[a-z0-9]+@[a-z.-]+\.[a-z]+$/i;
+      if (regex.test(value)) return true;
+      return "Must be a valid e-mail.";
     },
   ],
 });
@@ -48,6 +53,7 @@ const clickSignup = async () => {
   if (
     !userForm.value.username ||
     !userForm.value.password ||
+    !userForm.value.email ||
     !userForm.value.name
   ) {
     return; // 입력폼 비었는지 확인
@@ -78,6 +84,12 @@ const clickSignup = async () => {
           v-model="userForm.password"
           :rules="rules.password"
           label="Password"
+          type="password"
+        ></v-text-field>
+        <v-text-field
+          v-model="userForm.email"
+          :rules="rules.email"
+          label="E-mail"
         ></v-text-field>
         <v-text-field
           v-model="userForm.name"
@@ -98,7 +110,7 @@ const clickSignup = async () => {
   margin: 20vh 15vw;
   padding: 0;
   width: 500px;
-  height: 500px;
+  height: 600px;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }

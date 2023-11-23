@@ -10,12 +10,11 @@ const crewlist = ref([]);
 const getCrewList = async () => {
   const { data } = await getCrewListApi();
   crewlist.value = data;
-  console.log(crewlist.value);
 };
 </script>
 
 <template>
-  <v-card>
+  <v-card width="800">
     <v-data-iterator :items="crewlist" :items-per-page="3">
       <template v-slot:default="{ items }">
         <v-container class="pa-2" fluid>

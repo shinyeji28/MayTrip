@@ -8,7 +8,7 @@ import { storeToRefs } from "pinia";
 import { registReview } from "@/api/review.js";
 
 const planStore = usePlanStore();
-const { getInfos } = planStore;
+const { getInfos, toggleIsShared } = planStore;
 const { crew } = storeToRefs(planStore);
 
 const route = useRoute();
@@ -54,6 +54,8 @@ const submitReview = async () => {
   }
 
   await registReview(formData);
+const clickShared = async () => {
+  await toggleIsShared(crew.value.board.id);
 };
 </script>
 
@@ -134,12 +136,14 @@ const submitReview = async () => {
         <div class="d-flex justify-space-between px-4 align-center">
           <div class="px-3">
             <v-switch
-              :model-value="true"
+              color="success"
+              :model-value="crew.board.shared"
               label="Share"
               density="compact"
               inset
-              @click="() => toggleExpand(item)"
-            ></v-switch>
+              @click="() => clickShared()"
+            >
+            </v-switch>
           </div>
         </div>
 
@@ -198,6 +202,7 @@ const submitReview = async () => {
 
   max-width: 1080px;
 }
+
 .row {
   display: flex;
   flex-direction: row;

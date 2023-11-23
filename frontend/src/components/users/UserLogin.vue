@@ -1,12 +1,10 @@
 <script setup>
-import { useMenuStore } from "@/stores/menu";
 import { useAuthStore } from "@/stores/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const { login } = useAuthStore();
-const { changeMenuState } = useMenuStore();
 
 const userForm = ref({});
 
@@ -15,14 +13,12 @@ const rules = ref({
   username: [
     (value) => {
       if (value) return true;
-
       return "Username is requred.";
     },
   ],
   password: [
     (value) => {
       if (value) return true;
-
       return "Password is requred.";
     },
   ],
@@ -36,7 +32,6 @@ const clickLogin = async () => {
   try {
     await login(userForm.value);
     console.log("login 성공 !!");
-    changeMenuState();
     router.push({ path: "/" });
   } catch (error) {
     console.log(error);
@@ -58,10 +53,16 @@ const clickLogin = async () => {
         <v-text-field
           v-model="userForm.password"
           label="Password"
+          type="password"
           :rules="rules.password"
         ></v-text-field>
         <v-btn type="submit" block class="mt-2">Login</v-btn>
       </v-form>
+      <div class="row center">
+        <v-btn variant="plain" @click="router.push({ name: 'user-pass' })">
+          비밀번호를 잊어버리셨나요?
+        </v-btn>
+      </div>
     </v-sheet>
   </div>
 </template>
@@ -83,5 +84,20 @@ const clickLogin = async () => {
   font-size: 50px;
   font-weight: 700;
   margin: 50px 0px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.col {
+  display: flex;
+  flex-direction: col;
+}
+
+.center {
+  width: 300px;
+  justify-content: center;
+  margin-top: 20px;
 }
 </style>

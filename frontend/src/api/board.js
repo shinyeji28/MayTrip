@@ -51,6 +51,10 @@ const getSharedBoard = async (data) => {
   return await axios.get("/api/boards/planlist", data);
 };
 
+const toggleIsSharedApi = async (boardId) => {
+  return await axios.post(`/api/boards/${boardId}/shared`);
+};
+
 export {
   listBoard,
   listBoardByGugun,
@@ -61,4 +65,5 @@ export {
   updateBoard,
   modifyBoardDetailApi,
   getSharedBoard,
+  toggleIsSharedApi,
 };
