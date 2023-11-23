@@ -37,13 +37,13 @@ getInfoData();
 
 <style scoped>
 .container {
-  height: 90vh;
+  height: 93vh;
   max-width: none;
 }
 .side {
   min-width: 100px;
   max-width: 100px;
-  border-right: 1px solid lightgray;
+  border-right: 1px solid #f2e3db;
 }
 .side-item {
   display: flex;
@@ -51,18 +51,15 @@ getInfoData();
   align-items: center;
   height: 100px;
   padding: 20px 10px;
-  color: darkgray;
+  color: #41644a;
   font-weight: 800;
   font-size: small;
   border-radius: 5px;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid #f2e3db;
   text-decoration: none;
 }
 .side-item:hover {
-  color: rgb(130, 198, 221);
-}
-.blue {
-  background-color: aqua;
+  color: #e86a33;
 }
 .row {
   display: flex;

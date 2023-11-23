@@ -9,6 +9,7 @@ import {
   getDescriptionByContentIdApi,
   getByKeyWord,
   getByContentId,
+  getAllByLatLonApi,
 } from "@/api/attraction";
 import crewPlanMapPage from "@/components/crews/CrewPlanMapPage.vue";
 
@@ -34,7 +35,7 @@ const searchSetting = ref({
   loading: false,
   loaded: false,
 });
-const list = ref([]); // 검색 목록
+const list = ref([]); // 목록에 보일 검색 목록
 const dialog = ref(false); // 상세 보기 토글
 const dialogDetail = ref({}); // 상세보기 정보
 const location = ref({
@@ -42,8 +43,13 @@ const location = ref({
   latitude: 0.0,
   longitude: 0.0,
 });
-const selectedDay = ref(plan.value.days[0].dayId);
+const selectedDay = ref(plan.value.days[0].day);
 const dayList = ref(plan.value.days[0].details);
+
+// 스크롤 관련
+const tempList = ref([]); // 전체 조회 검색 목록
+const offset = ref(0); // 탐색 시작 위치
+const attractionTable = ref(null); // 스크롤 div
 
 /** 검색 조건 관련 */
 const getSido = async () => {
@@ -67,12 +73,17 @@ const getGugun = async () => {
 const clickSearch = async () => {
   // 키워드 검색
   searchSetting.value.loading = true;
-  console.log("조건 검색 : ", searchForm.value);
   const { data } = await getByKeyWord(searchForm.value);
   if (data.length > 300) list.value = data.slice(0, 300);
   else list.value = data;
   searchSetting.value.loading = false;
   searchSetting.value.loaded = true;
+};
+
+const updateAttractionList = (data) => {
+  tempList.value = data;
+  list.value = [];
+  offset.value = 0;
 };
 
 watch(
@@ -90,9 +101,8 @@ watch(
   ],
   async () => {
     const { data } = await getAllBySidoGugunContentTypeApi(selectForm.value);
-    if (data.length > 300) list.value = data.slice(0, 300);
-    else list.value = data;
-    console.log("검색됨! - 리스트 길이 : ", list.value.length);
+    updateAttractionList(data);
+    addAttractionInfo();
   }
 );
 
@@ -112,42 +122,82 @@ const clickDetail = async (contentId) => {
 const clickAdd = async (contentId) => {
   const data = {
     contentId,
-    dayId: selectedDay.value,
+    dayId: plan.value.days[selectedDay - 1].dayId,
     priority: dayList.value.length + 1,
   };
-  console.log("추가 버튼 클릭!!", data);
   await insertDetail(data);
   updateDayList();
 };
 
 const clickRemove = async (detailId) => {
-  console.log("삭제 버튼 클릭!!");
   await deleteDetail(detailId);
   updateDayList();
 };
 
 const clickItem = async (lat, lon) => {
-  console.log("아이템 클릭 : ", lat, lon);
   location.value.latitude = lat;
   location.value.longitude = lon;
 };
 
-const clickDay = async (dayId) => {
-  selectedDay.value = dayId;
+const clickDay = async (day) => {
+  selectedDay.value = day;
   updateDayList();
 };
 
 const updateDayList = () => {
-  plan.value.days.forEach((day) => {
-    if (day.dayId == selectedDay.value) {
-      dayList.value = day.details;
-      return false;
-    }
-  });
+  dayList.value = plan.value.days[selectedDay.value - 1].details;
+};
+
+const addAttractionInfo = () => {
+  var end =
+    offset.value + 100 > tempList.value.length
+      ? tempList.value.length
+      : offset.value + 100;
+  for (var i = offset.value; i < end; i++) {
+    list.value.push(tempList.value[i]);
+  }
+  offset.value += 100;
+};
+
+const handleAttractionListScroll = () => {
+  const table = attractionTable.value;
+  const scrollHeight = table.scrollHeight;
+  const scrollTop = table.scrollTop;
+  const clientHeight = table.clientHeight;
+
+  if (scrollTop + clientHeight >= scrollHeight) {
+    // 스크롤이 하단에 도달하면 추가 데이터 로드
+    addAttractionInfo();
+  }
+};
+
+const getGeorocation = async () => {
+  if (!navigator.geolocation) {
+    alert("현재 위치 정보를 찾을 수 없습니다.");
+  } else {
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        location.value.latitude = pos.coords.latitude;
+        location.value.longitude = pos.coords.longitude;
+        const params = {
+          lat: location.value.latitude,
+          lon: location.value.longitude,
+          nkm: 5,
+        };
+        const { data } = await getAllByLatLonApi(params);
+        updateAttractionList(data);
+        addAttractionInfo();
+      },
+      (err) => {
+        console.log("위치 얻기 실패", err.message);
+      }
+    );
+  }
 };
 
 onMounted(() => {
   getSido();
+  getGeorocation();
 });
 </script>
 
@@ -229,23 +279,19 @@ onMounted(() => {
           </v-col>
         </v-row>
       </div>
-      <div class="col center">
-        <!-- <RecycleScroller
-          class="scroll"
-          :items="list"
-          :item-size="30"
-          key-field="contentId"
-          v-slot="{ item }"
-        >
-          <div class="user">
-            {{ item.title }}
-          </div>
-        </RecycleScroller> -->
-        <v-virtual-scroll :items="list" width="500" height="700" class="scroll">
-          <template v-slot:default="{ item }">
+      <div
+        class="scrollable"
+        ref="attractionTable"
+        @scroll="handleAttractionListScroll"
+      >
+        <v-row dense>
+          <v-col cols="12">
             <v-card
-              width="350"
-              class="mx-1 mb-2 item"
+              v-for="item in list"
+              :key="item.contentId"
+              max-width="350"
+              height="150"
+              class="mb-2 item"
               @click="clickItem(item.latitude, item.longitude)"
             >
               <div class="d-flex flex-no-wrap justify-flex-start">
@@ -284,8 +330,8 @@ onMounted(() => {
                 </div>
               </div>
             </v-card>
-          </template>
-        </v-virtual-scroll>
+          </v-col>
+        </v-row>
 
         <v-row justify="center">
           <v-dialog v-model="dialog" persistent width="1024">
@@ -365,29 +411,34 @@ onMounted(() => {
       </div>
     </div>
     <div class="map">
-      <crewPlanMapPage :location="location"></crewPlanMapPage>
+      <crewPlanMapPage
+        :location="location"
+        :dayDetails="plan.days[selectedDay - 1].details"
+      ></crewPlanMapPage>
     </div>
     <div class="day-side">
       <v-list-item title="Days" subtitle="여행일"></v-list-item>
       <v-divider></v-divider>
       <v-list-item
+        class="day-item"
         v-for="day in plan.days"
         :key="day.dayId"
         link
         :title="day.day + '일자'"
-        @click="clickDay(day.dayId)"
+        @click="clickDay(day.day)"
       ></v-list-item>
     </div>
-    <div class="col margin-30">
+    <div class="col margin-30 mylist">
       <v-virtual-scroll
         :items="dayList"
-        width="400"
+        max-width="500"
+        min-width="400"
         height="700"
         class="scroll"
       >
         <template v-slot:default="{ item }">
           <v-card
-            width="400"
+            max-width="400"
             class="mx-1 mb-2 item"
             @click="
               clickItem(
@@ -445,30 +496,38 @@ onMounted(() => {
 <style scoped>
 .container {
   width: 400px;
-  border-right: 1px solid lightgray;
+  height: 100%;
+  border-right: 1px solid #f2e3db;
   padding: 30px 20px;
+  justify-content: flex-start;
 }
 .map {
-  width: 50vw;
-  border-right: 1px solid lightgray;
+  width: 55vw;
+  border-right: 1px solid #f2e3db;
 }
 .scroll {
-  height: 100%;
+  padding: 20px;
 }
-.scroll::-webkit-scrollbar {
+.scrollable {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.scrollable::-webkit-scrollbar {
   display: none;
 }
 .item {
-  height: 30%;
-  padding: 0 12px;
   display: flex;
   align-items: center;
 }
 .day-side {
   width: 100px;
-  border-right: 1px solid lightgray;
+  border-right: 1px solid #f2e3db;
 }
-
+.mylist {
+  max-width: 600px;
+  min-width: 400px;
+}
 .row {
   display: flex;
   flex-direction: row;
@@ -493,6 +552,7 @@ onMounted(() => {
   overflow: auto;
   height: 700px;
 }
+
 .margin-60 {
   margin: 60px 60px;
 }

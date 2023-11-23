@@ -16,9 +16,14 @@ const getByContentId = async (contentId) => {
   return await axios.get(`/api/attraction/detail/${contentId}`);
 };
 
+const getAllByLatLonApi = async (params) => {
+  return await axios.get(`/api/attraction`, {params});
+}
+
 export {
   getAllBySidoGugunContentTypeApi,
   getDescriptionByContentIdApi,
   getByKeyWord,
   getByContentId,
+  getAllByLatLonApi
 };

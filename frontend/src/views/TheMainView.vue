@@ -1,8 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { getReviewList } from "@/api/review.js";
 import { listBoard } from "@/api/board.js";
+import { useMenuStore } from "../stores/menu";
 
 const router = useRouter();
 
@@ -25,7 +26,12 @@ const getBoard = async () => {
 getReview();
 getBoard();
 
-const slider = ref(["First", "Second", "Third", "Fourth", "Fifth"]);
+const menuStore = useMenuStore();
+menuStore.setIsActive(true);
+
+onUnmounted(() => {
+  menuStore.setIsActive(false);
+});
 </script>
 
 <template>
@@ -134,7 +140,7 @@ const slider = ref(["First", "Second", "Third", "Fourth", "Fifth"]);
 .banner-container {
   position: absolute;
   left: 0;
-  top: 70px;
+  top: 7vh;
   width: 100%;
   height: 700px; /* 사진 높이 설정 */
 }
