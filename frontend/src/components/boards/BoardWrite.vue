@@ -5,7 +5,9 @@ import VQuillEditor from "@/components/boards/item/VQuillEditor.vue";
 import { registBoard } from "@/api/board.js";
 import { listSido, listGugun } from "@/api/sidoGugun.js";
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "../../stores/auth";
 
+const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
 const memberId = user.value.memberId;
 

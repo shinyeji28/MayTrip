@@ -77,9 +77,6 @@ window.addEventListener("scroll", function () {
 .active {
   background-color: transparent !important;
 }
-.nav-block {
-  height: 7vh;
-}
 .nav-container {
   position: fixed;
   top: 0;
@@ -87,7 +84,8 @@ window.addEventListener("scroll", function () {
   right: 0;
   background-color: #f2e3db;
   border-bottom: 1px solid #f0e4de;
-  height: 7vh;
+  height: 80px;
+  z-index: 100;
 }
 nav {
   display: flex;
