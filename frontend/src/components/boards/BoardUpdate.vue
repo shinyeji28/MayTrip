@@ -41,6 +41,11 @@ const title = ref(null);
 const headCount = ref(null);
 const thumbnail = ref({});
 
+if(memberId == ""){
+  alert("로그인 후 이용하실 수 있습니다.");
+  router.replace({name:'user-login'});
+}
+
 const getBoardDetail = async () => {
   const { data } = await getDetail(id);
   try {

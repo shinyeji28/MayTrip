@@ -67,37 +67,39 @@ const join = async () => {
 
 <template>
   <div class="board-details">
+    <p class="detail-title">{{ boardInfo?.title }}</p>
+    <hr /><br>
     <section class="board-section">
-      <div class="header">
-        <h2>{{ boardInfo?.title }}</h2>
-        <hr />
+      <div class="middle">
         <div class="info-wrap">
           <div>
             <div class="info">
               장소 : {{ boardInfo?.sidoName }} {{ boardInfo?.gugunName }}
             </div>
-            <div class="info">인원수: 최대 {{ boardInfo?.headcount }}</div>
+            <div class="info">인원수 : 최대 {{ boardInfo?.headcount }}</div>
             <div class="info">
               일정 : {{ boardInfo?.startDate }} - {{ boardInfo?.endDate }}
             </div>
           </div>
-          <div style="display: flex; flex-direction: column">
-            <div class="info" style="float: left">
+          <div style="display: flex; flex-direction: column; align-items: flex-end;">
+            <div class="info" style="padding-right:0">
               조회수: {{ boardInfo?.views }}
             </div>
-            <div class="info" style="float: left">
+            <div class="info" style="float: right">
               게시 날짜 : {{ formatDate(boardInfo?.registDate) }}
             </div>
           </div>
         </div>
       </div>
-      <div class="content" v-html="boardInfo?.content"></div>
     </section>
+    <div clss="content-wrap">
+      <div class="content" v-html="boardInfo?.content"></div>
+    </div>
 
-    <div v-if="boardInfo?.member.memberId != memberId">
+    <div class="button-wrap" v-if="boardInfo?.member.memberId != memberId">
       <v-btn class="btn delete-btn" @click="join">신청하기</v-btn>
     </div>
-    <div v-if="boardInfo?.member.memberId == memberId">
+    <div class="button-wrap" v-if="boardInfo?.member.memberId == memberId">
       <v-btn class="btn delete-btn" @click="remove">게시글 삭제</v-btn>
       <v-btn class="btn edit-btn" @click="mvUpdate">게시글 수정</v-btn>
     </div>
@@ -109,28 +111,25 @@ const join = async () => {
 .board-details {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  padding: 40px;
+
 }
 
 /* Board Section Style */
 .board-section {
-  width: 70%;
-  margin-bottom: 20px;
   background-color: #f9f9f9;
   border-radius: 15px;
   padding: 30px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
-/* Header Style */
-.header {
-  margin-bottom: 25px;
-}
-
-.header h2 {
+.detail-title {
+  align-self: flex-start;
   font-size: 28px;
   margin-bottom: 15px;
+  font-size: 30px;
+  font-weight: 900;
 }
 
 .info-wrap {
@@ -148,9 +147,13 @@ const join = async () => {
   line-height: 1.6;
   font-size: 18px;
   margin-top: 20px;
+  
 }
 
 /* Button Style */
+.button-wrap{
+  margin: auto;
+}
 .btn {
   padding: 10px 20px;
   border-radius: 20px;
@@ -176,4 +179,5 @@ const join = async () => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
+
 </style>
