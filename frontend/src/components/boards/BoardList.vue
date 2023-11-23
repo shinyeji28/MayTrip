@@ -15,7 +15,7 @@ const selectedGugun = ref(null);
 const getBoardList = async () => {
   const { data } = await listBoard();
   try {
-    items.value = data;
+    items.value = data.reverse();
   } catch (error) {
     console.error(error);
   }

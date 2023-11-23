@@ -9,7 +9,7 @@ const items = ref([]);
 const getReview = async () => {
   const { data } = await getReviewList();
   try {
-    items.value = data;
+    items.value = data.reverse();
     console.log(items.value);
   } catch (error) {
     console.error(error);
