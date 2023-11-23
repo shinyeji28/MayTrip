@@ -28,7 +28,7 @@ getInfoData();
         1. 날짜 & 여행지 선택
       </router-link>
       <router-link class="side-item" :to="{ name: 'crew-plan-schedule' }">
-        2. 일정 만들기
+        2. 일자별 관광지 선택
       </router-link>
     </div>
     <router-view></router-view>
@@ -37,12 +37,12 @@ getInfoData();
 
 <style scoped>
 .container {
-  height: 93vh;
+  padding-top: 80px;
+  height: 100vh;
   max-width: none;
 }
 .side {
-  min-width: 100px;
-  max-width: 100px;
+  width:5vw;
   border-right: 1px solid #f2e3db;
 }
 .side-item {
@@ -50,9 +50,9 @@ getInfoData();
   flex-direction: row;
   align-items: center;
   height: 100px;
-  padding: 20px 10px;
+  padding: 20px 5px;
   color: #41644a;
-  font-weight: 800;
+  font-weight: 700;
   font-size: small;
   border-radius: 5px;
   border-bottom: 1px solid #f2e3db;

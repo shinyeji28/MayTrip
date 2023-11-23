@@ -203,7 +203,7 @@ onMounted(() => {
 
 <template>
   <div class="row">
-    <div class="container col">
+    <div class="container col ">
       <div class="row">
         <v-row>
           <v-col cols="4">
@@ -495,14 +495,14 @@ onMounted(() => {
 
 <style scoped>
 .container {
-  width: 400px;
+  width: 25vw;
   height: 100%;
   border-right: 1px solid #f2e3db;
   padding: 30px 20px;
   justify-content: flex-start;
 }
 .map {
-  width: 55vw;
+  width: 40vw;
   border-right: 1px solid #f2e3db;
 }
 .scroll {
@@ -510,7 +510,7 @@ onMounted(() => {
 }
 .scrollable {
   width: 100%;
-  height: 100%;
+  height: 700px;
   overflow: auto;
 }
 .scrollable::-webkit-scrollbar {
@@ -521,12 +521,11 @@ onMounted(() => {
   align-items: center;
 }
 .day-side {
-  width: 100px;
+  width: 7vw;
   border-right: 1px solid #f2e3db;
 }
 .mylist {
-  max-width: 600px;
-  min-width: 400px;
+  width: 18vw;
 }
 .row {
   display: flex;

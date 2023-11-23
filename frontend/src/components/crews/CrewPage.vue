@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { getCrewApi } from "@/api/crew";
 import { usePlanStore } from "@/stores/plan";
@@ -21,13 +21,21 @@ const content = ref("");
 const images = ref([]);
 const thumb = ref(null);
 
+const date = ref(null);
+const today = ref(null);
+
 const getCrewInfo = async () => {
   try {
     await getInfos(route.params.crewId);
 
     console.log(crew.value);
     // 여행 후인지 체크
-    if (new Date(crew.value.board.endDate) < new Date()) {
+    console.log(new Date(crew.value.board.endDate), new Date())
+    date.value = new Date(crew.value.board.endDate);
+    date.value.setHours(0, 0, 0, 0);
+    today.value = new Date();
+    today.value.setHours(0, 0, 0, 0);
+    if (date.value < today.value) {
       isAfter.value = true;
       console.log(isAfter.value);
     }
@@ -200,6 +208,8 @@ const clickShared = async () => {
   display: flex;
   flex-direction: column;
   margin: auto;
+
+  padding-top: 80px;
 
   max-width: 1080px;
 }

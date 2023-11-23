@@ -44,7 +44,7 @@ const today = date.toISOString().split("T")[0];
 
 <template>
   <div class="col container">
-    <div class="row margin-60">
+    <div class="row margin-30">
       <v-row>
         <v-col cols="6">
           <v-list-subheader>여행시작일</v-list-subheader>
@@ -76,7 +76,7 @@ const today = date.toISOString().split("T")[0];
         v-model="boardForm.title"
       ></v-text-field>
     </div>
-    <div class="row margin-60 right">
+    <div class="row margin-30 right">
       <v-btn class="margin-10" color="warning" @click="modify"> Modify </v-btn>
       <v-btn color="accent" @click="cancle"> Cancle </v-btn>
     </div>
@@ -85,9 +85,9 @@ const today = date.toISOString().split("T")[0];
 
 <style scoped>
 .container {
-  justify-content: center;
   width: 800px;
   margin: 0 auto;
+  padding: 0
 }
 .row {
   display: flex;
@@ -111,7 +111,7 @@ const today = date.toISOString().split("T")[0];
 }
 
 .margin-60 {
-  margin: 60px 60px;
+  margin: 60px 0;
 }
 
 .margin-30 {
