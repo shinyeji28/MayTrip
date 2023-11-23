@@ -156,7 +156,7 @@ const items = ref([
 .banner-container {
   position: absolute;
   left: 0;
-  top: 70px;
+  top: 7vh;
   width: 100%;
   height: 700px; /* 사진 높이 설정 */
 }

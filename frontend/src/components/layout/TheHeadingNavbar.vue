@@ -19,11 +19,19 @@ const logout = () => {
 <template>
   <nav>
     <router-link :to="{ name: 'main' }">
-      <img src="@/assets/ssafy_logo.png" alt="..." id="logo" />
+      <img src="@/assets/logo.png" alt="..." id="logo" />
     </router-link>
     <div class="nav">
       <ul class="nav-left">
-        <li class="nav-item">공지사항</li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'board-list' }">공지사항</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'board-list' }">여행 크루 참여</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'board-list' }">여행 계획 공유</router-link>
+        </li>
       </ul>
       <ul class="nav-right">
         <template v-for="menu in menuList" :key="menu.routeName">
@@ -53,11 +61,20 @@ const logout = () => {
 nav {
   display: flex;
   flex-direction: row;
+  background-color: #f2e3db;
+  align-items: center;
+  border-bottom: 1px solid #f0e4de;
+  height: 7vh;
+}
+nav > a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 #logo {
-  width: 100px;
-  height: 70px;
-  margin-right: 0 20px;
+  width: 140px;
+  height: 80px;
+  margin: 1px 20px;
 }
 .nav {
   width: 100%;
@@ -65,7 +82,6 @@ nav {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(236, 234, 234);
 }
 ul {
   width: 50%;
@@ -84,7 +100,10 @@ ul {
 
 .nav-item > a {
   text-decoration-line: none;
-  color: black;
-  font-weight: 800;
+  color: #41644a;
+  font-weight: 700;
+}
+.nav-item > a:hover {
+  color: #e86a33;
 }
 </style>
