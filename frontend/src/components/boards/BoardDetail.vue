@@ -3,6 +3,14 @@ import { getDetail, deleteBoard } from "@/api/board.js";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { joinCrew } from "@/api/crew.js";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "../../stores/auth";
+
+const authStore = useAuthStore();
+
+const { user } = storeToRefs(authStore);
+const memberId = user.value.memberId;
+
 const route = useRoute();
 const router = useRouter();
 const routeParams = route.params;
@@ -62,25 +70,37 @@ const join = async () => {
     <section class="board-section">
       <div class="header">
         <h2>{{ boardInfo?.title }}</h2>
-        <div class="info">조회수: {{ boardInfo?.views }}</div>
-        <div class="info">
-          게시 날짜: {{ formatDate(boardInfo?.registDate) }}
-        </div>
-        <div class="info">
-          여행 목적지: {{ boardInfo?.sidoName }} {{ boardInfo?.gugunName }}
-        </div>
-        <div class="info">인원수: 최대 {{ boardInfo?.headcount }}</div>
-        <div class="info">
-          일정: {{ boardInfo?.startDate }} ~ {{ boardInfo?.endDate }}
+        <hr />
+        <div class="info-wrap">
+          <div>
+            <div class="info">
+              장소 : {{ boardInfo?.sidoName }} {{ boardInfo?.gugunName }}
+            </div>
+            <div class="info">인원수: 최대 {{ boardInfo?.headcount }}</div>
+            <div class="info">
+              일정 : {{ boardInfo?.startDate }} - {{ boardInfo?.endDate }}
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <div class="info" style="float: left">
+              조회수: {{ boardInfo?.views }}
+            </div>
+            <div class="info" style="float: left">
+              게시 날짜 : {{ formatDate(boardInfo?.registDate) }}
+            </div>
+          </div>
         </div>
       </div>
       <div class="content" v-html="boardInfo?.content"></div>
     </section>
 
-    <v-btn class="btn" @click="join">신청하기</v-btn>
-
-    <v-btn class="btn delete-btn" @click="remove">게시글 삭제</v-btn>
-    <v-btn class="btn edit-btn" @click="mvUpdate">게시글 수정</v-btn>
+    <div v-if="boardInfo?.member.memberId != memberId">
+      <v-btn class="btn delete-btn" @click="join">신청하기</v-btn>
+    </div>
+    <div v-if="boardInfo?.member.memberId == memberId">
+      <v-btn class="btn delete-btn" @click="remove">게시글 삭제</v-btn>
+      <v-btn class="btn edit-btn" @click="mvUpdate">게시글 수정</v-btn>
+    </div>
   </div>
 </template>
 
@@ -106,7 +126,6 @@ const join = async () => {
 /* Header Style */
 .header {
   margin-bottom: 25px;
-  text-align: center;
 }
 
 .header h2 {
@@ -114,6 +133,10 @@ const join = async () => {
   margin-bottom: 15px;
 }
 
+.info-wrap {
+  display: flex;
+  justify-content: space-between;
+}
 .info {
   font-size: 16px;
   margin-bottom: 10px;

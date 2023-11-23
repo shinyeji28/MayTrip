@@ -49,9 +49,9 @@ const submitReview = async () => {
   const formData = new FormData(form.value);
   formData.append("crewId", route.params.crewId);
 
-  for (let key of formData.keys()) {
-    console.log(key, ":", formData.get(key));
-  }
+  // for (let key of formData.keys()) {
+  //   console.log(key, ":", formData.get(key));
+  // }
 
   await registReview(formData);
 };
