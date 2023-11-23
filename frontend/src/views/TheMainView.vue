@@ -27,15 +27,13 @@ const imgList = ref([
 
 const getReview = async () => {
   const { data } = await getReviewList();
-  reviews.value = data.reverse().slice(0, 3);
+  reviews.value = data.reverse().slice(0, 4);
 };
 
 const getBoard = async () => {
   const { data } = await listBoard();
-  items.value = data.reverse().slice(0, 10);
   items.value = data.reverse().slice(0, 3);
-  console.log(items.value);
-  console.log("getBoard 완료:", items.value);
+  console.log(items.value)
 };
 
 getReview();
@@ -50,7 +48,6 @@ onUnmounted(() => {
 });
 
 watch(() => isActive.value, (newValue) => {
-  console.log("active 변경됨", newValue);
   isActive.value = true;
 });
 </script>
@@ -95,30 +92,6 @@ watch(() => isActive.value, (newValue) => {
 
     <div class="main-wrapper">
       <div class="main-section1">
-        <p class="subject-text">여행 다녀왔어요!</p>
-        <br />
-        <div class="card-section1-wrap">
-          <div v-for="(review, i) in reviews" :key="i">
-            <v-sheet :elevation="11" :height="300" :width="300" rounded>
-              <img
-                class="banner-img"
-                :src="review.thumbnailInfo?.url"
-                :alt="review.thumbnailInfo?.originFileName"
-              />
-            </v-sheet>
-          </div>
-          <button>
-            <v-btn
-              :height="300"
-              rounded="xl"
-              @click="router.push({ name: 'review-list' })"
-            >
-              <i class="fas fa-angle-double-right arrow"></i>
-            </v-btn>
-          </button>
-        </div>
-      </div>
-      <div class="main-section2">
         <p class="subject-text">함께 할 크루원을 찾아요</p>
         <br />
         <div class="card-section1-wrap">
@@ -129,6 +102,9 @@ watch(() => isActive.value, (newValue) => {
                 :src="item.thumbnailInfo?.url"
                 :alt="item.thumbnailInfo?.originFileName"
               />
+              <div class="board-text-wrap">
+                  {{ item.title }}
+                </div>
             </v-sheet>
           </div>
           <button>
@@ -144,6 +120,27 @@ watch(() => isActive.value, (newValue) => {
 
         <br />
       </div>
+
+      <div class="main-section2">
+        <p class="subject-text">여행 다녀왔어요!</p>
+        <br />
+          <v-row gap="10">
+            <!-- 'reviews' 배열의 데이터로 v-card를 생성합니다 -->
+            <v-col v-for="(review, index) in reviews" :key="index" :cols="index === 0 ? 7 : 5">
+              <v-card>
+                <v-img :src="review.thumbnailInfo?.url" height="300px" cover></v-img>
+                <!-- 추가적인 내용을 넣을 수 있습니다 -->
+                <v-card-actions>  
+                  <v-spacer></v-spacer>
+                  <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>
+                  <v-btn size="small" color="surface-variant" variant="text" icon="mdi-bookmark"></v-btn>
+                  <v-btn size="small" color="surface-variant" variant="text" icon="mdi-share-variant"></v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+      </div>
+
     </div>
   </div>
 </template>
@@ -174,7 +171,7 @@ watch(() => isActive.value, (newValue) => {
 .banner-text-left {
   font-size: 30px;
 }
-.banner-left-btn {
+.banner-left-btn .review-box{
   box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.3);
 }
 .banner-left-btn:hover {
@@ -231,4 +228,19 @@ watch(() => isActive.value, (newValue) => {
 .arrow {
   font-size: 30px;
 }
+.v-sheet:hover,
+.v-card:hover {
+  transform: scale(1.03); /* 호버 시 크기 확대 */
+}
+.board-text-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 8px;
+  border-radius: 4px; 
+  z-index: 10;
+}
+
 </style>
