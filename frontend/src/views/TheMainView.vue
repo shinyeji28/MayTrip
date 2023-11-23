@@ -92,7 +92,7 @@ watch(() => isActive.value, (newValue) => {
 
     <div class="main-wrapper">
       <div class="main-section1">
-        <p class="subject-text">함께 할 크루원을 찾아요</p>
+        <p class="subject-text">함께 할 크루원을 찾아요!</p>
         <br />
         <div class="card-section1-wrap">
           <div v-for="(item, i) in items" :key="i">
@@ -122,7 +122,7 @@ watch(() => isActive.value, (newValue) => {
       </div>
 
       <div class="main-section2">
-        <p class="subject-text">여행 다녀왔어요!</p>
+        <p class="subject-text">크루원과 여행 다녀왔어요!</p>
         <br />
           <v-row gap="10">
             <!-- 'reviews' 배열의 데이터로 v-card를 생성합니다 -->
@@ -222,6 +222,7 @@ watch(() => isActive.value, (newValue) => {
 .subject-text {
   font-size: 30px;
   font-weight: 900;
+  color: #263A29;
 }
 .card-section1-wrap {
   display: flex;
