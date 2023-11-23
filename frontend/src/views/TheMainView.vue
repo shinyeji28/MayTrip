@@ -36,6 +36,14 @@ onUnmounted(() => {
 watch(() => isActive.value, (newValue) => {
   isActive.value = true;
 });
+
+const truncateText = (text, length, suffix) => {
+  if (text.length > length) {
+    return text.substring(0, length) + suffix;
+  } else {
+    return text;
+  }
+};
 </script>
 
 <template>
@@ -82,16 +90,26 @@ watch(() => isActive.value, (newValue) => {
         <br />
         <div class="card-section1-wrap">
           <div v-for="(item, i) in items" :key="i">
-            <v-sheet :elevation="11" :height="300" :width="300" rounded>
-              <img
-                class="banner-img"
-                :src="item.thumbnailInfo?.url"
-                :alt="item.thumbnailInfo?.originFileName"
-              />
-              <div class="board-text-wrap">
-                  {{ item.title }}
+            <v-card
+              class="mx-auto board-card-wrap"
+              height="300"
+              width="300"
+              :image="item.thumbnailInfo?.url"
+              theme="dark"
+              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+
+            >
+              <v-card-title class="board-title">
+                {{item.title}}<br>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                  <div class="board-profile">
+                    <v-img cover :src="item.thumbnailInfo?.url"></v-img>
+                  </div>
+                  {{item.member.name }}
                 </div>
-            </v-sheet>
+                <!-- <p v-html="truncateText(item.content, 15, '...')"></p> -->
+              </v-card-title>
+          </v-card>
           </div>
           <button>
             <v-btn
@@ -103,6 +121,7 @@ watch(() => isActive.value, (newValue) => {
             </v-btn>
           </button>
         </div>
+          
 
         <br />
       </div>
@@ -211,9 +230,31 @@ watch(() => isActive.value, (newValue) => {
   flex-direction: row;
   justify-content: space-between;
 }
-
+.board-title{
+  color: #000;
+  font-size: 20px;
+  font-weight: 900;
+}
+.board-card-wrap::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+}
 .arrow {
   font-size: 30px;
+}
+.board-card-wrap{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* align-items: flex-end; */
+}
+.board-profile{
+  width: 40px; height:40px; border-radius: 100%; overflow: hidden;
 }
 .v-sheet:hover,
 .v-card:hover {
