@@ -16,6 +16,7 @@ const getBoardList = async () => {
   const { data } = await listBoard();
   try {
     items.value = data.reverse();
+    console.log(items);
   } catch (error) {
     console.error(error);
   }
@@ -83,6 +84,14 @@ const paginatedItems = computed(() => {
 const totalPages = computed(() => {
   return Math.ceil(items.value.length / perPage.value);
 });
+
+const truncateText = (text, length, suffix) => {
+  if (text.length > length) {
+    return text.substring(0, length) + suffix;
+  } else {
+    return text;
+  }
+};
 </script>
 
 <template>
@@ -123,23 +132,31 @@ const totalPages = computed(() => {
           class="card"
           width="310"
           height="300"
-          title="모집 글 제목"
           @click="
             router.push({ name: 'board-detail', params: { id: item.id } })
           "
         >
-          <v-img
-            :src="item.thumbnailInfo?.url"
-            alt="item.thumbnailInfo?.originFileName"
-          ></v-img>
-
-          <template v-slot:title>{{ item.title }}</template>
-
-          <template v-slot:subtitle
-            >타겟 도시 : {{ item.sidoName }} {{ item.gugunName }}</template
-          >
-
-          <template v-slot:text> 간략 설명 </template>
+          <div class="card-img-wrap">
+            <img
+              :src="item.thumbnailInfo?.url"
+              alt="item.thumbnailInfo?.originFileName"
+            />
+          </div>
+          <div class="content-wrap">
+            <b style="font-size: 17px">{{ item.title }}</b>
+            <div v-if="item.sidoName && item.gugunName" class="sub-text">
+              <i>#{{ item.sidoName }} </i>&nbsp;
+              <i>#{{ item.gugunName }}</i>
+            </div>
+            <div class="sub-text">
+              {{ item.startDate }} - {{ item.startDate }}
+            </div>
+            <div
+              class="sub-text"
+              style="color: gray"
+              v-html="truncateText(item.content, 20, '...')"
+            ></div>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -167,9 +184,28 @@ const totalPages = computed(() => {
   border-radius: 10px;
   box-sizing: border-box;
   transition: transform 0.3s ease;
+  height: 100%;
 }
 .card:hover {
   transform: translateY(15px);
   opacity: 0.3;
+}
+.card-img-wrap {
+  height: 190px;
+  overflow: hidden;
+}
+.card-img-wrap > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.content-wrap {
+  padding: 10px;
+}
+.sub-text {
+  font-size: 13px;
+}
+.sub-text > i {
+  color: #fc920f;
 }
 </style>
