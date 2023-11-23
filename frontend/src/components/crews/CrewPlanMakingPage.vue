@@ -494,8 +494,10 @@ onMounted(() => {
 <style scoped>
 .container {
   width: 400px;
+  height: 100%;
   border-right: 1px solid lightgray;
   padding: 30px 20px;
+  justify-content: flex-start;
 }
 .map {
   width: 50vw;
