@@ -9,7 +9,7 @@ import {
   getDescriptionByContentIdApi,
   getByKeyWord,
   getByContentId,
-  getAllByLatLonApi
+  getAllByLatLonApi,
 } from "@/api/attraction";
 import crewPlanMapPage from "@/components/crews/CrewPlanMapPage.vue";
 
@@ -43,14 +43,13 @@ const location = ref({
   latitude: 0.0,
   longitude: 0.0,
 });
-const selectedDay = ref(plan.value.days[0].dayId);
+const selectedDay = ref(plan.value.days[0].day);
 const dayList = ref(plan.value.days[0].details);
 
 // 스크롤 관련
 const tempList = ref([]); // 전체 조회 검색 목록
 const offset = ref(0); // 탐색 시작 위치
 const attractionTable = ref(null); // 스크롤 div
-
 
 /** 검색 조건 관련 */
 const getSido = async () => {
@@ -74,7 +73,6 @@ const getGugun = async () => {
 const clickSearch = async () => {
   // 키워드 검색
   searchSetting.value.loading = true;
-  console.log("조건 검색 : ", searchForm.value);
   const { data } = await getByKeyWord(searchForm.value);
   if (data.length > 300) list.value = data.slice(0, 300);
   else list.value = data;
@@ -86,7 +84,7 @@ const updateAttractionList = (data) => {
   tempList.value = data;
   list.value = [];
   offset.value = 0;
-}
+};
 
 watch(
   () => selectForm.value.sido,
@@ -105,7 +103,6 @@ watch(
     const { data } = await getAllBySidoGugunContentTypeApi(selectForm.value);
     updateAttractionList(data);
     addAttractionInfo();
-    console.log("검색됨! - 리스트 길이 : ", list.value.length);
   }
 );
 
@@ -125,49 +122,42 @@ const clickDetail = async (contentId) => {
 const clickAdd = async (contentId) => {
   const data = {
     contentId,
-    dayId: selectedDay.value,
+    dayId: plan.value.days[selectedDay - 1].dayId,
     priority: dayList.value.length + 1,
   };
-  console.log("추가 버튼 클릭!!", data);
   await insertDetail(data);
   updateDayList();
 };
 
 const clickRemove = async (detailId) => {
-  console.log("삭제 버튼 클릭!!");
   await deleteDetail(detailId);
   updateDayList();
 };
 
 const clickItem = async (lat, lon) => {
-  console.log("아이템 클릭 : ", lat, lon);
   location.value.latitude = lat;
   location.value.longitude = lon;
 };
 
-const clickDay = async (dayId) => {
-  selectedDay.value = dayId;
+const clickDay = async (day) => {
+  selectedDay.value = day;
   updateDayList();
 };
 
 const updateDayList = () => {
-  plan.value.days.forEach((day) => {
-    if (day.dayId == selectedDay.value) {
-      dayList.value = day.details;
-      return false;
-    }
-  });
+  dayList.value = plan.value.days[selectedDay.value - 1].details;
 };
 
 const addAttractionInfo = () => {
-  var end = offset.value + 100 > tempList.value.length ? tempList.value.length : offset.value+100;
-  for(var i=offset.value; i<end; i++) {
+  var end =
+    offset.value + 100 > tempList.value.length
+      ? tempList.value.length
+      : offset.value + 100;
+  for (var i = offset.value; i < end; i++) {
     list.value.push(tempList.value[i]);
   }
   offset.value += 100;
-  console.log("현재 목록 : ", list.value);
-}
-
+};
 
 const handleAttractionListScroll = () => {
   const table = attractionTable.value;
@@ -182,23 +172,28 @@ const handleAttractionListScroll = () => {
 };
 
 const getGeorocation = async () => {
-  if(!navigator.geolocation) {
+  if (!navigator.geolocation) {
     alert("현재 위치 정보를 찾을 수 없습니다.");
   } else {
-    navigator.geolocation.getCurrentPosition(async pos => {
-      location.value.latitude = pos.coords.latitude;
-      location.value.longitude = pos.coords.longitude;
-      console.log("내위치", location.value);
-      const params = {lat: location.value.latitude, lon: location.value.longitude, nkm: 5};
-      const {data} = await getAllByLatLonApi(params);
-      updateAttractionList(data);
-      addAttractionInfo();
-    }, err => {
-      console.log(err.message);
-    });
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        location.value.latitude = pos.coords.latitude;
+        location.value.longitude = pos.coords.longitude;
+        const params = {
+          lat: location.value.latitude,
+          lon: location.value.longitude,
+          nkm: 5,
+        };
+        const { data } = await getAllByLatLonApi(params);
+        updateAttractionList(data);
+        addAttractionInfo();
+      },
+      (err) => {
+        console.log("위치 얻기 실패", err.message);
+      }
+    );
   }
-}
-
+};
 
 onMounted(() => {
   getSido();
@@ -284,55 +279,59 @@ onMounted(() => {
           </v-col>
         </v-row>
       </div>
-      <div class="scrollable" ref="attractionTable" @scroll="handleAttractionListScroll">
+      <div
+        class="scrollable"
+        ref="attractionTable"
+        @scroll="handleAttractionListScroll"
+      >
         <v-row dense>
           <v-col cols="12">
             <v-card
-            v-for="item in list" :key="item.contentId"
-            max-width="350"
-            height="150"
-            class="mb-2 item"
-            @click="clickItem(item.latitude, item.longitude)"
-          >
-            <div class="d-flex flex-no-wrap justify-flex-start">
-              <v-avatar class="ma-2" size="100" rounded="0">
-                <v-img
-                  :src="
-                    item.firstImage != '' ? item.firstImage : item.firstImage2
-                  "
-                ></v-img>
-              </v-avatar>
-              <div>
-                <v-card-title class="text-h20">
-                  {{ item.title }}
-                </v-card-title>
-  
-                <v-card-subtitle>{{ item.addr1 }}</v-card-subtitle>
-  
-                <v-card-actions>
-                  <v-btn
-                    size="small"
-                    variant="text"
-                    density="comfortable"
-                    @click="clickDetail(item.contentId)"
-                  >
-                    상세보기
-                  </v-btn>
-                  <v-btn
-                    size="small"
-                    variant="outlined"
-                    density="comfortable"
-                    @click="clickAdd(item.contentId)"
-                  >
-                    add
-                  </v-btn>
-                </v-card-actions>
+              v-for="item in list"
+              :key="item.contentId"
+              max-width="350"
+              height="150"
+              class="mb-2 item"
+              @click="clickItem(item.latitude, item.longitude)"
+            >
+              <div class="d-flex flex-no-wrap justify-flex-start">
+                <v-avatar class="ma-2" size="100" rounded="0">
+                  <v-img
+                    :src="
+                      item.firstImage != '' ? item.firstImage : item.firstImage2
+                    "
+                  ></v-img>
+                </v-avatar>
+                <div>
+                  <v-card-title class="text-h20">
+                    {{ item.title }}
+                  </v-card-title>
+
+                  <v-card-subtitle>{{ item.addr1 }}</v-card-subtitle>
+
+                  <v-card-actions>
+                    <v-btn
+                      size="small"
+                      variant="text"
+                      density="comfortable"
+                      @click="clickDetail(item.contentId)"
+                    >
+                      상세보기
+                    </v-btn>
+                    <v-btn
+                      size="small"
+                      variant="outlined"
+                      density="comfortable"
+                      @click="clickAdd(item.contentId)"
+                    >
+                      add
+                    </v-btn>
+                  </v-card-actions>
+                </div>
               </div>
-            </div>
             </v-card>
           </v-col>
-          
-        </v-row>    
+        </v-row>
 
         <v-row justify="center">
           <v-dialog v-model="dialog" persistent width="1024">
@@ -412,7 +411,10 @@ onMounted(() => {
       </div>
     </div>
     <div class="map">
-      <crewPlanMapPage :location="location"></crewPlanMapPage>
+      <crewPlanMapPage
+        :location="location"
+        :dayDetails="plan.days[selectedDay - 1].details"
+      ></crewPlanMapPage>
     </div>
     <div class="day-side">
       <v-list-item title="Days" subtitle="여행일"></v-list-item>
@@ -422,7 +424,7 @@ onMounted(() => {
         :key="day.dayId"
         link
         :title="day.day + '일자'"
-        @click="clickDay(day.dayId)"
+        @click="clickDay(day.day)"
       ></v-list-item>
     </div>
     <div class="col margin-30">
@@ -505,7 +507,7 @@ onMounted(() => {
   overflow: auto;
 }
 .scrollable::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 .item {
   display: flex;
