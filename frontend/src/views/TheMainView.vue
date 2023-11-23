@@ -140,9 +140,9 @@ onUnmounted(() => {
 .banner-container {
   position: absolute;
   left: 0;
-  top: 7vh;
+  top: 0;
   width: 100%;
-  height: 700px; /* 사진 높이 설정 */
+  height: 1000px; /* 사진 높이 설정 */
 }
 .banner-img {
   object-fit: cover;
@@ -193,7 +193,7 @@ onUnmounted(() => {
   border-radius: 10px;
 }
 .main-wrapper {
-  margin-top: calc(70px + 700px); /* header + banner */
+  margin-top: calc(70px + 1000px); /* header + banner */
 }
 .main-section1 {
   margin-bottom: 100px;
