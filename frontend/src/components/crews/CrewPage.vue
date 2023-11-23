@@ -54,6 +54,7 @@ const submitReview = async () => {
   }
 
   await registReview(formData);
+};
 const clickShared = async () => {
   await toggleIsShared(crew.value.board.id);
 };
