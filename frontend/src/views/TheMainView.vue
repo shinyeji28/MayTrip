@@ -1,9 +1,10 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { getReviewList } from "@/api/review.js";
 import { listBoard } from "@/api/board.js";
 import { useMenuStore } from "../stores/menu";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 
@@ -27,10 +28,16 @@ getReview();
 getBoard();
 
 const menuStore = useMenuStore();
+const { isActive } = storeToRefs(menuStore);
 menuStore.setIsActive(true);
 
 onUnmounted(() => {
   menuStore.setIsActive(false);
+});
+
+watch(() => isActive.value, (newValue) => {
+  console.log("active 변경됨", newValue);
+  isActive.value = true;
 });
 </script>
 

@@ -1,12 +1,19 @@
 <script setup>
-import { onUnmounted } from "vue";
+import { onUnmounted, watch } from "vue";
 import { useMenuStore } from "../stores/menu";
+import { storeToRefs } from "pinia";
 
 const menuStore = useMenuStore();
+const {isActive} = storeToRefs(menuStore);
 menuStore.setIsActive(true);
 
 onUnmounted(() => {
   menuStore.setIsActive(false);
+});
+
+watch(() => isActive.value, (newValue) => {
+  console.log("active 변경됨", newValue);
+  isActive.value = true;
 });
 </script>
 
