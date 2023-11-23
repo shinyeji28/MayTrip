@@ -123,8 +123,10 @@ const secession = async () => {
   </form>
   <div class="row flex-end">
     <v-btn v-show="isShowInfo" class="me-4" @click="toggle"> modifiy </v-btn>
-    <v-btn v-show="!isShowInfo" class="me-4" @click="modify"> confirm </v-btn>
-    <v-btn v-show="!isShowInfo" @click="cancel"> cancel </v-btn>
+    <v-btn v-show="!isShowInfo" class="me-4 modify" @click="modify">
+      confirm
+    </v-btn>
+    <v-btn v-show="!isShowInfo" class="cancel" @click="cancel"> cancel </v-btn>
   </div>
 </template>
 
@@ -144,5 +146,15 @@ form {
 }
 .mt-30 {
   margin-top: 30px;
+}
+.modify:hover {
+  background-color: #e86a33;
+  color: white;
+  font-weight: 500;
+}
+.cancel:hover {
+  background-color: #41644a;
+  color: white;
+  font-weight: 500;
 }
 </style>

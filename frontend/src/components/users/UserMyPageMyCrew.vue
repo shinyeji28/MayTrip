@@ -14,6 +14,13 @@ const getCrewList = async () => {
 </script>
 
 <template>
+  <v-btn
+    v-if="crewlist.length == 0"
+    variant="plain"
+    @click="router.push({ name: 'board-list' })"
+  >
+    크루에 참여하여 메이트들과 함께 여행을 만들어보세요!
+  </v-btn>
   <v-card width="800">
     <v-data-iterator :items="crewlist" :items-per-page="3">
       <template v-slot:default="{ items }">
