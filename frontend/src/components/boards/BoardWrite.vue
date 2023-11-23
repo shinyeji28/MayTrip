@@ -31,6 +31,12 @@ const selectedGugun = ref(null);
 const content = ref(null);
 const selectedFile = ref([]);
 
+
+if(memberId == ""){
+  alert("로그인 후 이용하실 수 있습니다.");
+  router.replace({name:'user-login'});
+}
+
 onMounted(async () => {
   await getSidoList();
 });

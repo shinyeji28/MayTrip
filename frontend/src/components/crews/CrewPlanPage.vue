@@ -3,13 +3,20 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import crewPlanSetting from "@/components/crews/CrewPlanSettingPage.vue";
 import crewPlanMaking from "@/components/crews/crewPlanMakingPage.vue";
-import { usePlanStore } from "@/stores/plan";
+import { usePlanStore , useAuthStore} from "@/stores/plan";
 import { storeToRefs } from "pinia";
 
 const route = useRoute();
 const planStore = usePlanStore();
 const { getInfos } = planStore;
 const { crew } = storeToRefs(planStore);
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
+const memberId = user.value.memberId;
+if(memberId == ""){
+  alert("로그인 후 이용하실 수 있습니다.");
+  router.replace({name:'user-login'});
+}
 
 const getInfoData = async () => {
   try {
