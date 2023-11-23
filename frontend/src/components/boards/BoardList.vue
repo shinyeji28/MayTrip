@@ -138,7 +138,7 @@ const truncateText = (text, length, suffix) => {
         >
           <div class="card-img-wrap">
             <img
-              :src="item.thumbnailInfo? item.thumbnailInfo.url : '/src/assets/banner.png'"
+              :src="item.thumbnailInfo? item.thumbnailInfo.url : '/src/assets/default_img.png'"
               alt="thumbnail"
             />
           </div>
@@ -149,7 +149,7 @@ const truncateText = (text, length, suffix) => {
               <i>#{{ item.gugunName }}</i>
             </div>
             <div class="sub-text">
-              {{ item.startDate }} - {{ item.startDate }}
+              {{ item.startDate }} - {{ item.endDate }}
             </div>
             <div
               class="sub-text"

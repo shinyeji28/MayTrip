@@ -99,8 +99,8 @@ watch(() => isActive.value, (newValue) => {
             <v-sheet :elevation="11" :height="300" :width="300" rounded>
               <img
                 class="banner-img"
-                :src="item.thumbnailInfo?.url"
-                :alt="item.thumbnailInfo?.originFileName"
+                :src="item.thumbnailInfo? item.thumbnailInfo.url : '/src/assets/default_img2.png'"
+                :alt="item.thumbnailInfo? item.thumbnailInfo.originFileName : 'image'"
               />
               <div class="board-text-wrap">
                   {{ item.title }}
@@ -128,7 +128,7 @@ watch(() => isActive.value, (newValue) => {
             <!-- 'reviews' 배열의 데이터로 v-card를 생성합니다 -->
             <v-col v-for="(review, index) in reviews" :key="index" :cols="index === 0 ? 7 : 5">
               <v-card>
-                <v-img :src="review.thumbnailInfo?.url" height="300px" cover></v-img>
+                <v-img :src="review.thumbnailInfo? review.thumbnailInfo.url : '/src/assets/default_img.png'" height="300px" cover></v-img>
                 <!-- 추가적인 내용을 넣을 수 있습니다 -->
                 <v-card-actions>
                   <v-card-text>
