@@ -74,10 +74,16 @@ const clickChangePassword = async () => {
 
 <template>
   <div class="container">
-    <div class="title">Maytrip</div>
+    <img
+      src="@/assets/biglogo.png"
+      class="mb-3"
+      width="300"
+      alt="..."
+      id="logo"
+    />
     <div v-show="order == 1">
-      <h3>이메일을 입력하세요.</h3>
-      <v-card-text class="mt-4 mb-4 pa-0"
+      <h3 class="title">이메일을 입력하세요.</h3>
+      <v-card-text class="mt-4 mb-4 pa-0 gray"
         >가입 시 작성한 이메일로 인증을 시도하세요.</v-card-text
       >
       <v-sheet width="300" class="mx-auto">
@@ -87,42 +93,36 @@ const clickChangePassword = async () => {
             :rules="rules.email"
             label="E-mail"
           ></v-text-field>
-          <v-btn
-            type="submit"
-            color="primary"
-            block
-            class="mt-2"
-            :disabled="btnDisabled"
+          <v-btn type="submit" block class="mt-2 btn" :disabled="btnDisabled"
             >인증번호 전송</v-btn
           >
         </v-form>
       </v-sheet>
     </div>
     <div v-show="order == 2" class="col center">
-      <h3>인증번호를 입력하세요</h3>
-      <v-card-text class="mt-4 pa-0"
+      <h3 class="title">인증번호를 입력하세요</h3>
+      <v-card-text class="mt-4 pa-0 gray"
         >해당 이메일로 인증번호를 보냈습니다.</v-card-text
       >
-      <v-card-text class="ma-0 pa-0"
+      <v-card-text class="ma-0 pa-0 gray"
         >수신된 메일에서 코드를 찾아 입력해주세요.</v-card-text
       >
       <v-otp-input v-model="form.code"></v-otp-input>
       <v-btn
         type="submit"
-        color="primary"
         @click="clickCertificateConfirm"
         block
-        class="mt-2"
+        class="mt-2 btn"
         :disabled="btnDisabled"
         >확인</v-btn
       >
     </div>
     <div v-show="order == 3" class="col center">
-      <h3>인증되었습니다.</h3>
-      <v-card-text class="mt-4 pa-0"
+      <h3 class="title">인증되었습니다.</h3>
+      <v-card-text class="mt-4 pa-0 gray"
         >변경할 새로운 비밀번호를 입력하세요.</v-card-text
       >
-      <v-sheet width="300" class="mx-auto">
+      <v-sheet width="300" class="mx-auto mt-4">
         <v-form @submit.prevent="clickChangePassword">
           <v-text-field
             v-model="form.password"
@@ -130,12 +130,7 @@ const clickChangePassword = async () => {
             label="Password"
             type="password"
           ></v-text-field>
-          <v-btn
-            type="submit"
-            color="primary"
-            block
-            class="mt-2"
-            :disabled="btnDisabled"
+          <v-btn type="submit" block class="mt-2 btn" :disabled="btnDisabled"
             >변경하기</v-btn
           >
         </v-form>
@@ -149,17 +144,15 @@ const clickChangePassword = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20vh 15vw;
+  margin: 15vh 15vw;
   padding: 0;
-  width: 500px;
+  width: 400px;
   height: 500px;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .title {
-  font-size: 50px;
-  font-weight: 700;
-  margin: 50px 0px;
+  color: #263a29;
 }
 
 .col {
@@ -168,5 +161,15 @@ const clickChangePassword = async () => {
 }
 .center {
   align-items: center;
+}
+
+.btn {
+  background-color: #41644a;
+  color: white;
+  font-weight: 500;
+}
+
+.gray {
+  color: darkgray;
 }
 </style>
