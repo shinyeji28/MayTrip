@@ -6,6 +6,9 @@ import { listSido, listGugun } from "@/api/sidoGugun.js";
 import { useRoute, useRouter } from "vue-router";
 import { getDetail, updateBoard } from "@/api/board.js";
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "../../stores/auth";
+
+const authStore = useAuthStore();
 
 const { user } = storeToRefs(authStore);
 const memberId = user.value.memberId;
