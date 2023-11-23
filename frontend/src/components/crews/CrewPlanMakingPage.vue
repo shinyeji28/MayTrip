@@ -420,6 +420,7 @@ onMounted(() => {
       <v-list-item title="Days" subtitle="여행일"></v-list-item>
       <v-divider></v-divider>
       <v-list-item
+        class="day-item"
         v-for="day in plan.days"
         :key="day.dayId"
         link
@@ -427,16 +428,17 @@ onMounted(() => {
         @click="clickDay(day.day)"
       ></v-list-item>
     </div>
-    <div class="col margin-30">
+    <div class="col margin-30 mylist">
       <v-virtual-scroll
         :items="dayList"
-        width="400"
+        max-width="500"
+        min-width="400"
         height="700"
         class="scroll"
       >
         <template v-slot:default="{ item }">
           <v-card
-            width="400"
+            max-width="400"
             class="mx-1 mb-2 item"
             @click="
               clickItem(
@@ -495,17 +497,20 @@ onMounted(() => {
 .container {
   width: 400px;
   height: 100%;
-  border-right: 1px solid lightgray;
+  border-right: 1px solid #f2e3db;
   padding: 30px 20px;
   justify-content: flex-start;
 }
 .map {
-  width: 50vw;
-  border-right: 1px solid lightgray;
+  width: 55vw;
+  border-right: 1px solid #f2e3db;
+}
+.scroll {
+  padding: 20px;
 }
 .scrollable {
   width: 100%;
-  height: 600px;
+  height: 100%;
   overflow: auto;
 }
 .scrollable::-webkit-scrollbar {
@@ -517,9 +522,12 @@ onMounted(() => {
 }
 .day-side {
   width: 100px;
-  border-right: 1px solid lightgray;
+  border-right: 1px solid #f2e3db;
 }
-
+.mylist {
+  max-width: 600px;
+  min-width: 400px;
+}
 .row {
   display: flex;
   flex-direction: row;
@@ -544,6 +552,7 @@ onMounted(() => {
   overflow: auto;
   height: 700px;
 }
+
 .margin-60 {
   margin: 60px 60px;
 }
