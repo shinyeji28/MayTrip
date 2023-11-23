@@ -3,8 +3,8 @@
 <template>
   <div class="container">
     <div class="banner">
-      <img src="@/assets/images/trip4.jpg" />
-      <div class="title">여행 친구를 구하고 있어요 😍</div>
+      <img src="@/assets/banner.png" />
+      <div class="title">당신의 여행 친구를 찾아보세요</div>
     </div>
     <main class="container">
       <div class="main-wrap">
@@ -30,7 +30,7 @@
   left: 0;
   top: 70px;
   width: 100%;
-  height: 400px;
+  height: 500px;
   z-index: -1;
 }
 .banner img {
@@ -47,7 +47,8 @@
   z-index: 0;
   font-size: 30px;
   font-weight: 900;
-  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6);
+  color: white;
+  /* text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6); */
 }
 
 .container {
