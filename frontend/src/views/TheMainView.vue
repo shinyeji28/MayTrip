@@ -267,9 +267,10 @@ const truncateText = (text, length, suffix) => {
   justify-content: space-between;
 }
 .board-title {
-  color: #000;
+  color: #fff;
   font-size: 20px;
   font-weight: 900;
+  z-index: 2;
 }
 .board-card-wrap::before {
   content: "";
@@ -298,6 +299,9 @@ const truncateText = (text, length, suffix) => {
   height: 40px;
   border-radius: 100%;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .v-sheet:hover,
 .v-card:hover {
