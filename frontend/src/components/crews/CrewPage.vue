@@ -26,17 +26,20 @@ const getCrewInfo = async () => {
     await getInfos(route.params.crewId);
     console.log(crew.value);
   } catch (error) {
+    alert("폼을 채워주세요.");
     console.log(error);
   }
 };
-onMounted(async() => {
+onMounted(async () => {
   await getCrewInfo();
-
 });
 watch(crew, (newValue) => {
-  if (new Date(newValue.board.endDate).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
-      isAfter.value = true;
-    }
+  if (
+    new Date(newValue.board.endDate).setHours(0, 0, 0, 0) <
+    new Date().setHours(0, 0, 0, 0)
+  ) {
+    isAfter.value = true;
+  }
 });
 
 const truncateText = (text, length, suffix) => {
@@ -61,11 +64,22 @@ const submitReview = async () => {
 const clickShared = async () => {
   await toggleIsShared(crew.value.board.id);
 };
+const rules = ref([(value) => !!value || "입력해주세요."]);
 </script>
 
 <template>
   <div class="container">
-    <div class="col left margin-60 profile" :style="{ backgroundImage: 'url(' + (crew.board.thumbnailInfo?crew.board.thumbnailInfo.url : 'http://localhost:5173/src/assets/banner2.png') + ')' }">
+    <div
+      class="col left margin-60 profile"
+      :style="{
+        backgroundImage:
+          'url(' +
+          (crew.board.thumbnailInfo
+            ? crew.board.thumbnailInfo.url
+            : 'http://localhost:5173/src/assets/banner2.png') +
+          ')',
+      }"
+    >
       <div class="text-2">{{ crew.crewName }}</div>
       <div class="text-3 margin-10">
         {{ crew.board.sidoName }} {{ crew.board.gugunName }}
@@ -86,7 +100,11 @@ const clickShared = async () => {
         :key="member.memberId"
       >
         <v-avatar
-          :image="member.profileImg ? member.profileImg.url : '/src/assets/profile_none.png' "
+          :image="
+            member.profileImg
+              ? member.profileImg.url
+              : '/src/assets/profile_none.png'
+          "
           size="80"
         ></v-avatar>
         <div class="text-4">{{ member.name }}</div>
@@ -157,16 +175,18 @@ const clickShared = async () => {
       <v-dialog v-model="dialog" width="500px">
         <v-card class="dialog-container">
           <form @submit.prevent="submitReview" ref="form">
-            <h1>메이트립에서 함께한 크루원과의 여행을 공유하세요.</h1>
+            <h3>메이트립에서 함께한 크루원과의 여행을 공유하세요.</h3>
             <v-text-field
               v-model="title"
               name="title"
               label="Title"
+              :rules="rules"
             ></v-text-field>
             <v-textarea
               v-model="content"
               name="content"
               label="Content"
+              :rules="rules"
             ></v-textarea>
             <v-file-input
               v-model="thumb"

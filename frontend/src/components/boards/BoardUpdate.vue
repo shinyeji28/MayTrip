@@ -41,11 +41,6 @@ const title = ref(null);
 const headCount = ref(null);
 const thumbnail = ref({});
 
-if(memberId == ""){
-  alert("로그인 후 이용하실 수 있습니다.");
-  router.replace({name:'user-login'});
-}
-
 const getBoardDetail = async () => {
   const { data } = await getDetail(id);
   try {
@@ -97,26 +92,34 @@ watch(selectedSido, (newValue) => {
 });
 
 const updateBoardContent = async (formData) => {
-  const { data } = await updateBoard(formData);
   try {
+    const { data } = await updateBoard(formData);
     alert("수정이 완료되었습니다.");
-    console.log(data);
+    router.push({ name: "board-detail", params: { id: id } });
   } catch (error) {
+    alert("폼을 채워주세요.");
     console.error(error);
   }
 };
 
 const changeEditor = (newContent) => {
   content.value = newContent;
-  console.log(content.value);
 };
 
-const handleFileUpload = () => {
-  console.log(selectedFile.value);
-};
+const handleFileUpload = () => {};
 
 const onSubmit = async () => {
   const formData = new FormData(form.value);
+  const start_d = new Date(startDate.value);
+  const end_d = new Date(endDate.value);
+  const start_date =
+    start_d.getFullYear() +
+    "-" +
+    (start_d.getMonth() + 1) +
+    "-" +
+    start_d.getDate();
+  const end_date =
+    end_d.getFullYear() + "-" + (end_d.getMonth() + 1) + "-" + end_d.getDate();
   formData.append("id", id);
   formData.append("memberId", memberId);
   formData.append("startDate", startDate.value.toISOString().substring(0, 10));
@@ -129,8 +132,6 @@ const onSubmit = async () => {
   //   console.log(key, ":", formData.get(key));
   // }
   await updateBoardContent(formData);
-
-  router.push({ name: "board-detail", params: { id: id } });
 };
 
 const setStartDate = () => {
