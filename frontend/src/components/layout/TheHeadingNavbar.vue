@@ -34,16 +34,23 @@ window.addEventListener("scroll", function () {
       </router-link>
       <div class="nav">
         <ul class="nav-left">
-          <li class="nav-item">
-            <router-link :to="{ name: 'board-list' }">공지사항</router-link>
-          </li>
-          <li class="nav-item">
+          <li
+            :class="{
+              'nav-item': true,
+              'nav-item-active': top < 50 && isActive,
+            }"
+          >
             <router-link :to="{ name: 'board-list' }"
               >여행 크루 참여</router-link
             >
           </li>
-          <li class="nav-item">
-            <router-link :to="{ name: 'board-list' }"
+          <li
+            :class="{
+              'nav-item': true,
+              'nav-item-active': top < 50 && isActive,
+            }"
+          >
+            <router-link :to="{ name: 'review-list' }"
               >여행 계획 공유</router-link
             >
           </li>
@@ -52,14 +59,24 @@ window.addEventListener("scroll", function () {
           <template v-for="menu in menuList" :key="menu.routeName">
             <template v-if="menu.show">
               <template v-if="menu.routeName === 'user-logout'">
-                <li class="nav-item">
+                <li
+                  :class="{
+                    'nav-item': true,
+                    'nav-item-active': top < 50 && isActive,
+                  }"
+                >
                   <router-link to="/" @click.prevent="logout">{{
                     menu.name
                   }}</router-link>
                 </li>
               </template>
               <template v-else>
-                <li class="nav-item">
+                <li
+                  :class="{
+                    'nav-item': true,
+                    'nav-item-active': top < 50 && isActive,
+                  }"
+                >
                   <router-link :to="{ name: menu.routeName }">{{
                     menu.name
                   }}</router-link>
@@ -76,6 +93,7 @@ window.addEventListener("scroll", function () {
 <style scoped>
 .active {
   background-color: transparent !important;
+  border-bottom: none !important;
 }
 .nav-container {
   position: fixed;
@@ -122,6 +140,9 @@ ul {
 }
 .nav-item {
   margin: 0 20px;
+}
+.nav-item-active > a {
+  color: #fff !important;
 }
 
 .nav-item > a {
