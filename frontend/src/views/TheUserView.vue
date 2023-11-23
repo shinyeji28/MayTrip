@@ -9,7 +9,7 @@
 <style>
 .container {
   padding: 0;
-  padding-top: 7vh;
+  padding-top: 80px;
 
   display: flex;
   flex-direction: column;

@@ -20,7 +20,7 @@
 
   margin: auto;
   padding: 0;
-  padding-top: 7vh;
+  padding-top: 80px;
 
   flex-direction: column;
   max-width: 1080px;
