@@ -12,16 +12,16 @@ const reviews = ref([]);
 const items = ref([]);
 const imgList = ref([
   {
-    url: '/src/assets/main1.png'
+    url: "/src/assets/main1.png",
   },
   {
-    url: '/src/assets/main2.png'
+    url: "/src/assets/main2.png",
   },
   {
-    url: '/src/assets/main3.png'
+    url: "/src/assets/main3.png",
   },
   {
-    url: '/src/assets/main4.png'
+    url: "/src/assets/main4.png",
   },
 ]);
 
@@ -33,7 +33,7 @@ const getReview = async () => {
 const getBoard = async () => {
   const { data } = await listBoard();
   items.value = data.reverse().slice(0, 3);
-  console.log(items.value)
+  console.log(items.value);
 };
 
 getReview();
@@ -47,9 +47,12 @@ onUnmounted(() => {
   menuStore.setIsActive(false);
 });
 
-watch(() => isActive.value, (newValue) => {
-  isActive.value = true;
-});
+watch(
+  () => isActive.value,
+  (newValue) => {
+    isActive.value = true;
+  }
+);
 
 const truncateText = (text, length, suffix) => {
   if (text.length > length) {
@@ -111,19 +114,18 @@ const truncateText = (text, length, suffix) => {
               :image="item.thumbnailInfo?.url"
               theme="dark"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-
             >
               <v-card-title class="board-title">
-                {{item.title}}<br>
-                <div style="display: flex; align-items: center; gap: 20px;">
+                {{ item.title }}<br />
+                <div style="display: flex; align-items: center; gap: 20px">
                   <div class="board-profile">
                     <v-img cover :src="item.thumbnailInfo?.url"></v-img>
                   </div>
-                  {{item.member.name }}
+                  {{ item.member.name }}
                 </div>
                 <!-- <p v-html="truncateText(item.content, 15, '...')"></p> -->
               </v-card-title>
-          </v-card>
+            </v-card>
           </div>
           <button>
             <v-btn
@@ -135,7 +137,6 @@ const truncateText = (text, length, suffix) => {
             </v-btn>
           </button>
         </div>
-          
 
         <br />
       </div>
@@ -143,27 +144,44 @@ const truncateText = (text, length, suffix) => {
       <div class="main-section2">
         <p class="subject-text">크루원과 여행 다녀왔어요!</p>
         <br />
-          <v-row gap="10">
-            <!-- 'reviews' 배열의 데이터로 v-card를 생성합니다 -->
-            <v-col v-for="(review, index) in reviews" :key="index" :cols="index === 0 ? 7 : 5">
-              <v-card>
-                <v-img :src="review.thumbnailInfo? review.thumbnailInfo.url : '/src/assets/default_img.png'" height="300px" cover></v-img>
-                <!-- 추가적인 내용을 넣을 수 있습니다 -->
-                <v-card-actions>
-                  <v-card-text>
-                    {{ review.title }}
-                  </v-card-text>  
-                  <v-spacer></v-spacer>
-                  <v-btn size="small" color="surface-variant" variant="text" prepend-icon="mdi-eye">{{ review.views }}</v-btn>
-                  <!-- <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>
+        <v-row gap="10">
+          <!-- 'reviews' 배열의 데이터로 v-card를 생성합니다 -->
+          <v-col
+            v-for="(review, index) in reviews"
+            :key="index"
+            :cols="index === 0 ? 7 : 5"
+          >
+            <v-card>
+              <v-img
+                :src="
+                  review.thumbnailInfo
+                    ? review.thumbnailInfo.url
+                    : '/src/assets/default_img.png'
+                "
+                height="300px"
+                cover
+              ></v-img>
+              <!-- 추가적인 내용을 넣을 수 있습니다 -->
+              <v-card-actions>
+                <v-card-text>
+                  {{ review.title }}
+                </v-card-text>
+                <v-spacer></v-spacer>
+                <v-btn
+                  size="small"
+                  color="surface-variant"
+                  variant="text"
+                  prepend-icon="mdi-eye"
+                  >{{ review.views }}</v-btn
+                >
+                <!-- <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>
                   <v-btn size="small" color="surface-variant" variant="text" icon="mdi-bookmark"></v-btn>
                   <v-btn size="small" color="surface-variant" variant="text" icon="mdi-share-variant"></v-btn> -->
-                </v-card-actions>
-              </v-card>
-            </v-col>
-          </v-row>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
       </div>
-
     </div>
   </div>
 </template>
@@ -194,7 +212,7 @@ const truncateText = (text, length, suffix) => {
 .banner-text-left {
   font-size: 30px;
 }
-.banner-left-btn .review-box{
+.banner-left-btn .review-box {
   box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.3);
 }
 .banner-left-btn:hover {
@@ -205,8 +223,8 @@ const truncateText = (text, length, suffix) => {
 }
 .text-overlay {
   position: absolute;
-  top: 40%;
-  left: 30%;
+  top: 50%;
+  left: 25%;
   transform: translate(-50%, -50%);
   /* text-align: center; */
   color: white;
@@ -241,14 +259,14 @@ const truncateText = (text, length, suffix) => {
 .subject-text {
   font-size: 30px;
   font-weight: 900;
-  color: #263A29;
+  color: #263a29;
 }
 .card-section1-wrap {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-.board-title{
+.board-title {
   color: #000;
   font-size: 20px;
   font-weight: 900;
@@ -260,19 +278,26 @@ const truncateText = (text, length, suffix) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.5)
+  );
 }
 .arrow {
   font-size: 30px;
 }
-.board-card-wrap{
+.board-card-wrap {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   /* align-items: flex-end; */
 }
-.board-profile{
-  width: 40px; height:40px; border-radius: 100%; overflow: hidden;
+.board-profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  overflow: hidden;
 }
 .v-sheet:hover,
 .v-card:hover {
@@ -285,8 +310,7 @@ const truncateText = (text, length, suffix) => {
   transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
   padding: 8px;
-  border-radius: 4px; 
+  border-radius: 4px;
   z-index: 10;
 }
-
 </style>
