@@ -114,6 +114,23 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/review",
+      name: "review",
+      component: () => import("@/views/TheReviewView.vue"),
+      children: [
+        {
+          path: "list",
+          name: "review-list",
+          component: () => import("@/components/review/ReviewList.vue"),
+        },
+        {
+          path: "detail/:id",
+          name: "review-detail",
+          component: () => import("@/components/review/ReviewDetail.vue"),
+        },
+      ],
+    },
   ],
 });
 

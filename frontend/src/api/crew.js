@@ -13,4 +13,12 @@ async function getCrewApi(crewId) {
   return await axios.get(`/api/crews/${crewId}`);
 }
 
-export { getCrewListApi, getCrewApi };
+async function joinCrew(crewId) {
+  const memberId = user.value.memberId;
+  return await axios.post(`/api/crews/join`, {
+    crewId,
+    memberId,
+  });
+}
+
+export { getCrewListApi, getCrewApi, joinCrew };

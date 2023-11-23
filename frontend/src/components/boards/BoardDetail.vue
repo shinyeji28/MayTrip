@@ -2,6 +2,7 @@
 import { getDetail, deleteBoard } from "@/api/board.js";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { joinCrew } from "@/api/crew.js";
 const route = useRoute();
 const router = useRouter();
 const routeParams = route.params;
@@ -40,6 +41,20 @@ const formatDate = (date) => {
     return date.substring(0, 10);
   }
 };
+
+const join = async () => {
+  const { data } = await joinCrew(boardInfo.value.crewId);
+  try {
+    alert("크루 신청이 완료되었습니다.");
+    // console.log(data);
+    router.push({
+      name: "crew-detail",
+      params: { crewId: boardInfo.value.crewId },
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>
 
 <template>
@@ -61,6 +76,8 @@ const formatDate = (date) => {
       </div>
       <div class="content" v-html="boardInfo?.content"></div>
     </section>
+
+    <v-btn class="btn" @click="join">신청하기</v-btn>
 
     <v-btn class="btn delete-btn" @click="remove">게시글 삭제</v-btn>
     <v-btn class="btn edit-btn" @click="mvUpdate">게시글 수정</v-btn>
