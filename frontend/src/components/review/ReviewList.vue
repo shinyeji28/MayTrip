@@ -33,6 +33,14 @@ const paginatedItems = computed(() => {
 const totalPages = computed(() => {
   return Math.ceil(items.value.length / perPage.value);
 });
+
+const truncateText = (text, length, suffix) => {
+  if (text.length > length) {
+    return text.substring(0, length) + suffix;
+  } else {
+    return text;
+  }
+};
 </script>
 
 <template>
@@ -46,27 +54,27 @@ const totalPages = computed(() => {
         md="4"
         lg="4"
       >
-        <v-card
-          class="card"
-          width="310"
-          height="300"
-          @click="
-            router.push({ name: 'review-detail', params: { id: item.id } })
-          "
+      <v-card class="card" @click="router.push({name:'review-detail', params:{id:item.id}})">
+        <v-img
+          :src="item.thumbnailInfo.url"
+          class="align-end card-img"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+          height="200px"
+          cover
         >
-          <v-img
-            :src="item.thumbnailInfo?.url"
-            alt="item.thumbnailInfo?.originFileName"
-          ></v-img>
+          <v-card-title class="text-white" v-text="item.title"></v-card-title>
+        </v-img>
 
-          <template v-slot:title>{{ item.title }}</template>
+        <v-card-actions>
+          <v-spacer></v-spacer>
 
-          <template v-slot:subtitle
-            >다녀온 곳 : {{ item.sidoName }} {{ item.gugunName }}</template
-          >
+          <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>
 
-          <template v-slot:text> 간략 설명 </template>
-        </v-card>
+          <v-btn size="small" color="surface-variant" variant="text" icon="mdi-bookmark"></v-btn>
+
+          <v-btn size="small" color="surface-variant" variant="text" icon="mdi-share-variant"></v-btn>
+        </v-card-actions>
+      </v-card>
       </v-col>
     </v-row>
 
@@ -80,22 +88,20 @@ const totalPages = computed(() => {
 </template>
 
 <style scoped>
-.select-box {
-  display: flex;
-  gap: 30px;
-  margin-bottom: 40px;
+
+.card{
+  transition: transform 0.5s ease;
 }
-.card {
-  /* width: calc(33.3% - 10px); */
-  margin-bottom: 30px;
-  margin-right: 35px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-sizing: border-box;
-  transition: transform 0.3s ease;
+.v-img {
+  overflow: hidden;
+  position: relative;
+}
+
+.card:hover .v-card-title {
+  opacity: 1;
+  transition: opacity 0.5s ease;
 }
 .card:hover {
-  transform: translateY(15px);
-  opacity: 0.3;
+  transform: scale(1.1); /* 호버 시 크기 확대 */
 }
 </style>

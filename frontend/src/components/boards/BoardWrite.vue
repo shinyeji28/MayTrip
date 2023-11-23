@@ -31,6 +31,12 @@ const selectedGugun = ref(null);
 const content = ref(null);
 const selectedFile = ref([]);
 
+
+if(memberId == ""){
+  alert("로그인 후 이용하실 수 있습니다.");
+  router.replace({name:'user-login'});
+}
+
 onMounted(async () => {
   await getSidoList();
 });
@@ -79,10 +85,14 @@ const handleFileUpload = () => {
 };
 
 const onSubmit = async () => {
+  const start_d = new Date(startDate.value);
+  const end_d = new Date(endDate.value);  
+  const start_date = start_d.getFullYear() + "-" + (start_d.getMonth()+1) +"-"+ start_d.getDate();
+  const end_date = end_d.getFullYear() + "-" + (end_d.getMonth()+1) +"-"+ end_d.getDate();
   const formData = new FormData(form.value);
   formData.append("memberId", memberId);
-  formData.append("startDate", startDate.value.toISOString().substring(0, 10));
-  formData.append("endDate", endDate.value.toISOString().substring(0, 10));
+  formData.append("startDate", start_date);
+  formData.append("endDate", end_date);
   formData.append("content", content.value);
   // for (let key of formData.keys()) {
   //   console.log(key, ":", formData.get(key));
