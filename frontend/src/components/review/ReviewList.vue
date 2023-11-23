@@ -1,15 +1,10 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { getReviewList } from "@/api/review.js";
-import { listSido, listGugun } from "@/api/sidoGugun.js";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
 const items = ref([]);
-const sido = ref([]);
-const gugun = ref([]);
-const selectedSido = ref(null);
-const selectedGugun = ref(null);
 
 const getReview = async () => {
   const { data } = await getReviewList();
@@ -21,39 +16,8 @@ const getReview = async () => {
   }
 };
 
-const getSidoList = async () => {
-  const { data } = await listSido();
-  try {
-    sido.value = data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getGugunList = async (sidoCode) => {
-  const { data } = await listGugun(sidoCode);
-  try {
-    gugun.value = data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 onMounted(async () => {
   await getReview();
-  await getSidoList();
-});
-
-watch(selectedSido, (newValue) => {
-  if (newValue !== null) {
-    getGugunList(newValue.sidoCode);
-  }
-});
-
-watch(selectedGugun, (newValue) => {
-  if (newValue !== null) {
-    boardListByGugun(newValue.gugunCode);
-  }
 });
 
 //pageNavigation
@@ -72,26 +36,6 @@ const totalPages = computed(() => {
 </script>
 
 <template>
-  <div class="select-box">
-    <v-select
-      v-model="selectedSido"
-      :items="sido"
-      item-title="sidoName"
-      item-value="sidoCode"
-      label="시도 선택"
-      return-object
-      hint="구군까지 선택해주세요"
-    ></v-select>
-    <v-select
-      v-model="selectedGugun"
-      :items="gugun"
-      item-title="gugunName"
-      item-value="gugunCode"
-      label="구군 선택"
-      return-object
-    ></v-select>
-  </div>
-
   <v-container>
     <v-row>
       <v-col
