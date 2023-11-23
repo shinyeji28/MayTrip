@@ -4,14 +4,16 @@ import TheHeadingNavbar from "./components/layout/TheHeadingNavbar.vue";
 </script>
 
 <template>
-  <TheHeadingNavbar />
-  <main>
-    <RouterView />
-  </main>
+  <div class="application">
+    <TheHeadingNavbar />
+    <main>
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style>
-.v-application {
+.application {
   font-family: "NanumBarunGothic", sans-serif !important;
 }
 @font-face {
