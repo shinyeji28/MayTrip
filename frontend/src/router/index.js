@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import TheMainView from "../views/TheMainView.vue";
+import { useAuthStore } from "../stores/auth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,12 +41,14 @@ const router = createRouter({
               name: "user-mypage-crew",
               component: () =>
                 import("@/components/users/UserMyPageMyCrew.vue"),
+              meta: { requiresAuth: true },
             },
             {
               path: "info",
               name: "user-mypage-info",
               component: () =>
                 import("@/components/users/UserMyPageMyInfo.vue"),
+              meta: { requiresAuth: true },
             },
           ],
         },
@@ -101,6 +104,7 @@ const router = createRouter({
           path: "write",
           name: "board-write",
           component: () => import("@/components/boards/BoardWrite.vue"),
+          meta: { requiresAuth: true },
         },
         {
           path: "detail/:id",
@@ -111,6 +115,7 @@ const router = createRouter({
           path: "update/:id",
           name: "board-update",
           component: () => import("@/components/boards/BoardUpdate.vue"),
+          meta: { requiresAuth: true },
         },
       ],
     },
@@ -132,6 +137,18 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+//로그인, 또는 관리자 권한이 필요한 경우 제어 ( next()의 경우, 원래 이동하려 했던 라우트로 이동 )
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  //로그인 필요
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!authStore.token) {
+      alert("로그인 권한 필요");
+      next({ path: "/login" }); // 인증되지 않은 경우, 로그인 페이지로 리다이렉트
+    }
+  } else next(); // 인증이 필요하지 않은 경우 해당 경로로 이동
 });
 
 export default router;
