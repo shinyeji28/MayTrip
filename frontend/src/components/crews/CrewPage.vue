@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { getCrewApi } from "@/api/crew";
 import { usePlanStore } from "@/stores/plan";
@@ -24,18 +24,19 @@ const thumb = ref(null);
 const getCrewInfo = async () => {
   try {
     await getInfos(route.params.crewId);
-
-    console.log(crew.value);
-    // 여행 후인지 체크
-    if (new Date(crew.value.board.endDate) < new Date()) {
-      isAfter.value = true;
-      console.log(isAfter.value);
-    }
   } catch (error) {
     console.log(error);
   }
 };
-getCrewInfo();
+onMounted(async() => {
+  await getCrewInfo();
+
+});
+watch(crew, (newValue) => {
+  if (new Date(newValue.board.endDate).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
+      isAfter.value = true;
+    }
+});
 
 const truncateText = (text, length, suffix) => {
   if (text.length > length) {
@@ -49,9 +50,9 @@ const submitReview = async () => {
   const formData = new FormData(form.value);
   formData.append("crewId", route.params.crewId);
 
-  for (let key of formData.keys()) {
-    console.log(key, ":", formData.get(key));
-  }
+  // for (let key of formData.keys()) {
+  //   console.log(key, ":", formData.get(key));
+  // }
 
   await registReview(formData);
 };
