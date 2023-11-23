@@ -10,6 +10,20 @@ const router = useRouter();
 
 const reviews = ref([]);
 const items = ref([]);
+const imgList = ref([
+  {
+    url: '/src/assets/main1.png'
+  },
+  {
+    url: '/src/assets/main2.png'
+  },
+  {
+    url: '/src/assets/main3.png'
+  },
+  {
+    url: '/src/assets/main4.png'
+  },
+]);
 
 const getReview = async () => {
   const { data } = await getReviewList();
@@ -52,13 +66,13 @@ watch(() => isActive.value, (newValue) => {
         hide-delimiters
         style="height: 100%"
       >
-        <v-carousel-item v-for="(item, i) in items" :key="i">
-          <v-sheet height="100%" width="100%">
-            <img class="banner-img" :src="item.thumbnailInfo?.url" />
-            <div class="text-overlay-review">
+        <v-carousel-item v-for="(item, i) in imgList" :key="i">
+          <v-sheet height="100vh" width="100vw">
+            <img class="banner-img" :src="item.url" />
+            <!-- <div class="text-overlay-review">
               <div class="review-box"></div>
               <div class="text-content-review"></div>
-            </div>
+            </div> -->
           </v-sheet>
         </v-carousel-item>
         <div class="text-overlay">
@@ -159,7 +173,6 @@ watch(() => isActive.value, (newValue) => {
 
 .banner-text-left {
   font-size: 30px;
-  text-shadow: 2px 6px 2px gray;
 }
 .banner-left-btn {
   box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.3);
@@ -172,7 +185,7 @@ watch(() => isActive.value, (newValue) => {
 }
 .text-overlay {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 30%;
   transform: translate(-50%, -50%);
   /* text-align: center; */
