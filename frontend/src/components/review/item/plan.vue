@@ -70,7 +70,7 @@ onMounted(async () => {
           </template>
           <template v-slot:text>
             <div>
-              <img :src="content.attractionInfo.firstImage" alt="content.attractionInfo.title" />
+              <img v-if="content.attractionInfo.firstImage" :src="content.attractionInfo.firstImage" alt="image" />
               <p>{{ content.attractionInfo.addr1 }}</p>
               <hr>
               <h3>관광지 설명</h3>
