@@ -72,7 +72,7 @@ const clickSignup = async () => {
 
 <template>
   <div class="container">
-    <img src="@/assets/biglogo.png" width="500" alt="..." id="logo" />
+    <img src="@/assets/biglogo.png" width="300" alt="..." id="logo" />
     <v-sheet width="300" class="mx-auto">
       <v-form @submit.prevent="clickSignup">
         <v-text-field
@@ -109,8 +109,8 @@ const clickSignup = async () => {
   align-items: center;
   margin: 15vh 15vw;
   padding: 0;
-  width: 600px;
-  height: 700px;
+  width: 500px;
+  height: 550px;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }

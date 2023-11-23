@@ -42,7 +42,7 @@ const clickLogin = async () => {
 
 <template>
   <div class="login">
-    <img src="@/assets/biglogo.png" width="500" alt="..." id="logo" />
+    <img src="@/assets/biglogo.png" width="300" alt="..." id="logo" />
     <v-sheet width="300" class="mx-auto">
       <v-form @submit.prevent="clickLogin">
         <v-text-field
@@ -72,10 +72,10 @@ const clickLogin = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20vh 15vw;
+  margin: 15vh 15vw;
   padding: 0;
-  width: 600px;
-  height: 600px;
+  width: 500px;
+  height: 500px;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
