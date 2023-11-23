@@ -1,5 +1,14 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onUnmounted } from "vue";
+import { useMenuStore } from "../stores/menu";
+
+const menuStore = useMenuStore();
+menuStore.setIsActive(true);
+
+onUnmounted(() => {
+  menuStore.setIsActive(false);
+});
+
 const items = ref([
   { text: "1번 그림", src: "https://cdn.vuetifyjs.com/images/cards/docks.jpg" },
   { text: "2번 그림", src: "https://cdn.vuetifyjs.com/images/cards/hotel.jpg" },

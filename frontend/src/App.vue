@@ -20,12 +20,12 @@ import TheHeadingNavbar from "./components/layout/TheHeadingNavbar.vue";
   font-weight: 400;
 }
 @font-face {
-  font-family: "NanumBarunGothic";
+  font-family: "NanumBarunGothicLight";
   src: url("assets/fonts/NanumBarunGothicLight.ttf") format("truetype");
   font-weight: 300;
 }
 @font-face {
-  font-family: "NanumBarunGothic";
+  font-family: "NanumBarunGothicBold";
   src: url("assets/fonts/NanumBarunGothicBold.ttf") format("truetype");
   font-weight: 700;
 }
