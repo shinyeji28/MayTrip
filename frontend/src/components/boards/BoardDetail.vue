@@ -68,7 +68,8 @@ const join = async () => {
 <template>
   <div class="board-details">
     <p class="detail-title">{{ boardInfo?.title }}</p>
-    <hr /><br>
+    <hr />
+    <br />
     <section class="board-section">
       <div class="middle">
         <div class="info-wrap">
@@ -81,8 +82,10 @@ const join = async () => {
               일정 : {{ boardInfo?.startDate }} - {{ boardInfo?.endDate }}
             </div>
           </div>
-          <div style="display: flex; flex-direction: column; align-items: flex-end;">
-            <div class="info" style="padding-right:0">
+          <div
+            style="display: flex; flex-direction: column; align-items: flex-end"
+          >
+            <div class="info" style="padding-right: 0">
               조회수: {{ boardInfo?.views }}
             </div>
             <div class="info" style="float: right">
@@ -96,10 +99,16 @@ const join = async () => {
       <div class="content" v-html="boardInfo?.content"></div>
     </div>
 
-    <div class="button-wrap" v-if="boardInfo?.member.memberId != memberId">
+    <div
+      class="button-wrap"
+      v-if="memberId && boardInfo.member.memberId != memberId"
+    >
       <v-btn class="btn delete-btn" @click="join">신청하기</v-btn>
     </div>
-    <div class="button-wrap" v-if="boardInfo?.member.memberId == memberId">
+    <div
+      class="button-wrap"
+      v-if="memberId && boardInfo.member.memberId == memberId"
+    >
       <v-btn class="btn delete-btn" @click="remove">게시글 삭제</v-btn>
       <v-btn class="btn edit-btn" @click="mvUpdate">게시글 수정</v-btn>
     </div>
@@ -112,7 +121,6 @@ const join = async () => {
   display: flex;
   flex-direction: column;
   padding: 40px;
-
 }
 
 /* Board Section Style */
@@ -147,11 +155,10 @@ const join = async () => {
   line-height: 1.6;
   font-size: 18px;
   margin-top: 20px;
-  
 }
 
 /* Button Style */
-.button-wrap{
+.button-wrap {
   margin: auto;
 }
 .btn {
@@ -179,5 +186,4 @@ const join = async () => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
-
 </style>
