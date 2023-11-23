@@ -24,16 +24,16 @@ getCrewInfo();
 <template>
   <div class="container">
     <div class="col left margin-60 profile">
-      <div class="text-2">{{ crew.crewName }}</div>
+      <div class="text-2">{{ crew?.crewName }}</div>
       <div class="text-3 margin-10">
-        {{ crew.board.sidoName }} {{ crew.board.gugunName }}
+        {{ crew?.board.sidoName }} {{ crew?.board.gugunName }}
       </div>
       <div class="text-3 mt-60">
         <span class="mdi mdi-account-group"></span>
-        {{ crew.members.length }} / {{ crew.board.headcount }}
+        {{ crew?.members.length }} / {{ crew?.board.headcount }}
       </div>
       <div class="text-3">
-        {{ crew.board.startDate }} ~ {{ crew.board.endDate }}
+        {{ crew?.board.startDate }} ~ {{ crew?.board.endDate }}
       </div>
     </div>
     <h1>Our Crew</h1>
@@ -63,8 +63,9 @@ getCrewInfo();
           <h4>{{ crew.board.title }}</h4>
         </v-card-title>
         <v-card-text>
-          {{ crew.board.content }}
+          <div v-html="crew.board.content"></div>
         </v-card-text>
+
         <div class="d-flex justify-space-between px-4 align-center">
           <div class="mb-6">
             <router-link
