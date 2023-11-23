@@ -5,20 +5,56 @@ import { getCrewApi } from "@/api/crew";
 import { usePlanStore } from "@/stores/plan";
 import { storeToRefs } from "pinia";
 
+import { registReview } from "@/api/review.js";
+
 const planStore = usePlanStore();
 const { getInfos } = planStore;
 const { crew } = storeToRefs(planStore);
 
 const route = useRoute();
+const isAfter = ref(false);
+const dialog = ref(false);
+
+const form = ref(null);
+const title = ref("");
+const content = ref("");
+const images = ref([]);
+const thumb = ref(null);
 
 const getCrewInfo = async () => {
   try {
     await getInfos(route.params.crewId);
+
+    console.log(crew.value);
+    // 여행 후인지 체크
+    if (new Date(crew.value.board.endDate) < new Date()) {
+      isAfter.value = true;
+      console.log(isAfter.value);
+    }
   } catch (error) {
     console.log(error);
   }
 };
 getCrewInfo();
+
+const truncateText = (text, length, suffix) => {
+  if (text.length > length) {
+    return text.substring(0, length) + suffix;
+  } else {
+    return text;
+  }
+};
+
+const submitReview = async () => {
+  const formData = new FormData(form.value);
+  formData.append("crewId", route.params.crewId);
+
+  for (let key of formData.keys()) {
+    console.log(key, ":", formData.get(key));
+  }
+
+  await registReview(formData);
+};
 </script>
 
 <template>
@@ -63,16 +99,27 @@ getCrewInfo();
           <h4>{{ crew.board.title }}</h4>
         </v-card-title>
         <v-card-text>
-          <div v-html="crew.board.content"></div>
+          <div v-html="truncateText(crew.board.content, 15, '...')"></div>
         </v-card-text>
 
         <div class="d-flex justify-space-between px-4 align-center">
           <div class="mb-6">
+            <v-card-actions v-if="isAfter == true">
+              <v-btn
+                border
+                flat
+                size="small"
+                class="text-none"
+                @click="dialog = dialog ? false : true"
+                >리뷰쓰기</v-btn
+              >
+            </v-card-actions>
             <router-link
               :to="{
                 name: 'crew-plan',
                 params: { crewId: crew.id },
               }"
+              v-if="isAfter == false"
               ><v-btn
                 border
                 flat
@@ -98,6 +145,45 @@ getCrewInfo();
 
         <v-divider></v-divider>
       </v-card>
+
+      <v-dialog v-model="dialog" width="500px">
+        <v-card class="dialog-container">
+          <form @submit.prevent="submitReview" ref="form">
+            <h1>메이트립에서 함께한 크루원과의 여행을 공유하세요.</h1>
+            <v-text-field
+              v-model="title"
+              name="title"
+              label="Title"
+            ></v-text-field>
+            <v-textarea
+              v-model="content"
+              name="content"
+              label="Content"
+            ></v-textarea>
+            <v-file-input
+              v-model="thumb"
+              name="thumb"
+              label="대표 사진을 올려보세요"
+            ></v-file-input>
+            <v-file-input
+              v-model="images"
+              name="images"
+              label="크루원과 함께한 사진들을 올려보세요.(복수 가능)"
+              multiple
+            ></v-file-input>
+            <v-btn type="submit" color="primary">Submit</v-btn>
+          </form>
+          <v-card-actions>
+            <v-btn
+              color="primary"
+              block
+              @click="dialog = false"
+              class="close-button"
+              >닫기</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -173,5 +259,23 @@ getCrewInfo();
   font-size: large;
   font-weight: 800;
   color: black;
+}
+
+/* 다이얼로그 스타일 */
+/* 다이얼로그 컨테이너 */
+.dialog-container {
+  padding: 20px; /* 내부 여백 */
+  max-width: 500px; /* 최대 너비 */
+  border-radius: 10px; /* 테두리 모서리 반경 */
+}
+
+/* 닫기 버튼 */
+.close-button {
+  border-radius: 0 0 10px 10px; /* 버튼 모서리 반경 */
+}
+
+/* Submit 버튼 */
+.submit-button + .submit-button {
+  margin-top: 10px; /* 버튼 간격 조정 */
 }
 </style>

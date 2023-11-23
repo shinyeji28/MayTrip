@@ -10,4 +10,10 @@ const getDetail = async (id) => {
   return await axios.get(`/api/review/${id}`);
 };
 
-export { getReviewList, getDetail };
+const registReview = async (formData) => {
+  return await axios.post(`/api/review`, formData, {
+    headers: formDataHeader,
+  });
+};
+
+export { getReviewList, getDetail, registReview };
