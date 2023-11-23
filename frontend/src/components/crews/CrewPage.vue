@@ -24,6 +24,7 @@ const thumb = ref(null);
 const getCrewInfo = async () => {
   try {
     await getInfos(route.params.crewId);
+    console.log(crew.value);
   } catch (error) {
     console.log(error);
   }
@@ -63,7 +64,7 @@ const clickShared = async () => {
 
 <template>
   <div class="container">
-    <div class="col left margin-60 profile">
+    <div class="col left margin-60 profile" :style="{ backgroundImage: 'url(' + (crew.board.thumbnailInfo?crew.board.thumbnailInfo.url : 'http://localhost:5173/src/assets/banner2.png') + ')' }">
       <div class="text-2">{{ crew.crewName }}</div>
       <div class="text-3 margin-10">
         {{ crew.board.sidoName }} {{ crew.board.gugunName }}
@@ -84,7 +85,7 @@ const clickShared = async () => {
         :key="member.memberId"
       >
         <v-avatar
-          image="https://cdn.pixabay.com/photo/2020/06/28/00/04/chicago-5347435_960_720.jpg"
+          :image="member.profileImg ? member.profileImg.url : '/src/assets/profile_none.png' "
           size="80"
         ></v-avatar>
         <div class="text-4">{{ member.name }}</div>
@@ -202,6 +203,8 @@ const clickShared = async () => {
   flex-direction: column;
   margin: auto;
 
+  padding-top: 80px;
+
   max-width: 1080px;
 }
 
@@ -215,8 +218,7 @@ const clickShared = async () => {
 }
 
 .profile {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://cdn.pixabay.com/photo/2020/06/28/00/04/chicago-5347435_960_720.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
   background-size: cover;
   border-radius: 10px;
   padding: 10px 60px;

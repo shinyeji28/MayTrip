@@ -1,10 +1,31 @@
-<script setup></script>
+<script setup>
+import { onUnmounted, watch } from "vue";
+import { useMenuStore } from "../stores/menu";
+import { storeToRefs } from "pinia";
+
+const menuStore = useMenuStore();
+const {isActive} = storeToRefs(menuStore);
+menuStore.setIsActive(true);
+
+onUnmounted(() => {
+  menuStore.setIsActive(false);
+});
+
+watch(() => isActive.value, (newValue) => {
+  console.log("active 변경됨", newValue);
+  isActive.value = true;
+});
+</script>
 
 <template>
   <div class="container">
     <div class="banner">
-      <img src="@/assets/images/trip4.jpg" />
-      <div class="title">새로운 사람과 함께한 여행을 추억해요 😎</div>
+      <img src="@/assets/banner2.png" />
+      <div class="title">새로운 사람과 함께한 여행을 추억해요</div>
+      <div class="desc">
+        maytrip의 다양한 크루들에서 만들어간 여행을 모아두고, 하나씩 펼쳐보며
+        새로운 여행을 계획해요.
+      </div>
     </div>
     <main class="container">
       <div class="main-wrap">
@@ -20,6 +41,7 @@
 
   margin: auto;
   padding: 0;
+  padding-top: 80px;
 
   flex-direction: column;
   max-width: 1080px;
@@ -27,9 +49,9 @@
 .banner {
   position: absolute;
   left: 0;
-  top: 70px;
+  top: 0;
   width: 100%;
-  height: 400px;
+  height: 600px;
   z-index: -1;
 }
 .banner img {
@@ -44,9 +66,21 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 0;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: 900;
-  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6);
+  color: white;
+  /* text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6); */
+}
+
+.desc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  font-size: 15px;
+  font-weight: 900;
+  color: #f2e3db;
 }
 
 .container {

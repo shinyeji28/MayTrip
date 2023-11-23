@@ -138,8 +138,8 @@ const truncateText = (text, length, suffix) => {
         >
           <div class="card-img-wrap">
             <img
-              :src="item.thumbnailInfo?.url"
-              alt="item.thumbnailInfo?.originFileName"
+              :src="item.thumbnailInfo? item.thumbnailInfo.url : '/src/assets/banner.png'"
+              alt="thumbnail"
             />
           </div>
           <div class="content-wrap">

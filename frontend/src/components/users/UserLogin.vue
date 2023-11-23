@@ -42,7 +42,7 @@ const clickLogin = async () => {
 
 <template>
   <div class="login">
-    <div class="title">Maytrip</div>
+    <img src="@/assets/biglogo.png" width="300" alt="..." id="logo" />
     <v-sheet width="300" class="mx-auto">
       <v-form @submit.prevent="clickLogin">
         <v-text-field
@@ -56,7 +56,7 @@ const clickLogin = async () => {
           type="password"
           :rules="rules.password"
         ></v-text-field>
-        <v-btn type="submit" block class="mt-2">Login</v-btn>
+        <v-btn type="submit" block class="mt-2 btn">Login</v-btn>
       </v-form>
       <div class="row center">
         <v-btn variant="plain" @click="router.push({ name: 'user-pass' })">
@@ -72,7 +72,7 @@ const clickLogin = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20vh 15vw;
+  margin: 15vh 15vw;
   padding: 0;
   width: 500px;
   height: 500px;
@@ -99,5 +99,11 @@ const clickLogin = async () => {
   width: 300px;
   justify-content: center;
   margin-top: 20px;
+}
+
+.btn:hover {
+  background-color: #e86a33;
+  color: white;
+  font-weight: 800;
 }
 </style>

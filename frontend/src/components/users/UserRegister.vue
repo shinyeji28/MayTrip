@@ -72,7 +72,7 @@ const clickSignup = async () => {
 
 <template>
   <div class="container">
-    <div class="title">Maytrip</div>
+    <img src="@/assets/biglogo.png" width="300" alt="..." id="logo" />
     <v-sheet width="300" class="mx-auto">
       <v-form @submit.prevent="clickSignup">
         <v-text-field
@@ -96,7 +96,7 @@ const clickSignup = async () => {
           :rules="rules.name"
           label="Name"
         ></v-text-field>
-        <v-btn type="submit" block class="mt-2">Signup</v-btn>
+        <v-btn type="submit" block class="mt-2 btn">Signup</v-btn>
       </v-form>
     </v-sheet>
   </div>
@@ -107,10 +107,10 @@ const clickSignup = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20vh 15vw;
+  margin: 15vh 15vw;
   padding: 0;
   width: 500px;
-  height: 600px;
+  height: 550px;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
@@ -118,5 +118,11 @@ const clickSignup = async () => {
   font-size: 50px;
   font-weight: 700;
   margin: 50px 0px;
+}
+
+.btn:hover {
+  background-color: #41644a;
+  color: white;
+  font-weight: 800;
 }
 </style>

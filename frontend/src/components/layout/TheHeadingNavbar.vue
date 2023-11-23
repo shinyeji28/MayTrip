@@ -2,7 +2,7 @@
 import { useMenuStore } from "@/stores/menu";
 import { useAuthStore } from "../../stores/auth";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const menuStore = useMenuStore();
 const { clearUser } = useAuthStore();
@@ -24,6 +24,7 @@ window.addEventListener("scroll", function () {
     document.documentElement.scrollTop ||
     document.body.scrollTop;
 });
+
 </script>
 
 <template>
