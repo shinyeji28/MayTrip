@@ -1,10 +1,24 @@
-<script setup></script>
+<script setup>
+import { onUnmounted } from "vue";
+import { useMenuStore } from "../stores/menu";
+
+const menuStore = useMenuStore();
+menuStore.setIsActive(true);
+
+onUnmounted(() => {
+  menuStore.setIsActive(false);
+});
+</script>
 
 <template>
   <div class="container">
     <div class="banner">
       <img src="@/assets/banner.png" />
-      <div class="title">당신의 여행 친구를 찾아보세요</div>
+      <div class="title">여행을 기다리는 크루들</div>
+      <div class="desc">
+        당신을 기다리는 크루에 참여하여 여행을 시작하거나, 당신만의 여행을
+        만들어보세요.
+      </div>
     </div>
     <main class="container">
       <div class="main-wrap">
@@ -28,9 +42,9 @@
 .banner {
   position: absolute;
   left: 0;
-  top: 70px;
+  top: 0;
   width: 100%;
-  height: 500px;
+  height: 600px;
   z-index: -1;
 }
 .banner img {
@@ -45,10 +59,21 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 0;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: 900;
   color: white;
   /* text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6); */
+}
+
+.desc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  font-size: 15px;
+  font-weight: 900;
+  color: #f2e3db;
 }
 
 .container {
