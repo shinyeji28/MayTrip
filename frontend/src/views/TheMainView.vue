@@ -114,6 +114,9 @@ const truncateText = (text, length, suffix) => {
               :image="item.thumbnailInfo?.url"
               theme="dark"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+              @click="
+                router.push({ name: 'board-detail', params: { id: item.id } })
+              "
             >
               <v-card-title class="board-title">
                 {{ item.title }}<br />
@@ -151,7 +154,11 @@ const truncateText = (text, length, suffix) => {
             :key="index"
             :cols="index === 0 ? 7 : 5"
           >
-            <v-card>
+            <v-card
+              @click="
+                router.push({ name: 'board-detail', params: { id: review.id } })
+              "
+            >
               <v-img
                 :src="
                   review.thumbnailInfo
