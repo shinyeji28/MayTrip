@@ -4,6 +4,10 @@ import { useRouter } from "vue-router";
 import VQuillEditor from "@/components/boards/item/VQuillEditor.vue";
 import { registBoard } from "@/api/board.js";
 import { listSido, listGugun } from "@/api/sidoGugun.js";
+import { storeToRefs } from "pinia";
+
+const { user } = storeToRefs(authStore);
+const memberId = user.value.memberId;
 
 const router = useRouter();
 
@@ -74,7 +78,7 @@ const handleFileUpload = () => {
 
 const onSubmit = async () => {
   const formData = new FormData(form.value);
-  formData.append("memberId", 1); // todo token으로 수정
+  formData.append("memberId", memberId);
   formData.append("startDate", startDate.value.toISOString().substring(0, 10));
   formData.append("endDate", endDate.value.toISOString().substring(0, 10));
   formData.append("content", content.value);

@@ -43,7 +43,7 @@ const formatDate = (date) => {
 };
 
 const join = async () => {
-  const { data } = await joinCrew(boardInfo.value.crewId, 1);
+  const { data } = await joinCrew(boardInfo.value.crewId);
   try {
     alert("크루 신청이 완료되었습니다.");
     // console.log(data);
