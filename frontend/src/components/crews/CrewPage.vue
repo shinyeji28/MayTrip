@@ -24,9 +24,8 @@ const thumb = ref(null);
 const getCrewInfo = async () => {
   try {
     await getInfos(route.params.crewId);
-    console.log(crew.value);
+    // console.log(crew.value);
   } catch (error) {
-    alert("폼을 채워주세요.");
     console.log(error);
   }
 };
@@ -58,7 +57,13 @@ const submitReview = async () => {
   //   console.log(key, ":", formData.get(key));
   // }
 
-  await registReview(formData);
+  try {
+    await registReview(formData);
+    alert("등록이 완료되었습니다.");
+    dialog.value = false;
+  } catch (error) {
+    alert("폼을 채워주세요.");
+  }
   dialog.value = false;
 };
 const clickShared = async () => {
