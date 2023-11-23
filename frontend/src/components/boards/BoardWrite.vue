@@ -31,12 +31,6 @@ const selectedGugun = ref(null);
 const content = ref(null);
 const selectedFile = ref([]);
 
-
-if(memberId == ""){
-  alert("로그인 후 이용하실 수 있습니다.");
-  router.replace({name:'user-login'});
-}
-
 onMounted(async () => {
   await getSidoList();
 });
@@ -66,11 +60,13 @@ watch(selectedSido, (newValue) => {
 });
 
 const saveBoard = async (formData) => {
-  const { data } = await registBoard(formData);
   try {
+    const { data } = await registBoard(formData);
     alert("등록이 완료되었습니다.");
+    router.push({ name: "board-list" });
     // console.log(data);
   } catch (error) {
+    alert("폼을 채워주세요.");
     console.error(error);
   }
 };
@@ -86,9 +82,15 @@ const handleFileUpload = () => {
 
 const onSubmit = async () => {
   const start_d = new Date(startDate.value);
-  const end_d = new Date(endDate.value);  
-  const start_date = start_d.getFullYear() + "-" + (start_d.getMonth()+1) +"-"+ start_d.getDate();
-  const end_date = end_d.getFullYear() + "-" + (end_d.getMonth()+1) +"-"+ end_d.getDate();
+  const end_d = new Date(endDate.value);
+  const start_date =
+    start_d.getFullYear() +
+    "-" +
+    (start_d.getMonth() + 1) +
+    "-" +
+    start_d.getDate();
+  const end_date =
+    end_d.getFullYear() + "-" + (end_d.getMonth() + 1) + "-" + end_d.getDate();
   const formData = new FormData(form.value);
   formData.append("memberId", memberId);
   formData.append("startDate", start_date);
@@ -98,7 +100,6 @@ const onSubmit = async () => {
   //   console.log(key, ":", formData.get(key));
   // }
   await saveBoard(formData);
-  router.push({ name: "board-list" });
 };
 
 const setStartDate = () => {
