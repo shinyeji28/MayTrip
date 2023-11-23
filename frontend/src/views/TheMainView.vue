@@ -10,6 +10,20 @@ const router = useRouter();
 
 const reviews = ref([]);
 const items = ref([]);
+const imgList = ref([
+  {
+    url: '/src/assets/main1.png'
+  },
+  {
+    url: '/src/assets/main2.png'
+  },
+  {
+    url: '/src/assets/main3.png'
+  },
+  {
+    url: '/src/assets/main4.png'
+  },
+]);
 
 const getReview = async () => {
   const { data } = await getReviewList();
@@ -57,13 +71,13 @@ const truncateText = (text, length, suffix) => {
         hide-delimiters
         style="height: 100%"
       >
-        <v-carousel-item v-for="(item, i) in items" :key="i">
-          <v-sheet height="100%" width="100%">
-            <img class="banner-img" :src="item.thumbnailInfo?.url" />
-            <div class="text-overlay-review">
+        <v-carousel-item v-for="(item, i) in imgList" :key="i">
+          <v-sheet height="100vh" width="100vw">
+            <img class="banner-img" :src="item.url" />
+            <!-- <div class="text-overlay-review">
               <div class="review-box"></div>
               <div class="text-content-review"></div>
-            </div>
+            </div> -->
           </v-sheet>
         </v-carousel-item>
         <div class="text-overlay">
@@ -86,7 +100,7 @@ const truncateText = (text, length, suffix) => {
 
     <div class="main-wrapper">
       <div class="main-section1">
-        <p class="subject-text">함께 할 크루원을 찾아요</p>
+        <p class="subject-text">함께 할 크루원을 찾아요!</p>
         <br />
         <div class="card-section1-wrap">
           <div v-for="(item, i) in items" :key="i">
@@ -127,19 +141,23 @@ const truncateText = (text, length, suffix) => {
       </div>
 
       <div class="main-section2">
-        <p class="subject-text">여행 다녀왔어요!</p>
+        <p class="subject-text">크루원과 여행 다녀왔어요!</p>
         <br />
           <v-row gap="10">
             <!-- 'reviews' 배열의 데이터로 v-card를 생성합니다 -->
             <v-col v-for="(review, index) in reviews" :key="index" :cols="index === 0 ? 7 : 5">
               <v-card>
-                <v-img :src="review.thumbnailInfo?.url" height="300px" cover></v-img>
+                <v-img :src="review.thumbnailInfo? review.thumbnailInfo.url : '/src/assets/default_img.png'" height="300px" cover></v-img>
                 <!-- 추가적인 내용을 넣을 수 있습니다 -->
-                <v-card-actions>  
+                <v-card-actions>
+                  <v-card-text>
+                    {{ review.title }}
+                  </v-card-text>  
                   <v-spacer></v-spacer>
-                  <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>
+                  <v-btn size="small" color="surface-variant" variant="text" prepend-icon="mdi-eye">{{ review.views }}</v-btn>
+                  <!-- <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>
                   <v-btn size="small" color="surface-variant" variant="text" icon="mdi-bookmark"></v-btn>
-                  <v-btn size="small" color="surface-variant" variant="text" icon="mdi-share-variant"></v-btn>
+                  <v-btn size="small" color="surface-variant" variant="text" icon="mdi-share-variant"></v-btn> -->
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -175,7 +193,6 @@ const truncateText = (text, length, suffix) => {
 
 .banner-text-left {
   font-size: 30px;
-  text-shadow: 2px 6px 2px gray;
 }
 .banner-left-btn .review-box{
   box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.3);
@@ -188,7 +205,7 @@ const truncateText = (text, length, suffix) => {
 }
 .text-overlay {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 30%;
   transform: translate(-50%, -50%);
   /* text-align: center; */
@@ -224,6 +241,7 @@ const truncateText = (text, length, suffix) => {
 .subject-text {
   font-size: 30px;
   font-weight: 900;
+  color: #263A29;
 }
 .card-section1-wrap {
   display: flex;

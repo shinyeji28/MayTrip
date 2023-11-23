@@ -56,7 +56,7 @@ const truncateText = (text, length, suffix) => {
       >
       <v-card class="card" @click="router.push({name:'review-detail', params:{id:item.id}})">
         <v-img
-          :src="item.thumbnailInfo.url"
+          :src="item.thumbnailInfo? item.thumbnailInfo.url : '/src/assets/default_img.png'"
           class="align-end card-img"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
           height="200px"
@@ -67,12 +67,12 @@ const truncateText = (text, length, suffix) => {
 
         <v-card-actions>
           <v-spacer></v-spacer>
-
-          <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>
+          <v-btn size="small" color="surface-variant" variant="text" prepend-icon="mdi-eye">{{ item.views }}</v-btn>
+          <!-- <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>
 
           <v-btn size="small" color="surface-variant" variant="text" icon="mdi-bookmark"></v-btn>
 
-          <v-btn size="small" color="surface-variant" variant="text" icon="mdi-share-variant"></v-btn>
+          <v-btn size="small" color="surface-variant" variant="text" icon="mdi-share-variant"></v-btn> -->
         </v-card-actions>
       </v-card>
       </v-col>

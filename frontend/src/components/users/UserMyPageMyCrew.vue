@@ -30,7 +30,7 @@ const getCrewList = async () => {
             <v-col v-for="crew in items" :key="crew.id" cols="auto" md="4">
               <v-card class="pb-3" border flat >
                 <img 
-                  :src="crew.raw.board.thumbnailInfo? crew.raw.board.thumbnailInfo.url : '/src/assets/banner.png'"
+                  :src="crew.raw.board.thumbnailInfo? crew.raw.board.thumbnailInfo.url : '/src/assets/default_img.png'"
                   alt="thumbnail"
                 />
 
