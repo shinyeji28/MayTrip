@@ -60,13 +60,17 @@ watch(selectedSido, (newValue) => {
 });
 
 const saveBoard = async (formData) => {
+  const response = await registBoard(formData);
   try {
-    const { data } = await registBoard(formData);
     alert("등록이 완료되었습니다.");
     router.push({ name: "board-list" });
-    // console.log(data);
+    console.log(data);
   } catch (error) {
-    alert("폼을 채워주세요.");
+    if ((error.response.status = "500")) {
+      alert("content에 공백을 채워주세요.");
+    } else if ((error.response.status = "400")) {
+      alert("폼을 채워주세요.");
+    }
     console.error(error);
   }
 };
