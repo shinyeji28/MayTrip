@@ -77,11 +77,11 @@ const saveBoard = async (formData) => {
 
 const changeEditor = (newContent) => {
   content.value = newContent;
-  console.log(content.value);
+  // console.log(content.value);
 };
 
 const handleFileUpload = () => {
-  console.log(selectedFile.value);
+  // console.log(selectedFile.value);
 };
 
 const onSubmit = async () => {
