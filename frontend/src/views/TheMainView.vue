@@ -24,10 +24,12 @@ const imgList = ref([
     url: "/src/assets/main4.png",
   },
 ]);
+const imgShow = ref(false);
 
 const getReview = async () => {
   const { data } = await getReviewList();
   reviews.value = data.reverse().slice(0, 4);
+  imgShow.value = true;
 };
 
 const getBoard = async () => {
@@ -67,7 +69,7 @@ const truncateText = (text, length, suffix) => {
   <div class="container">
     <div class="banner-container">
       <v-carousel
-        v-if="items.length > 0"
+        v-if="imgShow == true"
         cycle
         hide-delimiter-background
         :show-arrows="false"
