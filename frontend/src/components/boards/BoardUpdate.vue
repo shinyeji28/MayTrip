@@ -119,15 +119,19 @@ const onSubmit = async () => {
   const start_date =
     start_d.getFullYear() +
     "-" +
-    (start_d.getMonth() + 1) +
+    String(start_d.getMonth() + 1).padStart(2, "0") +
     "-" +
-    start_d.getDate();
+    String(start_d.getDate()).padStart(2, "0");
   const end_date =
-    end_d.getFullYear() + "-" + (end_d.getMonth() + 1) + "-" + end_d.getDate();
+    end_d.getFullYear() +
+    "-" +
+    String(end_d.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(end_d.getDate()).padStart(2, "0");
   formData.append("id", id);
   formData.append("memberId", memberId);
-  formData.append("startDate", startDate.value.toISOString().substring(0, 10));
-  formData.append("endDate", endDate.value.toISOString().substring(0, 10));
+  formData.append("startDate", start_date);
+  formData.append("endDate", end_date);
   formData.append("content", content.value);
   // if (selectedFile.value.length == 0) {
   // formData.append("image", null);

@@ -66,7 +66,7 @@ const join = async () => {
 </script>
 
 <template>
-  <div class="board-details">
+  <div class="board-details" v-if="boardInfo != null">
     <p class="detail-title">{{ boardInfo?.title }}</p>
     <hr />
     <br />
@@ -101,13 +101,13 @@ const join = async () => {
 
     <div
       class="button-wrap"
-      v-if="memberId && boardInfo.member.memberId != memberId"
+      v-if="memberId && boardInfo.member?.memberId != memberId"
     >
       <v-btn class="btn delete-btn" @click="join">신청하기</v-btn>
     </div>
     <div
       class="button-wrap"
-      v-if="memberId && boardInfo.member.memberId == memberId"
+      v-if="memberId && boardInfo.member?.memberId == memberId"
     >
       <v-btn class="btn delete-btn" @click="remove">게시글 삭제</v-btn>
       <v-btn class="btn edit-btn" @click="mvUpdate">게시글 수정</v-btn>

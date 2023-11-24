@@ -64,7 +64,7 @@ const saveBoard = async (formData) => {
   try {
     alert("등록이 완료되었습니다.");
     router.push({ name: "board-list" });
-    console.log(data);
+    // console.log(data);
   } catch (error) {
     if ((error.response.status = "500")) {
       alert("content에 공백을 채워주세요.");
@@ -90,11 +90,15 @@ const onSubmit = async () => {
   const start_date =
     start_d.getFullYear() +
     "-" +
-    (start_d.getMonth() + 1) +
+    String(start_d.getMonth() + 1).padStart(2, "0") +
     "-" +
-    start_d.getDate();
+    String(start_d.getDate()).padStart(2, "0");
   const end_date =
-    end_d.getFullYear() + "-" + (end_d.getMonth() + 1) + "-" + end_d.getDate();
+    end_d.getFullYear() +
+    "-" +
+    String(end_d.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(end_d.getDate()).padStart(2, "0");
   const formData = new FormData(form.value);
   formData.append("memberId", memberId);
   formData.append("startDate", start_date);
