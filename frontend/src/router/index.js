@@ -147,8 +147,12 @@ router.beforeEach((to, from, next) => {
     if (!authStore.token) {
       alert("로그인 권한 필요");
       next({ path: "/user/login" }); // 인증되지 않은 경우, 로그인 페이지로 리다이렉트
+    } else {
+      next();
     }
-  } else next(); // 인증이 필요하지 않은 경우 해당 경로로 이동
+  } else {
+    next(); // 인증이 필요하지 않은 경우 해당 경로로 이동
+  }
 });
 
 export default router;
