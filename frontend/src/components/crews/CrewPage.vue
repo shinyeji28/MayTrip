@@ -23,15 +23,15 @@ const thumb = ref(null);
 
 const getCrewInfo = async () => {
   try {
+    console.log("크루 아이디", route.params.crewId);
     await getInfos(route.params.crewId);
-    // console.log(crew.value);
+    console.log(crew.value);
   } catch (error) {
     console.log(error);
   }
 };
-onMounted(async () => {
-  await getCrewInfo();
-});
+getCrewInfo();
+
 watch(crew, (newValue) => {
   if (
     new Date(newValue.board.endDate).setHours(0, 0, 0, 0) <
@@ -73,7 +73,7 @@ const rules = ref([(value) => !!value || "입력해주세요."]);
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-if="crew != null">
     <div
       class="col left margin-60 profile"
       :style="{

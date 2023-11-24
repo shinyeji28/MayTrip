@@ -124,7 +124,7 @@ const truncateText = (text, length, suffix) => {
                 {{ item.title }}<br />
                 <div style="display: flex; align-items: center; gap: 20px">
                   <div class="board-profile">
-                    <v-img cover :src="item.thumbnailInfo?.url"></v-img>
+                    <v-img cover :src="item.member?.profileImg?.url"></v-img>
                   </div>
                   {{ item.member.name }}
                 </div>

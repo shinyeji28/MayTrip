@@ -122,7 +122,7 @@ const clickDetail = async (contentId) => {
 const clickAdd = async (contentId) => {
   const data = {
     contentId,
-    dayId: plan.value.days[selectedDay - 1].dayId,
+    dayId: plan.value.days[selectedDay.value - 1].dayId,
     priority: dayList.value.length + 1,
   };
   await insertDetail(data);
@@ -203,7 +203,7 @@ onMounted(() => {
 
 <template>
   <div class="row">
-    <div class="container col ">
+    <div class="container col">
       <div class="row">
         <v-row>
           <v-col cols="4">
